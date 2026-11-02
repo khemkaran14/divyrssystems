@@ -61,7 +61,52 @@ router.post('/tools/qr', rateLimit(60, 600000), async (req, res) => {
   res.render('tools/qr', { title: 'Free QR Code Generator', qr, svg, form, error: null });
 });
 
-router.get('/tools/uptime', (req, res) => res.render('tools/uptime', { title: 'Website Uptime Monitor' }));
+router.get('/tools/uptime', (req, res) => res.render('tools/uptime', { title: 'Website Uptime & SSL Monitor' }));
+router.get('/tools/gst-calculator', (req, res) => res.render('tools/gst-calculator', { title: 'GST Calculator — add or remove GST' }));
+router.get('/tools/emi-calculator', (req, res) => res.render('tools/emi-calculator', { title: 'EMI Calculator — home, car & business loans' }));
+
+// Landing pages for account-based tools (these are what Google sends people to).
+const LANDINGS = {
+  booking: {
+    title: 'Free Online Appointment Booking Page',
+    badge: 'Appointment booking', app: '/dashboard/booking', cta: 'Create my booking page',
+    h1: 'Let clients book you without the WhatsApp back-and-forth',
+    lead: 'Share one link. Clients see your free times, pick one, and you both get a confirmation email. Double bookings are impossible.',
+    features: [
+      ['Your hours, your days', 'Set working days, hours, meeting length and timezone. Only free slots are shown.'],
+      ['Email confirmations', 'You and your client both get the details instantly. Cancel with one click and the client is told.'],
+      ['Works on any phone', 'Put the link in your Instagram bio, Google Business profile, WhatsApp status or website.'],
+    ],
+    who: 'doctors, clinics, consultants, CAs, lawyers, tutors, salons, photographers, coaches.',
+  },
+  forms: {
+    title: 'Form Backend for Websites — Contact Forms Without a Server',
+    badge: 'Forms for websites', app: '/dashboard/forms', cta: 'Create a form endpoint',
+    h1: 'Working contact forms for any website in 2 minutes',
+    lead: 'Paste a simple HTML form into any website — static HTML, WordPress, Webflow, React. Every submission is emailed to you and saved in your dashboard.',
+    features: [
+      ['No backend needed', 'Point your form at your Divyrs link. Any fields you add are captured.'],
+      ['Spam protection', 'Built-in honeypot and rate limiting keep bots out.'],
+      ['Export to Excel', 'Download every lead as CSV. Use your own thank-you page.'],
+    ],
+    who: 'web designers, agencies, landing pages, event registrations, lead generation.',
+  },
+  'business-card': {
+    title: 'Free Digital Business Card with QR Code',
+    badge: 'Digital visiting card', app: '/dashboard/cards', cta: 'Make my free card',
+    h1: 'A digital visiting card that never runs out',
+    lead: 'One link with your photo, call and WhatsApp buttons, "Save contact", UPI payment, location and social links — plus a QR code to print on your counter or old cards.',
+    features: [
+      ['Save contact in one tap', 'Visitors add you to their phone contacts instantly (vCard).'],
+      ['WhatsApp, UPI & Maps', 'Direct buttons to chat, pay you and get directions.'],
+      ['Cards for your whole team', 'Business plan includes 25 cards for your staff, all managed from one account.'],
+    ],
+    who: 'sales teams, real-estate agents, shop owners, insurance advisors, freelancers.',
+  },
+};
+for (const [slug, info] of Object.entries(LANDINGS)) {
+  router.get('/tools/' + slug, (req, res) => res.render('tools/landing', { title: info.title, info }));
+}
 router.get('/tools/links', (req, res) => res.render('tools/links', { title: 'Link Shortener with Click Tracking' }));
 
 // ---- Short link redirect ----
@@ -90,7 +135,8 @@ router.get('/robots.txt', (req, res) => {
   res.type('text/plain').send(`User-agent: *\nDisallow: /dashboard\nDisallow: /admin\nDisallow: /billing\nSitemap: ${config.baseUrl}/sitemap.xml\n`);
 });
 router.get('/sitemap.xml', (req, res) => {
-  const pages = ['', '/tools', '/tools/invoice', '/tools/qr', '/tools/uptime', '/tools/links', '/pricing', '/about', '/contact', '/privacy', '/terms', '/refund'];
+  const pages = ['', '/tools', '/tools/invoice', '/tools/qr', '/tools/uptime', '/tools/links', '/tools/booking', '/tools/forms',
+    '/tools/business-card', '/tools/gst-calculator', '/tools/emi-calculator', '/pricing', '/about', '/contact', '/privacy', '/terms', '/refund'];
   res.type('application/xml').send(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
     pages.map((p) => `  <url><loc>${config.baseUrl}${p}</loc></url>`).join('\n') + '\n</urlset>\n');
 });

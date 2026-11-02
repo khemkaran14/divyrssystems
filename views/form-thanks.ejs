@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= title %></title><link rel="stylesheet" href="/css/style.css"><meta name="robots" content="noindex"></head>
+<body><section class="section center"><div class="container" style="max-width:520px">
+  <div class="card">
+    <div style="font-size:2.5rem"><%= ok ? '✅' : '⚠️' %></div>
+    <h1 style="font-size:1.6rem"><%= title %></h1>
+    <p class="muted"><%= message %></p>
+    <% if (back && /^https?:\/\//.test(back)) { %><a class="btn primary" href="<%= back %>">← Back to the website</a><% } %>
+  </div>
+  <p class="small muted" style="margin-top:20px">Form handled by <a href="/tools/forms">Divyrs Forms</a></p>
+</div></section></body></html>

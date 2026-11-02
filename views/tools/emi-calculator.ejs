@@ -1,0 +1,39 @@
+<%- include('../partials/head') %>
+<section class="section"><div class="container" style="max-width:860px">
+  <h1>EMI Calculator</h1>
+  <p class="lead">Monthly EMI, total interest and total payment for home, car, personal or business loans.</p>
+  <div class="grid grid-2" style="margin-top:24px;align-items:start">
+    <div class="card">
+      <div class="field"><label for="p">Loan amount (₹)</label><input id="p" type="number" min="0" step="any" value="1000000"></div>
+      <div class="field"><label for="r">Interest rate (% per year)</label><input id="r" type="number" min="0" step="0.05" value="9.5"></div>
+      <div class="field"><label for="n">Tenure (years)</label><input id="n" type="number" min="0.5" max="40" step="0.5" value="10"></div>
+    </div>
+    <div class="card">
+      <div class="muted small">Monthly EMI</div>
+      <div class="price" id="o-emi"></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0"><span class="muted">Total interest</span><strong id="o-int"></strong></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0"><span class="muted">Total payment</span><strong id="o-tot"></strong></div>
+      <div style="height:14px;border-radius:7px;overflow:hidden;display:flex;margin-top:12px;background:var(--line)"><div id="bar-p" style="background:var(--brand)"></div><div id="bar-i" style="background:var(--warn)"></div></div>
+      <p class="small muted" style="margin-top:6px"><span style="color:var(--brand)">■</span> Principal &nbsp; <span style="color:var(--warn)">■</span> Interest</p>
+    </div>
+  </div>
+  <h2 style="margin-top:48px;font-size:1.4rem">EMI formula</h2>
+  <p class="muted">EMI = P × r × (1 + r)<sup>n</sup> ÷ ((1 + r)<sup>n</sup> − 1), where P is the loan amount, r is the monthly interest rate (annual rate ÷ 12 ÷ 100) and n is the number of months.</p>
+</div></section>
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const f = (x) => '₹' + Math.round(x).toLocaleString('en-IN');
+  function calc() {
+    const P = parseFloat($('p').value) || 0, r = (parseFloat($('r').value) || 0) / 1200, n = Math.round((parseFloat($('n').value) || 0) * 12);
+    if (!n) return;
+    const emi = r ? P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1) : P / n;
+    const tot = emi * n;
+    $('o-emi').textContent = f(emi); $('o-int').textContent = f(tot - P); $('o-tot').textContent = f(tot);
+    $('bar-p').style.width = (tot ? 100 * P / tot : 0) + '%'; $('bar-i').style.width = (tot ? 100 * (tot - P) / tot : 0) + '%';
+  }
+  document.querySelectorAll('input').forEach((el) => el.addEventListener('input', calc));
+  calc();
+})();
+</script>
+<%- include('../partials/foot') %>

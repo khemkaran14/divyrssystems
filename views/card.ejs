@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= d.name %><%= d.company ? ' — ' + d.company : '' %></title>
+<meta name="description" content="<%= [d.title, d.company, d.about].filter(Boolean).join(' · ') %>">
+<meta property="og:title" content="<%= d.name %>"><meta property="og:description" content="<%= [d.title, d.company].filter(Boolean).join(' · ') %>">
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  body { background: var(--bg-soft); }
+  .vcard { max-width: 440px; margin: 0 auto; padding: 0 0 40px; }
+  .vcard .top { background: <%= d.color %>; height: 120px; border-radius: 0 0 24px 24px; }
+  .vcard .avatar { width: 112px; height: 112px; border-radius: 50%; border: 4px solid var(--card); background: <%= d.color %>; margin: -56px auto 0; overflow: hidden; display: grid; place-items: center; color: #fff; font-size: 2.6rem; font-weight: 800; }
+  .vcard .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .vcard .acts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
+  .vcard .acts a { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 6px; border-radius: 14px; background: var(--card); border: 1px solid var(--line); color: var(--text); font-size: .82rem; font-weight: 600; }
+  .vcard .acts a span { font-size: 1.4rem; }
+  .vcard .acts a:hover { text-decoration: none; border-color: <%= d.color %>; }
+  .vcard .save { background: <%= d.color %>; border-color: <%= d.color %>; color: #fff; }
+  .vcard .linkbtn { display: block; text-align: center; padding: 12px; border-radius: 12px; background: var(--card); border: 1px solid var(--line); color: var(--text); font-weight: 600; margin-bottom: 10px; }
+</style></head>
+<body>
+<div class="vcard">
+  <div class="top"></div>
+  <div class="container">
+    <div class="avatar"><% if (d.photo) { %><img src="<%= d.photo %>" alt="<%= d.name %>"><% } else { %><%= d.name[0] %><% } %></div>
+    <div class="center" style="margin-top:12px">
+      <h1 style="font-size:1.6rem;margin:0"><%= d.name %></h1>
+      <p class="muted" style="margin:4px 0 0"><%= [d.title, d.company].filter(Boolean).join(' · ') %></p>
+    </div>
+    <div class="acts">
+      <% if (d.phone) { %><a href="tel:<%= d.phone.replace(/[^\d+]/g, '') %>"><span>📞</span>Call</a><% } %>
+      <% if (d.whatsapp) { %><a href="https://wa.me/<%= d.whatsapp.replace(/\D/g, '') %>"><span>💬</span>WhatsApp</a><% } %>
+      <% if (d.email) { %><a href="mailto:<%= d.email %>"><span>✉️</span>Email</a><% } %>
+      <% if (d.website) { %><a href="<%= d.website %>" rel="noopener"><span>🌐</span>Website</a><% } %>
+      <% if (d.address) { %><a href="https://www.google.com/maps/search/?api=1&query=<%= encodeURIComponent(d.address) %>" rel="noopener"><span>📍</span>Directions</a><% } %>
+      <% if (d.upi) { %><a href="upi://pay?pa=<%= encodeURIComponent(d.upi) %>&pn=<%= encodeURIComponent(d.name) %>"><span>₹</span>Pay (UPI)</a><% } %>
+    </div>
+    <a class="btn lg block save" href="/c/<%= c.slug %>/contact.vcf" style="background:<%= d.color %>;border-color:<%= d.color %>;color:#fff">Save contact</a>
+    <% if (d.about) { %><div class="card" style="margin-top:20px"><p style="margin:0;white-space:pre-line"><%= d.about %></p></div><% } %>
+    <% if (d.address) { %><p class="small muted center" style="margin-top:16px;white-space:pre-line">📍 <%= d.address %></p><% } %>
+    <% if (d.links && d.links.length) { %><div style="margin-top:20px"><% for (const l of d.links) { %><a class="linkbtn" href="<%= l.url %>" rel="noopener"><%= l.label %></a><% } %></div><% } %>
+    <div class="card center" style="margin-top:20px">
+      <img src="<%= qr %>" alt="QR code for this card" style="width:180px">
+      <p class="small muted" style="margin:6px 0 10px">Scan to open this card</p>
+      <button class="btn sm" onclick="navigator.share ? navigator.share({ title: document.title, url: location.href }) : navigator.clipboard.writeText(location.href).then(() => this.textContent = 'Link copied')">Share card</button>
+    </div>
+    <% if (branding) { %><p class="center small muted" style="margin-top:24px"><a href="/tools/business-card">Make your own free digital card →</a></p><% } %>
+  </div>
+</div>
+</body></html>

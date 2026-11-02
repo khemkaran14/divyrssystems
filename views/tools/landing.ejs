@@ -1,0 +1,14 @@
+<%- include('../partials/head') %>
+<section class="hero"><div class="container" style="max-width:860px">
+  <span class="badge"><%= info.badge %></span>
+  <h1 style="margin-top:12px"><%= info.h1 %></h1>
+  <p class="lead"><%= info.lead %></p>
+  <div class="btn-row"><a class="btn primary lg" href="<%= user ? info.app : '/signup?next=' + info.app %>"><%= info.cta %></a><a class="btn lg" href="/pricing">Pricing</a></div>
+</div></section>
+<section class="section" style="padding-top:0"><div class="container" style="max-width:860px">
+  <div class="grid grid-3">
+    <% for (const f of info.features) { %><div class="card"><h3><%= f[0] %></h3><p class="muted small"><%= f[1] %></p></div><% } %>
+  </div>
+  <% if (info.who) { %><p class="muted" style="margin-top:28px"><strong>Great for:</strong> <%= info.who %></p><% } %>
+</div></section>
+<%- include('../partials/foot') %>

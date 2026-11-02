@@ -1,0 +1,49 @@
+<%- include('../partials/head') %>
+<% const d = card.data; const L = d.links || []; %>
+<div class="container dash">
+  <%- include('../partials/dash-side') %>
+  <div>
+    <p class="small"><a href="/dashboard/cards">← All cards</a></p>
+    <h1 style="font-size:1.8rem"><%= card.id ? 'Edit card' : 'New business card' %></h1>
+    <% if (error) { %><div class="alert error"><%= error %> <% if (/Upgrade/.test(error)) { %><a href="/pricing">See plans</a><% } %></div><% } %>
+    <form class="card" method="post" action="/dashboard/cards/save" id="card-form">
+      <input type="hidden" name="id" value="<%= card.id || '' %>">
+      <input type="hidden" name="photo" id="photo" value="<%= d.photo || '' %>">
+      <div class="field"><label for="slug">Page address</label>
+        <div style="display:flex;align-items:center;gap:6px"><span class="muted small" style="white-space:nowrap"><%= baseUrl.replace(/^https?:\/\//, '') %>/c/</span><input id="slug" name="slug" value="<%= card.slug %>" placeholder="your-name" required></div></div>
+      <div class="grid grid-2" style="gap:12px">
+        <div class="field"><label>Full name</label><input name="name" value="<%= d.name || '' %>" required></div>
+        <div class="field"><label>Job title</label><input name="title" value="<%= d.title || '' %>" placeholder="Founder"></div>
+        <div class="field"><label>Company</label><input name="company" value="<%= d.company || '' %>"></div>
+        <div class="field"><label>Phone</label><input name="phone" value="<%= d.phone || '' %>" placeholder="+91 98xxxxxxxx"></div>
+        <div class="field"><label>WhatsApp number</label><input name="whatsapp" value="<%= d.whatsapp || '' %>" placeholder="919800000000"></div>
+        <div class="field"><label>Email</label><input name="email" type="email" value="<%= d.email || '' %>"></div>
+        <div class="field"><label>Website</label><input name="website" value="<%= d.website || '' %>"></div>
+        <div class="field"><label>UPI ID (for "Pay me")</label><input name="upi" value="<%= d.upi || '' %>" placeholder="name@bank"></div>
+      </div>
+      <div class="field"><label>Address</label><textarea name="address" rows="2"><%= d.address || '' %></textarea></div>
+      <div class="field"><label>About</label><textarea name="about" rows="3" placeholder="What you do, in one or two lines"><%= d.about || '' %></textarea></div>
+      <div class="grid grid-2" style="gap:12px">
+        <div class="field"><label>Photo or logo (under 100 KB)</label><input type="file" id="photo-file" accept="image/png,image/jpeg,image/webp"></div>
+        <div class="field"><label>Theme colour</label><input type="color" name="color" value="<%= d.color || '#4f46e5' %>"></div>
+      </div>
+      <label>Links (Instagram, LinkedIn, Google Maps, catalogue…)</label>
+      <% for (let i = 0; i < 6; i++) { %>
+        <div class="grid grid-2" style="gap:8px;margin-bottom:8px">
+          <input name="link_label_<%= i %>" value="<%= L[i] ? L[i].label : '' %>" placeholder="Label">
+          <input name="link_url_<%= i %>" value="<%= L[i] ? L[i].url : '' %>" placeholder="https://">
+        </div>
+      <% } %>
+      <div class="btn-row" style="margin-top:12px"><button class="btn primary" type="submit">Save card</button>
+        <% if (card.id) { %><a class="btn" href="/c/<%= card.slug %>" target="_blank">Preview</a><% } %></div>
+    </form>
+  </div>
+</div>
+<script>
+  document.getElementById('photo-file').onchange = (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    if (f.size > 100 * 1024) { alert('Please choose an image under 100 KB.'); e.target.value = ''; return; }
+    const r = new FileReader(); r.onload = () => { document.getElementById('photo').value = r.result; }; r.readAsDataURL(f);
+  };
+</script>
+<%- include('../partials/foot') %>

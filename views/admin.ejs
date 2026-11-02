@@ -7,6 +7,9 @@
     <div class="card"><div class="muted small">Paying now</div><div class="stat"><%= stats.paying %></div></div>
     <div class="card"><div class="muted small">Revenue this month</div><div class="stat" style="font-size:1.3rem"><%= stats.revenue.length ? stats.revenue.map(r => formatPrice(r.total, r.currency)).join(' + ') : '—' %></div></div>
     <div class="card"><div class="muted small">Monitors / links</div><div class="stat"><%= stats.monitors %> / <%= stats.links %></div></div>
+    <div class="card"><div class="muted small">Business cards</div><div class="stat"><%= stats.cards %></div></div>
+    <div class="card"><div class="muted small">Forms</div><div class="stat"><%= stats.forms %></div></div>
+    <div class="card"><div class="muted small">Bookings</div><div class="stat"><%= stats.bookings %></div></div>
   </div>
 
   <h2 style="font-size:1.3rem;margin-top:36px">Users (latest 100)</h2>

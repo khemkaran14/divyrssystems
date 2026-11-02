@@ -10,6 +10,9 @@
     <div class="grid grid-3" style="margin-top:20px">
       <a class="card" href="/dashboard/monitors"><div class="muted small">Uptime monitors</div><div class="stat"><%= counts.monitors %> <span class="small muted">/ <%= plan.limits.monitors %></span></div></a>
       <a class="card" href="/dashboard/links"><div class="muted small">Short links</div><div class="stat"><%= counts.links %> <span class="small muted">/ <%= plan.limits.links === Infinity ? '∞' : plan.limits.links %></span></div></a>
+      <a class="card" href="/dashboard/booking"><div class="muted small">Bookings this month</div><div class="stat"><%= counts.bookings %> <span class="small muted">/ <%= plan.limits.bookingsMonth === Infinity ? '∞' : plan.limits.bookingsMonth %></span></div></a>
+      <a class="card" href="/dashboard/forms"><div class="muted small">Form submissions this month</div><div class="stat"><%= counts.submissions %> <span class="small muted">/ <%= plan.limits.formSubmissionsMonth === Infinity ? '∞' : plan.limits.formSubmissionsMonth %></span></div></a>
+      <a class="card" href="/dashboard/cards"><div class="muted small">Business card views</div><div class="stat"><%= counts.cardViews %></div></a>
       <a class="card" href="/dashboard/invoices"><div class="muted small">Saved invoices</div><div class="stat"><%= counts.invoices %> <span class="small muted">/ <%= plan.limits.savedInvoices === Infinity ? '∞' : plan.limits.savedInvoices %></span></div></a>
     </div>
     <h2 style="font-size:1.3rem;margin-top:36px">Quick start</h2>
@@ -17,6 +20,9 @@
       <a class="card" href="/tools/invoice"><h3>🧾 Create an invoice</h3><p class="muted small">GST-ready, download as PDF.</p></a>
       <a class="card" href="/dashboard/monitors"><h3>📡 Monitor a website</h3><p class="muted small">Get told when it goes down.</p></a>
       <a class="card" href="/dashboard/links"><h3>🔗 Shorten a link</h3><p class="muted small">Track every click.</p></a>
+      <a class="card" href="/dashboard/booking"><h3>📅 Set up a booking page</h3><p class="muted small">Clients book a time with you.</p></a>
+      <a class="card" href="/dashboard/cards/new"><h3>🪪 Create a digital business card</h3><p class="muted small">With WhatsApp, UPI and a QR code.</p></a>
+      <a class="card" href="/dashboard/forms"><h3>📨 Add a form to your website</h3><p class="muted small">Leads straight to your inbox.</p></a>
       <a class="card" href="/tools/qr"><h3>▦ Make a QR code</h3><p class="muted small">PNG and SVG.</p></a>
     </div>
   </div>

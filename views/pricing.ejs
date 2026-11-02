@@ -25,7 +25,12 @@
           <li class="<%= L.statusPage ? '' : 'no' %>">Public status page</li>
           <li class="<%= L.whiteLabel ? '' : 'no' %>">White-label status page (no Divyrs branding)</li>
           <li><%= L.links === Infinity ? 'Unlimited' : L.links %> short links<%= p.id === 'free' ? '' : ' + custom codes' %></li>
-          <li>Unlimited invoices &amp; QR codes</li>
+          <li class="<%= L.sslAlerts ? '' : 'no' %>">SSL certificate expiry alerts</li>
+          <li><%= L.bookingsMonth === Infinity ? 'Unlimited' : L.bookingsMonth %> online bookings a month</li>
+          <li><%= L.cards %> digital business card<%= L.cards > 1 ? 's' : '' %></li>
+          <li><%= L.forms %> website form<%= L.forms > 1 ? 's' : '' %>, <%= L.formSubmissionsMonth === Infinity ? 'unlimited' : L.formSubmissionsMonth.toLocaleString('en-IN') %> submissions/mo</li>
+          <li class="<%= L.removeBranding ? '' : 'no' %>">No Divyrs branding on cards &amp; booking page</li>
+          <li>Unlimited invoices, quotations &amp; QR codes</li>
           <li><%= L.savedInvoices === Infinity ? 'Unlimited' : L.savedInvoices %> saved invoices</li>
           <li class="<%= L.invoiceWatermark ? 'no' : '' %>">No "Made with Divyrs" footer on invoices</li>
           <li class="<%= L.apiAccess ? '' : 'no' %>">REST API access</li>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= page.title %></title><link rel="stylesheet" href="/css/style.css">
+<style>
+  .slots { display: flex; flex-wrap: wrap; gap: 8px; }
+  .slots label { margin: 0; }
+  .slots input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .slots span { display: inline-block; padding: 8px 14px; border: 1px solid var(--line); border-radius: 10px; font-weight: 600; font-size: .9rem; cursor: pointer; background: var(--card); }
+  .slots input:checked + span { background: var(--brand); color: var(--brand-ink); border-color: var(--brand); }
+  .slots input:focus-visible + span { outline: 2px solid var(--brand); }
+  .day { margin-bottom: 18px; }
+</style></head>
+<body style="background:var(--bg-soft)">
+<section class="section"><div class="container" style="max-width:720px">
+  <div class="card">
+    <p class="muted small" style="margin:0"><%= owner.name %></p>
+    <h1 style="font-size:1.8rem"><%= page.title %></h1>
+    <p class="muted">⏱ <%= page.duration %> minutes · 🌍 times shown in <%= page.tz %></p>
+    <% if (page.intro) { %><p style="white-space:pre-line"><%= page.intro %></p><% } %>
+
+    <% if (done) { %>
+      <div class="alert success" style="font-weight:600">✅ Booked! <%= done.when %>. A confirmation has been emailed to you.</div>
+    <% } else if (full || !slots.length) { %>
+      <div class="alert">No times are available right now. Please check back later.</div>
+    <% } else { %>
+      <% if (error) { %><div class="alert error"><%= error %></div><% } %>
+      <form method="post">
+        <h3>1. Pick a time</h3>
+        <% slots.forEach((day, di) => { %>
+          <div class="day"><div class="small" style="font-weight:700;margin-bottom:6px"><%= day.label %></div>
+            <div class="slots"><% day.times.forEach((t, ti) => { %>
+              <label><input type="radio" name="slot" value="<%= day.date %> <%= t %>" required><span><%= t %></span></label>
+            <% }) %></div></div>
+        <% }) %>
+        <h3 style="margin-top:24px">2. Your details</h3>
+        <div class="grid grid-2" style="gap:12px">
+          <div class="field"><label for="b-name">Name</label><input id="b-name" name="name" value="<%= form.name || '' %>" required></div>
+          <div class="field"><label for="b-email">Email</label><input id="b-email" name="email" type="email" value="<%= form.email || '' %>" required></div>
+          <div class="field"><label for="b-phone">Phone (optional)</label><input id="b-phone" name="phone" value="<%= form.phone || '' %>"></div>
+        </div>
+        <div class="field"><label for="b-note">Anything we should know? (optional)</label><textarea id="b-note" name="note" rows="2"><%= form.note || '' %></textarea></div>
+        <button class="btn primary lg block" type="submit">Confirm booking</button>
+      </form>
+    <% } %>
+  </div>
+  <% if (branding) { %><p class="center small muted" style="margin-top:20px">Free booking page by <a href="/tools/booking">Divyrs</a></p><% } %>
+</div></section>
+</body></html>

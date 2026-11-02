@@ -1,6 +1,9 @@
 <aside class="side">
   <a href="/dashboard" class="<%= path === '/dashboard' ? 'active' : '' %>">Overview</a>
-  <a href="/dashboard/monitors" class="<%= path === '/dashboard/monitors' ? 'active' : '' %>">Uptime monitors</a>
+  <a href="/dashboard/monitors" class="<%= path === '/dashboard/monitors' ? 'active' : '' %>">Uptime &amp; SSL</a>
+  <a href="/dashboard/booking" class="<%= path === '/dashboard/booking' ? 'active' : '' %>">Booking page</a>
+  <a href="/dashboard/forms" class="<%= path.startsWith('/dashboard/forms') ? 'active' : '' %>">Forms</a>
+  <a href="/dashboard/cards" class="<%= path.startsWith('/dashboard/cards') ? 'active' : '' %>">Business cards</a>
   <a href="/dashboard/links" class="<%= path === '/dashboard/links' ? 'active' : '' %>">Short links</a>
   <a href="/dashboard/invoices" class="<%= path === '/dashboard/invoices' ? 'active' : '' %>">Invoices</a>
   <a href="/tools/qr">QR codes</a>

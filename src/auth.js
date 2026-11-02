@@ -55,7 +55,8 @@ function requireAdmin(req, res, next) {
 // Blocks cross-site form posts (CSRF) by checking Origin/Referer on unsafe methods.
 function sameOrigin(req, res, next) {
   if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next();
-  if (req.path === '/billing/webhook' || req.path.startsWith('/api/')) return next();
+  // Webhook, API and form endpoints are meant to be called from other sites.
+  if (req.path === '/billing/webhook' || req.path.startsWith('/api/') || req.path.startsWith('/f/')) return next();
   const origin = req.get('origin') || req.get('referer') || '';
   const host = req.get('host');
   try {

@@ -10,12 +10,18 @@
 
   const today = () => new Date().toISOString().slice(0, 10);
   const plusDays = (d) => new Date(Date.now() + d * 86400000).toISOString().slice(0, 10);
+  const DOCS = {
+    invoice: { title: 'INVOICE', num: 'Invoice', due: 'Due date', prefix: 'INV' },
+    quotation: { title: 'QUOTATION', num: 'Quote', due: 'Valid until', prefix: 'QT' },
+    proforma: { title: 'PROFORMA INVOICE', num: 'Proforma', due: 'Valid until', prefix: 'PI' },
+    receipt: { title: 'PAYMENT RECEIPT', num: 'Receipt', due: null, prefix: 'RCT' },
+  };
   const symbols = { INR: '₹', USD: '$', EUR: '€', GBP: '£', AED: 'AED ' };
 
   function blank() {
     return {
       seller: {}, client: {}, number: 'INV-' + new Date().getFullYear() + '-001', currency: 'INR',
-      date: today(), due: plusDays(15), taxMode: 'intra', payment: '', notes: 'Thank you for your business.',
+      docType: 'invoice', date: today(), due: plusDays(15), taxMode: 'intra', payment: '', notes: 'Thank you for your business.',
       items: [{ desc: '', hsn: '', qty: 1, rate: 0, tax: 18 }], logo: '',
     };
   }
@@ -50,7 +56,9 @@
     for (const el of form.elements) {
       if (!el.name) continue;
       const [a, b] = el.name.split('.');
-      el.value = (b ? (d[a] || {})[b] : d[a]) ?? '';
+      const val = (b ? (d[a] || {})[b] : d[a]) ?? '';
+      if (el.tagName === 'SELECT' && !val) { el.selectedIndex = 0; continue; } // older drafts lack new fields
+      el.value = val;
     }
     itemsEl.innerHTML = '';
     (d.items && d.items.length ? d.items : blank().items).forEach(addItemRow);
@@ -110,15 +118,18 @@
       lines(d.seller.address),
       d.seller.gstin ? h('div', {}, 'GSTIN: ' + d.seller.gstin) : null,
       d.seller.contact ? h('div', {}, d.seller.contact) : null);
+    const kind = DOCS[d.docType] || DOCS.invoice;
+    const title = d.docType === 'invoice' || !d.docType ? (d.taxMode === 'none' ? 'INVOICE' : 'TAX INVOICE') : kind.title;
+    document.getElementById('due-label').textContent = kind.due || 'Due date';
     const right = h('div', { style: 'text-align:right' },
-      h('div', { class: 'inv-title' }, d.taxMode === 'none' ? 'INVOICE' : 'TAX INVOICE'),
-      h('div', {}, 'Invoice #: ' + (d.number || '')),
+      h('div', { class: 'inv-title' }, title),
+      h('div', {}, kind.num + ' #: ' + (d.number || '')),
       h('div', {}, 'Date: ' + (d.date || '')),
-      d.due ? h('div', {}, 'Due: ' + d.due) : null);
+      d.due && kind.due ? h('div', {}, kind.due + ': ' + d.due) : null);
     paper.append(h('div', { class: 'inv-head' }, left, right));
 
     paper.append(h('div', { style: 'margin-bottom:20px' },
-      h('div', { style: 'color:#6b7280;font-size:12px;text-transform:uppercase;letter-spacing:.05em' }, 'Bill to'),
+      h('div', { style: 'color:#6b7280;font-size:12px;text-transform:uppercase;letter-spacing:.05em' }, d.docType === 'quotation' ? 'Quotation for' : d.docType === 'receipt' ? 'Received from' : 'Bill to'),
       h('div', { style: 'font-weight:700' }, d.client.name || 'Client name'),
       lines(d.client.address),
       d.client.gstin ? h('div', {}, 'GSTIN: ' + d.client.gstin) : null));
@@ -140,13 +151,13 @@
     } else if (d.taxMode === 'inter') {
       tot.append(h('div', {}, h('span', {}, 'IGST'), h('span', {}, money(t.tax, c))));
     }
-    tot.append(h('div', { class: 'grand' }, h('span', {}, 'Total'), h('span', {}, money(t.total, c))));
+    tot.append(h('div', { class: 'grand' }, h('span', {}, d.docType === 'receipt' ? 'Amount received' : 'Total'), h('span', {}, money(t.total, c))));
     paper.append(tot);
     if (c === 'INR') paper.append(h('div', { style: 'margin-top:8px;font-style:italic;text-align:right' }, inWordsINR(t.total)));
 
     if (d.payment) paper.append(h('div', { style: 'margin-top:28px' }, h('strong', {}, 'Payment details'), lines(d.payment)));
     if (d.notes) paper.append(h('div', { style: 'margin-top:16px' }, h('strong', {}, 'Notes'), lines(d.notes)));
-    if (cfg.watermark) paper.append(h('div', { class: 'wm' }, 'Made with Divyrs Invoice Generator · ' + cfg.siteUrl));
+    if (cfg.watermark) paper.append(h('div', { class: 'wm' }, 'Made with Divyrs free invoice maker · ' + cfg.siteUrl));
 
     try { localStorage.setItem(STORE, JSON.stringify(d)); } catch (_) { /* storage may be blocked */ }
     return { d, t };
@@ -165,6 +176,8 @@
   document.getElementById('new').onclick = () => {
     const keep = read().seller;
     const b = blank(); b.seller = keep; b.logo = logo;
+    b.docType = read().docType;
+    b.number = (DOCS[b.docType] || DOCS.invoice).prefix + '-' + new Date().getFullYear() + '-001';
     savedId = null; fill(b); render();
   };
   document.getElementById('logo-file').onchange = (e) => {

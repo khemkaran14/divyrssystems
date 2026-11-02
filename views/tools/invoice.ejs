@@ -1,6 +1,6 @@
 <%- include('../partials/head') %>
 <section class="section" style="padding-top:32px"><div class="container" style="max-width:1280px">
-  <h1 style="font-size:2rem">Free GST Invoice Generator</h1>
+  <h1 style="font-size:2rem">Free GST Invoice, Quotation &amp; Receipt Maker</h1>
   <p class="muted">Fill the form, check the preview, download as PDF. Your details are remembered on this device.
     <% if (!user) { %><a href="/signup?next=/tools/invoice">Sign up free</a> to save invoices to your account.<% } %></p>
   <div id="inv-msg"></div>
@@ -20,12 +20,20 @@
       <div class="field"><label>Client address</label><textarea name="client.address" rows="2"></textarea></div>
       <div class="field"><label>Client GSTIN (optional)</label><input name="client.gstin" maxlength="15"></div>
 
-      <h3 style="margin-top:20px">Invoice</h3>
+      <h3 style="margin-top:20px">Document</h3>
+      <div class="field"><label>Type</label>
+        <select name="docType">
+          <option value="invoice">Invoice / Tax invoice</option>
+          <option value="quotation">Quotation / Estimate</option>
+          <option value="proforma">Proforma invoice</option>
+          <option value="receipt">Payment receipt</option>
+        </select>
+      </div>
       <div class="grid grid-2" style="gap:10px">
-        <div class="field"><label>Invoice no.</label><input name="number"></div>
+        <div class="field"><label>Number</label><input name="number"></div>
         <div class="field"><label>Currency</label><select name="currency"><option>INR</option><option>USD</option><option>EUR</option><option>GBP</option><option>AED</option></select></div>
         <div class="field"><label>Date</label><input type="date" name="date"></div>
-        <div class="field"><label>Due date</label><input type="date" name="due"></div>
+        <div class="field"><label id="due-label">Due date</label><input type="date" name="due"></div>
       </div>
       <div class="field"><label>Tax type</label>
         <select name="taxMode">

@@ -1,0 +1,48 @@
+<%- include('../partials/head') %>
+<% const p = page || { slug: '', title: 'Book a meeting with ' + user.name.split(' ')[0], intro: '', duration: 30, days: '1,2,3,4,5', start_time: '10:00', end_time: '18:00', tz: 'Asia/Kolkata', enabled: 1 }; const on = p.days.split(','); %>
+<div class="container dash">
+  <%- include('../partials/dash-side') %>
+  <div>
+    <h1 style="font-size:1.8rem">Booking page</h1>
+    <p class="muted">Share one link; clients pick a free time and you both get an email. No more back-and-forth on WhatsApp.
+      <br><%= used %> of <%= plan.limits.bookingsMonth === Infinity ? 'unlimited' : plan.limits.bookingsMonth %> bookings this month.</p>
+    <% if (msg) { %><div class="alert success"><%= msg %></div><% } %>
+    <% if (error) { %><div class="alert error"><%= error %></div><% } %>
+    <% if (page) { %><div class="alert">Your link: <a href="/book/<%= page.slug %>" target="_blank"><%= baseUrl %>/book/<%= page.slug %></a> <%= page.enabled ? '' : '(turned off)' %></div><% } %>
+
+    <h2 style="font-size:1.3rem">Upcoming bookings</h2>
+    <% if (upcoming.length) { %>
+    <div class="card table-wrap" style="padding:8px;margin-bottom:28px"><table>
+      <thead><tr><th>When</th><th>Client</th><th>Contact</th><th>Note</th><th></th></tr></thead>
+      <tbody><% for (const b of upcoming) { %>
+        <tr><td><strong><%= b.date %></strong> <%= b.time %></td><td><%= b.name %></td>
+          <td class="small"><a href="mailto:<%= b.email %>"><%= b.email %></a><%= b.phone ? ' · ' + b.phone : '' %></td>
+          <td class="small muted" style="max-width:220px"><%= b.note %></td>
+          <td><form method="post" action="/dashboard/booking/<%= b.id %>/cancel" onsubmit="return confirm('Cancel and email the client?')"><button class="btn sm danger" type="submit">Cancel</button></form></td></tr>
+      <% } %></tbody>
+    </table></div>
+    <% } else { %><p class="muted" style="margin-bottom:28px">No upcoming bookings.</p><% } %>
+
+    <h2 style="font-size:1.3rem">Settings</h2>
+    <form class="card" method="post" action="/dashboard/booking">
+      <div class="grid grid-2" style="gap:12px">
+        <div class="field"><label>Page address</label><div style="display:flex;align-items:center;gap:6px"><span class="muted small">/book/</span><input name="slug" value="<%= p.slug %>" placeholder="dr-sharma" required></div></div>
+        <div class="field"><label>Title</label><input name="title" value="<%= p.title %>" maxlength="100"></div>
+      </div>
+      <div class="field"><label>Description</label><textarea name="intro" rows="2" placeholder="30-minute consultation. Fee ₹500, pay at the clinic."><%= p.intro || '' %></textarea></div>
+      <div class="grid grid-4" style="gap:12px">
+        <div class="field"><label>Length</label><select name="duration"><% for (const m of [15, 20, 30, 45, 60, 90, 120]) { %><option value="<%= m %>" <%= p.duration === m ? 'selected' : '' %>><%= m %> min</option><% } %></select></div>
+        <div class="field"><label>From</label><input type="time" name="start_time" value="<%= p.start_time %>"></div>
+        <div class="field"><label>To</label><input type="time" name="end_time" value="<%= p.end_time %>"></div>
+        <div class="field"><label>Timezone</label><select name="tz"><% for (const t of TIMEZONES) { %><option <%= p.tz === t ? 'selected' : '' %>><%= t %></option><% } %></select></div>
+      </div>
+      <label>Working days</label>
+      <div class="btn-row" style="margin-bottom:14px">
+        <% DAY_NAMES.forEach((n, i) => { %><label style="font-weight:500;display:flex;gap:6px;align-items:center"><input type="checkbox" name="days" value="<%= i %>" style="width:auto" <%= on.includes(String(i)) ? 'checked' : '' %>> <%= n %></label><% }) %>
+      </div>
+      <label style="font-weight:500;display:flex;gap:8px;align-items:center;margin-bottom:14px"><input type="checkbox" name="enabled" value="1" style="width:auto" <%= p.enabled ? 'checked' : '' %>> Accept bookings</label>
+      <button class="btn primary" type="submit">Save booking page</button>
+    </form>
+  </div>
+</div>
+<%- include('../partials/foot') %>

@@ -1,0 +1,43 @@
+<%- include('../partials/head') %>
+<section class="section"><div class="container" style="max-width:860px">
+  <h1>GST Calculator</h1>
+  <p class="lead">Add GST to a price or remove GST from a GST-inclusive price. Shows CGST, SGST and IGST split.</p>
+  <div class="grid grid-2" style="margin-top:24px;align-items:start">
+    <div class="card">
+      <div class="field"><label for="amt">Amount (₹)</label><input id="amt" type="number" min="0" step="any" value="10000"></div>
+      <div class="field"><label for="rate">GST rate</label><select id="rate"><option>0</option><option>0.25</option><option>3</option><option>5</option><option>12</option><option selected>18</option><option>28</option><option>40</option></select></div>
+      <div class="field"><label>Amount is</label>
+        <div class="btn-row"><label style="font-weight:500;display:flex;gap:6px;align-items:center"><input type="radio" name="mode" value="ex" checked style="width:auto"> excluding GST</label>
+        <label style="font-weight:500;display:flex;gap:6px;align-items:center"><input type="radio" name="mode" value="inc" style="width:auto"> including GST</label></div></div>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;padding:6px 0"><span class="muted">Net amount</span><strong id="o-net"></strong></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0"><span class="muted">GST</span><strong id="o-gst"></strong></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0" class="small"><span class="muted">CGST + SGST (same state)</span><span id="o-split"></span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0" class="small"><span class="muted">IGST (other state)</span><span id="o-igst"></span></div>
+      <div style="display:flex;justify-content:space-between;padding:10px 0 0;border-top:2px solid var(--text);margin-top:8px;font-size:1.2rem"><span>Total</span><strong id="o-total"></strong></div>
+      <a class="btn primary block" href="/tools/invoice" style="margin-top:18px">Make a GST invoice →</a>
+    </div>
+  </div>
+  <h2 style="margin-top:48px;font-size:1.4rem">How GST is calculated</h2>
+  <p class="muted"><strong>Adding GST:</strong> GST = Amount × Rate ÷ 100. Total = Amount + GST.<br>
+  <strong>Removing GST:</strong> Net = Total × 100 ÷ (100 + Rate). GST = Total − Net.<br>
+  Within the same state GST is split equally into CGST and SGST. For sales to another state the full amount is IGST.</p>
+</div></section>
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const f = (n) => '₹' + n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  function calc() {
+    const a = parseFloat($('amt').value) || 0, r = parseFloat($('rate').value) || 0;
+    const inc = document.querySelector('[name=mode]:checked').value === 'inc';
+    const net = inc ? a * 100 / (100 + r) : a, gst = inc ? a - net : a * r / 100;
+    $('o-net').textContent = f(net); $('o-gst').textContent = f(gst);
+    $('o-split').textContent = f(gst / 2) + ' + ' + f(gst / 2); $('o-igst').textContent = f(gst);
+    $('o-total').textContent = f(net + gst);
+  }
+  document.querySelectorAll('input,select').forEach((el) => el.addEventListener('input', calc));
+  calc();
+})();
+</script>
+<%- include('../partials/foot') %>

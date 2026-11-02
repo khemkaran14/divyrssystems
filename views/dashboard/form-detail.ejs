@@ -1,0 +1,22 @@
+<%- include('../partials/head') %>
+<div class="container dash">
+  <%- include('../partials/dash-side') %>
+  <div>
+    <p class="small"><a href="/dashboard/forms">← All forms</a></p>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <h1 style="font-size:1.8rem;margin:0"><%= form.name %></h1>
+      <a class="btn" href="/dashboard/forms/<%= form.id %>/export.csv">Download CSV (Excel)</a>
+    </div>
+    <p class="muted"><%= subs.length %> submission<%= subs.length === 1 ? '' : 's' %> (latest 500 shown)</p>
+    <% for (const s of subs) { %>
+      <div class="card" style="margin-bottom:12px;padding:16px 20px">
+        <div class="small muted" style="margin-bottom:6px"><%= new Date(s.created_at).toLocaleString('en-IN') %></div>
+        <% for (const [k, v] of Object.entries(s.data)) { %>
+          <div><strong><%= k %>:</strong> <span style="white-space:pre-line"><%= v %></span></div>
+        <% } %>
+      </div>
+    <% } %>
+    <% if (!subs.length) { %><p class="muted">No submissions yet. Paste the form code into your website and send a test message.</p><% } %>
+  </div>
+</div>
+<%- include('../partials/foot') %>

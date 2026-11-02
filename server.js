@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, 'public'), { maxAge: config.isProd ?
 // Razorpay webhook must see the raw body.
 app.post('/billing/webhook', express.raw({ type: 'application/json', limit: '1mb' }), billing.webhook);
 
-app.use(express.urlencoded({ extended: false, limit: '100kb' }));
+app.use(express.urlencoded({ extended: false, limit: '300kb' })); // business-card photos
 app.use(cookieParser(config.sessionSecret));
 app.use(sameOrigin);
 app.use(loadUser);
@@ -52,6 +52,9 @@ app.use((req, res, next) => {
 app.use('/', require('./src/routes/public'));
 app.use('/', require('./src/routes/account'));
 app.use('/dashboard', require('./src/routes/dashboard'));
+const services = require('./src/routes/services');
+app.use('/dashboard', services.dash);
+app.use('/', services.pub);
 app.use('/billing', billing);
 app.use('/api/v1', require('./src/routes/api'));
 app.use('/admin', require('./src/routes/admin'));

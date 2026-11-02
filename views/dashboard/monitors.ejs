@@ -2,9 +2,9 @@
 <div class="container dash">
   <%- include('../partials/dash-side') %>
   <div>
-    <h1 style="font-size:1.8rem">Uptime monitors</h1>
+    <h1 style="font-size:1.8rem">Uptime &amp; SSL monitors</h1>
     <p class="muted"><%= monitors.length %> of <%= plan.limits.monitors %> used · checked every <%= plan.limits.intervalMin %> min ·
-      email alerts <%= plan.limits.emailAlerts ? 'on' : 'off (Pro)' %>
+      email alerts <%= plan.limits.emailAlerts ? 'on' : 'off (Pro)' %> · SSL expiry alerts <%= plan.limits.sslAlerts ? 'on' : 'off (Pro)' %>
       <% if (plan.limits.statusPage && user.status_slug) { %> · <a href="/status/<%= user.status_slug %>" target="_blank">Public status page ↗</a><% } %></p>
     <% if (error) { %><div class="alert error"><%= error %> <% if (/Upgrade/.test(error)) { %><a href="/pricing">See plans</a><% } %></div><% } %>
     <form class="card inline-form" method="post" action="/dashboard/monitors" style="margin-bottom:24px">
@@ -23,6 +23,9 @@
             <strong><%= m.name %></strong>
             <span class="badge <%= m.status === 'up' ? 'ok' : m.status === 'down' ? 'bad' : 'warn' %>"><%= m.status.toUpperCase() %></span>
             <div class="small muted" style="word-break:break-all"><%= m.url %></div>
+            <% if (m.ssl_expires) { const dl = Math.floor((m.ssl_expires - Date.now()) / 86400000); %>
+              <div class="small" style="margin-top:2px">🔒 SSL <span class="badge <%= dl > 14 ? 'ok' : dl >= 0 ? 'warn' : 'bad' %>"><%= dl >= 0 ? dl + ' days left' : 'expired' %></span> <span class="muted">(<%= new Date(m.ssl_expires).toLocaleDateString('en-IN') %>)</span></div>
+            <% } else if (m.ssl_error) { %><div class="small" style="color:var(--bad)">🔒 SSL problem: <%= m.ssl_error %></div><% } %>
           </div>
           <div class="small muted" style="text-align:right">
             <%= up !== null ? up + '% uptime' : 'Waiting for first check' %><br>

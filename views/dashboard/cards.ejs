@@ -1,0 +1,31 @@
+<%- include('../partials/head') %>
+<div class="container dash">
+  <%- include('../partials/dash-side') %>
+  <div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <h1 style="font-size:1.8rem;margin:0">Digital business cards</h1>
+      <% if (cards.length < plan.limits.cards) { %><a class="btn primary" href="/dashboard/cards/new">+ New card</a><% } else { %><a class="btn" href="/pricing">Upgrade for more cards</a><% } %>
+    </div>
+    <p class="muted">A mobile page with your contact details, WhatsApp button, "Save contact" and a QR code to print. <%= cards.length %> of <%= plan.limits.cards %> used.</p>
+    <div class="grid grid-2">
+    <% for (const c of cards) { const url = baseUrl + '/c/' + c.slug; %>
+      <div class="card">
+        <div style="display:flex;gap:14px;align-items:center">
+          <div style="width:52px;height:52px;border-radius:50%;background:<%= c.data.color %>;flex:none;overflow:hidden;display:grid;place-items:center;color:#fff;font-weight:700">
+            <% if (c.data.photo) { %><img src="<%= c.data.photo %>" alt="" style="width:100%;height:100%;object-fit:cover"><% } else { %><%= (c.data.name || '?')[0] %><% } %>
+          </div>
+          <div><strong><%= c.data.name %></strong><div class="small muted"><%= [c.data.title, c.data.company].filter(Boolean).join(' · ') %></div></div>
+        </div>
+        <p class="small" style="margin:12px 0"><a href="<%= url %>" target="_blank"><%= url.replace(/^https?:\/\//, '') %></a> · <%= c.views %> views</p>
+        <div class="btn-row">
+          <a class="btn sm primary" href="/dashboard/cards/<%= c.id %>">Edit</a>
+          <a class="btn sm" href="<%= url %>" target="_blank">Open</a>
+          <form method="post" action="/dashboard/cards/<%= c.id %>/delete" onsubmit="return confirm('Delete this card?')"><button class="btn sm danger" type="submit">Delete</button></form>
+        </div>
+      </div>
+    <% } %>
+    </div>
+    <% if (!cards.length) { %><p class="muted">No cards yet. <a href="/dashboard/cards/new">Create your first card</a> — it takes 2 minutes.</p><% } %>
+  </div>
+</div>
+<%- include('../partials/foot') %>

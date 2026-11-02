@@ -7,13 +7,19 @@ const { parseHttpUrl, isPublicUrl } = require('../safeurl');
 const router = express.Router();
 router.use(requireUser);
 
+const monthStart = () => { const d = new Date(); d.setDate(1); d.setHours(0, 0, 0, 0); return d.getTime(); };
 const count = (table, userId) => db.prepare(`SELECT COUNT(*) n FROM ${table} WHERE user_id = ?`).get(userId).n;
 
 router.get('/', (req, res) => {
   const u = req.user.id;
   res.render('dashboard/index', {
     title: 'Dashboard',
-    counts: { monitors: count('monitors', u), links: count('links', u), invoices: count('invoices', u) },
+    counts: {
+      monitors: count('monitors', u), links: count('links', u), invoices: count('invoices', u),
+      bookings: db.prepare("SELECT COUNT(*) n FROM bookings WHERE user_id = ? AND status = 'confirmed' AND created_at >= ?").get(u, monthStart()).n,
+      submissions: db.prepare('SELECT COUNT(*) n FROM form_submissions WHERE form_id IN (SELECT id FROM forms WHERE user_id = ?) AND created_at >= ?').get(u, monthStart()).n,
+      cardViews: db.prepare('SELECT COALESCE(SUM(views), 0) n FROM cards WHERE user_id = ?').get(u).n,
+    },
     down: db.prepare("SELECT * FROM monitors WHERE user_id = ? AND status = 'down'").all(u),
     flash: req.query.msg || null,
   });

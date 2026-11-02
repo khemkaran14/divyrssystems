@@ -4,6 +4,7 @@ const { effectivePlan } = require('./plans');
 const { parseHttpUrl, isPublicUrl } = require('./safeurl');
 const { sendMail } = require('./mailer');
 const config = require('./config');
+const tls = require('tls');
 
 const TICK_MS = 20000;
 const TIMEOUT_MS = 10000;
@@ -29,6 +30,52 @@ async function checkUrl(url) {
   }
 }
 
+// Reads the HTTPS certificate expiry date (checked twice a day per monitor).
+function checkSsl(urlObj) {
+  return new Promise((resolve) => {
+    const socket = tls.connect({
+      host: urlObj.hostname,
+      port: Number(urlObj.port) || 443,
+      servername: urlObj.hostname,
+      rejectUnauthorized: false,
+      timeout: TIMEOUT_MS,
+    }, () => {
+      const cert = socket.getPeerCertificate();
+      const ok = socket.authorized;
+      const err = socket.authorizationError;
+      socket.end();
+      if (!cert || !cert.valid_to) return resolve({ expires: null, error: 'No certificate' });
+      resolve({ expires: new Date(cert.valid_to).getTime(), error: ok ? null : String(err) });
+    });
+    socket.on('timeout', () => { socket.destroy(); resolve({ expires: null, error: 'Timed out' }); });
+    socket.on('error', (e) => resolve({ expires: null, error: e.message }));
+  });
+}
+
+async function runSsl(m, user, plan) {
+  const u = parseHttpUrl(m.url);
+  if (!u || u.protocol !== 'https:') return;
+  if (m.ssl_checked && Date.now() - m.ssl_checked < 12 * 3600000) return;
+  if (!(await isPublicUrl(u))) return;
+  const r = await checkSsl(u);
+  const now = Date.now();
+  const daysLeft = r.expires ? Math.floor((r.expires - now) / 86400000) : null;
+  let alerted = m.ssl_alerted;
+  if (daysLeft !== null && daysLeft > 14) alerted = null; // renewed: allow future alerts
+  const due = daysLeft !== null && daysLeft <= 14 && (!alerted || now - alerted > 3 * 86400000);
+  if (due && plan.limits.sslAlerts && user) {
+    await sendMail({
+      to: user.email,
+      subject: daysLeft < 0 ? `🔴 SSL certificate EXPIRED: ${m.name}` : `⚠️ SSL certificate for ${m.name} expires in ${daysLeft} days`,
+      text: `Website: ${m.url}\nCertificate expires: ${new Date(r.expires).toUTCString()}\n\n` +
+        `Renew it before it expires, or visitors will see a security warning.\n\n${config.baseUrl}/dashboard/monitors\n`,
+    });
+    alerted = now;
+  }
+  db.prepare('UPDATE monitors SET ssl_expires = ?, ssl_checked = ?, ssl_alerted = ?, ssl_error = ? WHERE id = ?')
+    .run(r.expires, now, alerted, r.error, m.id);
+}
+
 async function runOne(m) {
   const user = db.prepare('SELECT * FROM users WHERE id = ?').get(m.user_id);
   const plan = effectivePlan(user);
@@ -50,6 +97,8 @@ async function runOne(m) {
   db.prepare(`DELETE FROM checks WHERE monitor_id=? AND id NOT IN
               (SELECT id FROM checks WHERE monitor_id=? ORDER BY checked_at DESC LIMIT ?)`)
     .run(m.id, m.id, KEEP_CHECKS);
+
+  await runSsl(m, user, plan).catch((e) => console.error('ssl', m.id, e.message));
 
   const changed = (m.status === 'up' || m.status === 'down') && m.status !== newStatus;
   if (changed && plan.limits.emailAlerts && user) {
