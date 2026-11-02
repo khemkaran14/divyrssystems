@@ -133,12 +133,15 @@ if [ -n "$OTHER" ]; then
   die "Not touching that file. Remove or rename the old $DOMAIN config there, then run this script again."
 fi
 
+# Listen on IPv6 only if this server has it (otherwise nginx -t fails).
+V6=""; [ -s /proc/net/if_inet6 ] && V6="    listen [::]:80;"
+
 if [ ! -f "$CONF" ]; then
   cat > "$CONF" <<EOF
 # Divyrs Systems (installed by deploy/install-vps.sh)
 server {
     listen 80;
-    listen [::]:80;
+$V6
     server_name $DOMAIN www.$DOMAIN;
     client_max_body_size 2m;
 
@@ -158,20 +161,20 @@ EOF
     rm -f "$CONF" ${LINK:+"$LINK"}
     die "Nginx config test failed, so nothing was changed. Your other sites are unaffected."
   fi
-  systemctl reload nginx
+  { systemctl reload nginx 2>/dev/null || nginx -s reload; }
   ok "Nginx now sends $DOMAIN to the app"
 else
   # Keep the port in our own file in sync with .env.
   sed -i "s|proxy_pass http://127.0.0.1:[0-9]*;|proxy_pass http://127.0.0.1:$PORT;|" "$CONF"
-  nginx -t 2>/dev/null && systemctl reload nginx
+  nginx -t 2>/dev/null && { systemctl reload nginx 2>/dev/null || nginx -s reload; }
   ok "Nginx config already present"
 fi
 
 # ---------------------------------------------------------------- https
 say "HTTPS certificate"
-SERVER_IP="$(curl -fs4 --max-time 5 https://api.ipify.org || hostname -I | awk '{print $1}')"
-DNS_IP="$(getent ahostsv4 "$DOMAIN" | awk 'NR==1{print $1}')"
-WWW_IP="$(getent ahostsv4 "www.$DOMAIN" | awk 'NR==1{print $1}')"
+SERVER_IP="$(curl -fs4 --max-time 5 https://api.ipify.org || hostname -I | awk '{print $1}' || true)"
+DNS_IP="$(getent ahostsv4 "$DOMAIN" | awk 'NR==1{print $1}' || true)"
+WWW_IP="$(getent ahostsv4 "www.$DOMAIN" | awk 'NR==1{print $1}' || true)"
 
 if [ "$DNS_IP" != "$SERVER_IP" ]; then
   warn "$DOMAIN points to ${DNS_IP:-nothing}, but this server is $SERVER_IP."
@@ -189,8 +192,9 @@ else
 fi
 
 # ---------------------------------------------------------------- backups
+command -v crontab >/dev/null || { apt-get install -y -qq cron >/dev/null && { systemctl enable --now cron 2>/dev/null || true; }; }
 if ! crontab -l 2>/dev/null | grep -qF "$APP_DIR/deploy/backup.sh"; then
-  command -v sqlite3 >/dev/null || apt-get install -y -qq sqlite3
+  command -v sqlite3 >/dev/null || apt-get install -y -qq sqlite3 >/dev/null
   (crontab -l 2>/dev/null; echo "15 3 * * * $APP_DIR/deploy/backup.sh") | crontab -
   ok "Daily database backup at 03:15 into $APP_DIR/backups"
 fi

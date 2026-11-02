@@ -1,5 +1,28 @@
 # Deploying to your Hostinger VPS
 
+## Quick way (recommended): one command
+
+SSH into the VPS as root and run:
+
+```bash
+bash <(curl -fsSL https://raw.githubusercontent.com/khemkaran14/divyrssystems/claude/divyrs-monetization-strategy-54s2qt/deploy/install-vps.sh)
+```
+
+It installs the app in `/root/divyrssystems`, next to your other sites, and:
+
+- picks a free port (from 3100 up) so it never clashes with your other apps
+- uses the server's Node.js if it is version 22+, otherwise downloads a private Node 22 into `/root/divyrssystems/.node` (your other sites keep their Node)
+- runs the app with PM2 as `divyrs`, alongside your other PM2 apps
+- adds an Nginx config **only** for divyrs.com; if `nginx -t` fails it removes it again, so other sites are never affected
+- turns on HTTPS once divyrs.com's DNS points at this server (otherwise it tells you which DNS records to set)
+- sets up a daily database backup
+
+Run the same command again any time to update to the latest code.
+
+The manual steps below do the same thing by hand.
+
+---
+
 This runs next to your other websites. Nginx sends `divyrs.com` traffic to this app on port **3100** (change `PORT` in `.env` if 3100 is taken).
 
 ## 1. One-time server setup (skip what you already have)
