@@ -1,0 +1,31 @@
+<%- include('../partials/head') %>
+<section class="section"><div class="container">
+  <h1>Free QR Code Generator</h1>
+  <p class="lead">For links, UPI IDs, Wi-Fi, phone numbers or any text. Download PNG or print-ready SVG. No sign-up.</p>
+  <div class="grid grid-2" style="margin-top:24px;align-items:start">
+    <form class="card" method="post" action="/tools/qr">
+      <% if (typeof error !== 'undefined' && error) { %><div class="alert error"><%= error %></div><% } %>
+      <div class="field"><label for="text">Link or text</label><textarea id="text" name="text" rows="3" required maxlength="2000" placeholder="https://example.com or upi://pay?pa=name@bank"><%= form.text || '' %></textarea></div>
+      <div class="grid grid-3" style="gap:12px">
+        <div class="field"><label for="dark">Colour</label><input id="dark" type="color" name="dark" value="<%= form.dark || '#111827' %>"></div>
+        <div class="field"><label for="light">Background</label><input id="light" type="color" name="light" value="<%= form.light || '#ffffff' %>"></div>
+        <div class="field"><label for="size">Size (px)</label><select id="size" name="size"><% for (const s of [256, 512, 1024, 2048]) { %><option <%= String(form.size || 512) === String(s) ? 'selected' : '' %>><%= s %></option><% } %></select></div>
+      </div>
+      <p class="small muted">Tip: for UPI use <code>upi://pay?pa=yourid@bank&pn=Your%20Name</code></p>
+      <button class="btn primary block" type="submit">Generate QR code</button>
+    </form>
+    <div class="card center">
+      <% if (qr) { %>
+        <img src="<%= qr %>" alt="QR code" style="width:100%;max-width:320px;image-rendering:pixelated">
+        <div class="btn-row" style="justify-content:center;margin-top:16px">
+          <a class="btn primary" href="<%= qr %>" download="qr-code.png">Download PNG</a>
+          <a class="btn" href="data:image/svg+xml;charset=utf-8,<%= encodeURIComponent(svg) %>" download="qr-code.svg">Download SVG</a>
+        </div>
+        <% if (!user) { %><p class="small muted" style="margin-top:16px">Want to track scans? <a href="/signup?next=/dashboard/links">Create a free short link</a> and turn it into a QR code.</p><% } %>
+      <% } else { %>
+        <p class="muted" style="padding:80px 0">Your QR code will appear here.</p>
+      <% } %>
+    </div>
+  </div>
+</div></section>
+<%- include('../partials/foot') %>

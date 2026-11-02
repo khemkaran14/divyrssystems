@@ -1,0 +1,15 @@
+<%- include("../partials/head") %>
+<section class="section"><div class="container legal">
+<h1>Cancellation &amp; Refund Policy</h1>
+<p class="muted">Last updated: <%= new Date().getFullYear() %></p>
+<h2>Cancellation</h2>
+<p>Plans are prepaid and never renew automatically, so there is nothing to cancel. If you don't buy again, your account returns to the Free plan at the end of the period.</p>
+<h2>Refunds</h2>
+<ul>
+  <li><strong>7-day money-back guarantee:</strong> if you're not happy, ask within 7 days of your first payment for a full refund.</li>
+  <li>Yearly plans cancelled after 7 days can be refunded for the unused whole months, minus payment gateway charges.</li>
+  <li>Approved refunds are returned to the original payment method within 5–7 working days.</li>
+</ul>
+<p>To request a refund, email <a href="mailto:<%= business.email %>"><%= business.email %></a> with your account email and payment ID.</p>
+</div></section>
+<%- include("../partials/foot") %>

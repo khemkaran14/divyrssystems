@@ -1,0 +1,42 @@
+<%- include('../partials/head') %>
+<div class="container dash">
+  <%- include('../partials/dash-side') %>
+  <div>
+    <h1 style="font-size:1.8rem">Uptime monitors</h1>
+    <p class="muted"><%= monitors.length %> of <%= plan.limits.monitors %> used · checked every <%= plan.limits.intervalMin %> min ·
+      email alerts <%= plan.limits.emailAlerts ? 'on' : 'off (Pro)' %>
+      <% if (plan.limits.statusPage && user.status_slug) { %> · <a href="/status/<%= user.status_slug %>" target="_blank">Public status page ↗</a><% } %></p>
+    <% if (error) { %><div class="alert error"><%= error %> <% if (/Upgrade/.test(error)) { %><a href="/pricing">See plans</a><% } %></div><% } %>
+    <form class="card inline-form" method="post" action="/dashboard/monitors" style="margin-bottom:24px">
+      <div class="field"><label for="m-url">Website URL</label><input id="m-url" name="url" placeholder="https://yourwebsite.com" required></div>
+      <div class="field" style="flex:0 1 200px"><label for="m-name">Name (optional)</label><input id="m-name" name="name" maxlength="80"></div>
+      <button class="btn primary" type="submit">Add monitor</button>
+    </form>
+    <% if (!monitors.length) { %>
+      <p class="muted">No monitors yet. Add your first website above — the first check runs within a minute.</p>
+    <% } %>
+    <div class="grid">
+    <% for (const m of monitors) { const hist = history[m.id]; const up = m.checks_total ? (100 * m.checks_up / m.checks_total).toFixed(2) : null; %>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center">
+          <div>
+            <strong><%= m.name %></strong>
+            <span class="badge <%= m.status === 'up' ? 'ok' : m.status === 'down' ? 'bad' : 'warn' %>"><%= m.status.toUpperCase() %></span>
+            <div class="small muted" style="word-break:break-all"><%= m.url %></div>
+          </div>
+          <div class="small muted" style="text-align:right">
+            <%= up !== null ? up + '% uptime' : 'Waiting for first check' %><br>
+            <%= m.last_response_ms != null ? m.last_response_ms + ' ms' : '' %><%= m.last_checked ? ' · ' + new Date(m.last_checked).toLocaleTimeString('en-IN') : '' %>
+          </div>
+        </div>
+        <div class="bars" style="margin-top:12px" title="Last <%= hist.length %> checks">
+          <% for (let i = 0; i < 40 - hist.length; i++) { %><span></span><% } %>
+          <% for (const c of hist) { %><span class="<%= c.up ? 'up' : 'down' %>" title="<%= new Date(c.checked_at).toLocaleString('en-IN') %> — <%= c.up ? c.response_ms + ' ms' : (c.error || 'down') %>"></span><% } %>
+        </div>
+        <form method="post" action="/dashboard/monitors/<%= m.id %>/delete" style="margin-top:12px" onsubmit="return confirm('Delete this monitor?')"><button class="btn sm danger" type="submit">Delete</button></form>
+      </div>
+    <% } %>
+    </div>
+  </div>
+</div>
+<%- include('../partials/foot') %>

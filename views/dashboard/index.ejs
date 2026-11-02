@@ -1,0 +1,24 @@
+<%- include('../partials/head') %>
+<div class="container dash">
+  <%- include('../partials/dash-side') %>
+  <div>
+    <h1 style="font-size:1.8rem">Hi <%= user.name.split(' ')[0] %> 👋</h1>
+    <p class="muted">You're on the <strong><%= plan.name %></strong> plan<% if (plan.id !== 'free') { %> until <%= new Date(user.plan_expires).toLocaleDateString('en-IN') %><% } %>.
+      <% if (plan.id !== 'business') { %><a href="/pricing">Upgrade</a><% } %></p>
+    <% if (flash) { %><div class="alert success"><%= flash %></div><% } %>
+    <% if (down.length) { %><div class="alert error">🔴 Down right now: <%= down.map(m => m.name).join(', ') %></div><% } %>
+    <div class="grid grid-3" style="margin-top:20px">
+      <a class="card" href="/dashboard/monitors"><div class="muted small">Uptime monitors</div><div class="stat"><%= counts.monitors %> <span class="small muted">/ <%= plan.limits.monitors %></span></div></a>
+      <a class="card" href="/dashboard/links"><div class="muted small">Short links</div><div class="stat"><%= counts.links %> <span class="small muted">/ <%= plan.limits.links === Infinity ? '∞' : plan.limits.links %></span></div></a>
+      <a class="card" href="/dashboard/invoices"><div class="muted small">Saved invoices</div><div class="stat"><%= counts.invoices %> <span class="small muted">/ <%= plan.limits.savedInvoices === Infinity ? '∞' : plan.limits.savedInvoices %></span></div></a>
+    </div>
+    <h2 style="font-size:1.3rem;margin-top:36px">Quick start</h2>
+    <div class="grid grid-2">
+      <a class="card" href="/tools/invoice"><h3>🧾 Create an invoice</h3><p class="muted small">GST-ready, download as PDF.</p></a>
+      <a class="card" href="/dashboard/monitors"><h3>📡 Monitor a website</h3><p class="muted small">Get told when it goes down.</p></a>
+      <a class="card" href="/dashboard/links"><h3>🔗 Shorten a link</h3><p class="muted small">Track every click.</p></a>
+      <a class="card" href="/tools/qr"><h3>▦ Make a QR code</h3><p class="muted small">PNG and SVG.</p></a>
+    </div>
+  </div>
+</div>
+<%- include('../partials/foot') %>

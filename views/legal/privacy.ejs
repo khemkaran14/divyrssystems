@@ -1,0 +1,25 @@
+<%- include("../partials/head") %>
+<section class="section"><div class="container legal">
+<h1>Privacy Policy</h1>
+<p class="muted">Last updated: <%= new Date().getFullYear() %></p>
+<p><%= business.name %> ("we", "us") runs this website and its online tools. This policy explains what we collect and why.</p>
+<h2>What we collect</h2>
+<ul>
+  <li><strong>Account details:</strong> your name, email address and a hashed (unreadable) password.</li>
+  <li><strong>Content you create:</strong> saved invoices, short links, and the website addresses you ask us to monitor.</li>
+  <li><strong>Usage data:</strong> click counts on short links (we count clicks; we do not store visitors' identities).</li>
+  <li><strong>Payments:</strong> handled by Razorpay. We receive the payment ID and amount, never your card or bank details.</li>
+  <li><strong>Invoice drafts</strong> made without an account stay in your own browser and are not sent to us.</li>
+</ul>
+<h2>How we use it</h2>
+<p>Only to provide the service: log you in, run your tools, send alerts and receipts, and answer support requests. We do not sell your data or show ads.</p>
+<h2>Cookies</h2>
+<p>We use one login cookie and one cookie that remembers your currency. No tracking or advertising cookies.</p>
+<h2>Sharing</h2>
+<p>We share data only with providers needed to run the service (hosting, email delivery, Razorpay for payments), or when required by law.</p>
+<h2>Your rights</h2>
+<p>You can ask us to export or delete your data at any time by writing to <a href="mailto:<%= business.email %>"><%= business.email %></a>.</p>
+<h2>Contact</h2>
+<p><%= business.name %>, <%= business.address %>. Email: <%= business.email %></p>
+</div></section>
+<%- include("../partials/foot") %>

@@ -1,0 +1,67 @@
+<%- include('../partials/head') %>
+<section class="section" style="padding-top:32px"><div class="container" style="max-width:1280px">
+  <h1 style="font-size:2rem">Free GST Invoice Generator</h1>
+  <p class="muted">Fill the form, check the preview, download as PDF. Your details are remembered on this device.
+    <% if (!user) { %><a href="/signup?next=/tools/invoice">Sign up free</a> to save invoices to your account.<% } %></p>
+  <div id="inv-msg"></div>
+  <div class="inv-layout" style="margin-top:16px">
+    <form id="inv-form" class="card" onsubmit="return false">
+      <h3>Your business</h3>
+      <div class="field"><label>Business name</label><input name="seller.name" placeholder="Your Company Pvt Ltd"></div>
+      <div class="field"><label>Address</label><textarea name="seller.address" rows="2"></textarea></div>
+      <div class="grid grid-2" style="gap:10px">
+        <div class="field"><label>GSTIN</label><input name="seller.gstin" maxlength="15"></div>
+        <div class="field"><label>Email / phone</label><input name="seller.contact"></div>
+      </div>
+      <div class="field"><label>Logo (PNG/JPG, under 100 KB)</label><input type="file" id="logo-file" accept="image/png,image/jpeg"></div>
+
+      <h3 style="margin-top:20px">Bill to</h3>
+      <div class="field"><label>Client name</label><input name="client.name"></div>
+      <div class="field"><label>Client address</label><textarea name="client.address" rows="2"></textarea></div>
+      <div class="field"><label>Client GSTIN (optional)</label><input name="client.gstin" maxlength="15"></div>
+
+      <h3 style="margin-top:20px">Invoice</h3>
+      <div class="grid grid-2" style="gap:10px">
+        <div class="field"><label>Invoice no.</label><input name="number"></div>
+        <div class="field"><label>Currency</label><select name="currency"><option>INR</option><option>USD</option><option>EUR</option><option>GBP</option><option>AED</option></select></div>
+        <div class="field"><label>Date</label><input type="date" name="date"></div>
+        <div class="field"><label>Due date</label><input type="date" name="due"></div>
+      </div>
+      <div class="field"><label>Tax type</label>
+        <select name="taxMode">
+          <option value="intra">GST — same state (CGST + SGST)</option>
+          <option value="inter">GST — other state (IGST)</option>
+          <option value="none">No tax / export</option>
+        </select>
+      </div>
+
+      <h3 style="margin-top:20px">Items</h3>
+      <div class="small muted inv-items"><div class="row" style="margin:0"><span>Description / HSN</span><span>Qty</span><span>Rate</span><span>GST %</span><span></span></div></div>
+      <div id="items" class="inv-items"></div>
+      <button type="button" class="btn sm" id="add-item">+ Add item</button>
+
+      <h3 style="margin-top:20px">Payment &amp; notes</h3>
+      <div class="field"><label>Bank / UPI details</label><textarea name="payment" rows="2" placeholder="A/c 1234…, IFSC …, UPI: name@bank"></textarea></div>
+      <div class="field"><label>Notes / terms</label><textarea name="notes" rows="2" placeholder="Thank you for your business."></textarea></div>
+
+      <div class="btn-row" style="margin-top:12px">
+        <button type="button" class="btn primary" id="print">Download PDF</button>
+        <button type="button" class="btn" id="save"><%= user ? 'Save to account' : 'Save (sign up free)' %></button>
+        <button type="button" class="btn" id="new">New invoice</button>
+      </div>
+      <p class="small muted" style="margin-top:10px">PDF: choose "Save as PDF" in the print dialog.</p>
+    </form>
+
+    <div id="paper" class="paper"></div>
+  </div>
+</div></section>
+<script>
+  window.INV = {
+    loggedIn: <%- json(!!user) %>,
+    watermark: <%- json(plan.limits.invoiceWatermark) %>,
+    saved: <%- json(saved) %>,
+    siteUrl: <%- json(baseUrl.replace(/^https?:\/\//, '')) %>
+  };
+</script>
+<script src="/js/invoice.js"></script>
+<%- include('../partials/foot') %>

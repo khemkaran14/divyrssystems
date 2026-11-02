@@ -1,0 +1,9 @@
+<aside class="side">
+  <a href="/dashboard" class="<%= path === '/dashboard' ? 'active' : '' %>">Overview</a>
+  <a href="/dashboard/monitors" class="<%= path === '/dashboard/monitors' ? 'active' : '' %>">Uptime monitors</a>
+  <a href="/dashboard/links" class="<%= path === '/dashboard/links' ? 'active' : '' %>">Short links</a>
+  <a href="/dashboard/invoices" class="<%= path === '/dashboard/invoices' ? 'active' : '' %>">Invoices</a>
+  <a href="/tools/qr">QR codes</a>
+  <a href="/dashboard/account" class="<%= path === '/dashboard/account' ? 'active' : '' %>">Account &amp; billing</a>
+  <form method="post" action="/logout" style="margin-top:12px"><button class="btn sm" type="submit">Log out</button></form>
+</aside>

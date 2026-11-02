@@ -1,0 +1,34 @@
+<%- include('../partials/head') %>
+<div class="container dash">
+  <%- include('../partials/dash-side') %>
+  <div>
+    <h1 style="font-size:1.8rem">Short links</h1>
+    <p class="muted"><%= links.length %> of <%= plan.limits.links === Infinity ? 'unlimited' : plan.limits.links %> used</p>
+    <% if (error) { %><div class="alert error"><%= error %> <% if (/Upgrade/.test(error)) { %><a href="/pricing">See plans</a><% } %></div><% } %>
+    <form class="card inline-form" method="post" action="/dashboard/links" style="margin-bottom:24px">
+      <div class="field"><label for="l-url">Long URL</label><input id="l-url" name="url" placeholder="https://example.com/very/long/link" required></div>
+      <div class="field" style="flex:0 1 200px"><label for="l-code">Custom code <%= plan.id === 'free' ? '(Pro)' : '(optional)' %></label><input id="l-code" name="code" placeholder="diwali-sale" <%= plan.id === 'free' ? 'disabled' : '' %>></div>
+      <button class="btn primary" type="submit">Shorten</button>
+    </form>
+    <% if (links.length) { %>
+    <div class="card table-wrap" style="padding:8px">
+      <table>
+        <thead><tr><th>Short link</th><th>Goes to</th><th class="num">Clicks</th><th></th></tr></thead>
+        <tbody>
+        <% for (const l of links) { const short = baseUrl + '/s/' + l.code; %>
+          <tr>
+            <td><a href="<%= short %>" target="_blank" class="mono"><%= short.replace(/^https?:\/\//, '') %></a>
+              <button class="btn sm" type="button" onclick="navigator.clipboard.writeText('<%= short %>');this.textContent='Copied'">Copy</button></td>
+            <td class="small muted" style="max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><%= l.target %></td>
+            <td class="num"><strong><%= l.clicks %></strong></td>
+            <td><form method="post" action="/dashboard/links/<%= l.id %>/delete" onsubmit="return confirm('Delete this link?')"><button class="btn sm danger" type="submit">Delete</button></form></td>
+          </tr>
+        <% } %>
+        </tbody>
+      </table>
+    </div>
+    <p class="small muted" style="margin-top:12px">Tip: paste a short link into the <a href="/tools/qr">QR generator</a> to count scans.</p>
+    <% } else { %><p class="muted">No links yet.</p><% } %>
+  </div>
+</div>
+<%- include('../partials/foot') %>

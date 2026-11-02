@@ -1,0 +1,15 @@
+<%- include('partials/head') %>
+<section class="section"><div class="container" style="max-width:440px">
+  <div class="card">
+    <h1 style="font-size:1.8rem">Log in</h1>
+    <% if (error) { %><div class="alert error"><%= error %></div><% } %>
+    <form method="post" action="/login">
+      <input type="hidden" name="next" value="<%= next %>">
+      <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" value="<%= email %>" required autocomplete="email"></div>
+      <div class="field"><label for="password">Password</label><input id="password" name="password" type="password" required autocomplete="current-password"></div>
+      <button class="btn primary block" type="submit">Log in</button>
+    </form>
+    <p class="small muted" style="margin-top:14px">New here? <a href="/signup">Create a free account</a>. Forgot your password? <a href="/contact">Contact us</a>.</p>
+  </div>
+</div></section>
+<%- include('partials/foot') %>

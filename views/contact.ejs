@@ -1,0 +1,27 @@
+<%- include('partials/head') %>
+<section class="section"><div class="container" style="max-width:980px">
+  <div class="grid grid-2" style="gap:40px">
+    <div>
+      <h1>Contact us</h1>
+      <p class="lead">Questions, custom plans, bulk licences for your team, or a custom software project — we usually reply within one working day.</p>
+      <p><strong>Email:</strong> <a href="mailto:<%= business.email %>"><%= business.email %></a></p>
+      <% if (business.phone) { %><p><strong>Phone / WhatsApp:</strong> <%= business.phone %></p><% } %>
+      <p><strong>Address:</strong> <%= business.address %></p>
+    </div>
+    <div class="card">
+      <% if (sent) { %>
+        <div class="alert success">Thanks! Your message has been sent. We'll get back to you soon.</div>
+      <% } else { %>
+        <% if (error) { %><div class="alert error"><%= error %></div><% } %>
+        <form method="post" action="/contact">
+          <div class="field"><label for="name">Name</label><input id="name" name="name" required maxlength="200"></div>
+          <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required maxlength="200"></div>
+          <div class="field"><label for="company">Company (optional)</label><input id="company" name="company" maxlength="200"></div>
+          <div class="field"><label for="message">Message</label><textarea id="message" name="message" rows="5" required maxlength="5000"></textarea></div>
+          <button class="btn primary block" type="submit">Send message</button>
+        </form>
+      <% } %>
+    </div>
+  </div>
+</div></section>
+<%- include('partials/foot') %>

@@ -1,0 +1,9 @@
+<%- include("../partials/head") %>
+<section class="section"><div class="container legal">
+<h1>Delivery Policy</h1>
+<p class="muted">Last updated: <%= new Date().getFullYear() %></p>
+<p>All products sold on this website are online software subscriptions. Nothing is physically shipped.</p>
+<p>Your paid plan is activated <strong>instantly</strong> after a successful payment and is available in your dashboard. A payment receipt is sent to your registered email address.</p>
+<p>If your plan is not active within 1 hour of payment, contact <a href="mailto:<%= business.email %>"><%= business.email %></a><% if (business.phone) { %> or <%= business.phone %><% } %> with your payment ID.</p>
+</div></section>
+<%- include("../partials/foot") %>

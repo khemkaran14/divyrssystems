@@ -1,0 +1,30 @@
+<%- include('../partials/head') %>
+<div class="container dash">
+  <%- include('../partials/dash-side') %>
+  <div>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
+      <h1 style="font-size:1.8rem;margin:0">Saved invoices</h1>
+      <a class="btn primary" href="/tools/invoice">+ New invoice</a>
+    </div>
+    <p class="muted"><%= invoices.length %> of <%= plan.limits.savedInvoices === Infinity ? 'unlimited' : plan.limits.savedInvoices %> saved</p>
+    <% if (invoices.length) { %>
+    <div class="card table-wrap" style="padding:8px">
+      <table>
+        <thead><tr><th>Number</th><th>Client</th><th class="num">Total</th><th>Updated</th><th></th></tr></thead>
+        <tbody>
+        <% for (const i of invoices) { %>
+          <tr>
+            <td><a href="/tools/invoice?id=<%= i.id %>"><%= i.number || '(no number)' %></a></td>
+            <td><%= i.client %></td>
+            <td class="num"><%= i.currency %> <%= i.total.toLocaleString('en-IN', { minimumFractionDigits: 2 }) %></td>
+            <td class="small muted"><%= new Date(i.updated_at).toLocaleDateString('en-IN') %></td>
+            <td><form method="post" action="/dashboard/invoices/<%= i.id %>/delete" onsubmit="return confirm('Delete this invoice?')"><button class="btn sm danger" type="submit">Delete</button></form></td>
+          </tr>
+        <% } %>
+        </tbody>
+      </table>
+    </div>
+    <% } else { %><p class="muted">No saved invoices yet. Create one and press "Save to account".</p><% } %>
+  </div>
+</div>
+<%- include('../partials/foot') %>

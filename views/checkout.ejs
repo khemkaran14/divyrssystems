@@ -1,0 +1,33 @@
+<%- include('partials/head') %>
+<section class="section"><div class="container" style="max-width:520px">
+  <div class="card center">
+    <h1 style="font-size:1.8rem">Upgrade to <%= plan.name %></h1>
+    <p class="price"><%= formatPrice(amount, currency) %></p>
+    <p class="muted"><%= months === 12 ? '12 months (2 months free)' : '1 month' %> · prepaid, no auto-renewal</p>
+    <button id="pay" class="btn primary lg block">Pay securely</button>
+    <p class="small muted" style="margin-top:12px">Payments are processed by Razorpay. UPI, cards, net banking and wallets accepted.</p>
+    <form id="done" method="post" action="/billing/verify">
+      <input type="hidden" name="razorpay_order_id"><input type="hidden" name="razorpay_payment_id"><input type="hidden" name="razorpay_signature">
+    </form>
+  </div>
+</div></section>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  const rzp = new Razorpay({
+    key: <%- json(keyId) %>,
+    order_id: <%- json(order.id) %>,
+    amount: <%- json(order.amount) %>,
+    currency: <%- json(currency) %>,
+    name: 'Divyrs Systems',
+    description: <%- json(plan.name + ' plan') %>,
+    prefill: { name: <%- json(user.name) %>, email: <%- json(user.email) %> },
+    theme: { color: '#4f46e5' },
+    handler: function (r) {
+      const f = document.getElementById('done');
+      for (const k of ['razorpay_order_id', 'razorpay_payment_id', 'razorpay_signature']) f.elements[k].value = r[k];
+      f.submit();
+    }
+  });
+  document.getElementById('pay').onclick = () => rzp.open();
+</script>
+<%- include('partials/foot') %>

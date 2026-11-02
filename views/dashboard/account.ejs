@@ -1,0 +1,65 @@
+<%- include('../partials/head') %>
+<div class="container dash">
+  <%- include('../partials/dash-side') %>
+  <div>
+    <h1 style="font-size:1.8rem">Account &amp; billing</h1>
+    <% if (msg) { %><div class="alert success"><%= msg %></div><% } %>
+    <% if (error) { %><div class="alert error"><%= error %></div><% } %>
+
+    <div class="card" style="margin-bottom:20px">
+      <h3>Plan</h3>
+      <p><strong><%= plan.name %></strong><% if (plan.id !== 'free') { %> — active until <%= new Date(me.plan_expires).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) %><% } %></p>
+      <div class="btn-row"><a class="btn primary" href="/pricing"><%= plan.id === 'free' ? 'Upgrade' : 'Renew or change plan' %></a></div>
+      <p class="small muted" style="margin-top:10px">Plans are prepaid. Buying the same plan again adds time on top of what you have.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+      <h3>Public status page <span class="badge">Pro</span></h3>
+      <% if (plan.limits.statusPage) { %>
+        <form class="inline-form" method="post" action="/dashboard/account/status-slug">
+          <div class="field"><label for="slug"><%= baseUrl.replace(/^https?:\/\//, '') %>/status/</label><input id="slug" name="slug" value="<%= me.status_slug || '' %>" placeholder="your-company"></div>
+          <button class="btn" type="submit">Save</button>
+        </form>
+        <% if (me.status_slug) { %><p class="small" style="margin-top:10px"><a href="/status/<%= me.status_slug %>" target="_blank">Open status page ↗</a></p><% } %>
+      <% } else { %><p class="muted small">Share a live uptime page with your customers. <a href="/pricing">Upgrade to Pro</a>.</p><% } %>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+      <h3>API key <span class="badge">Pro</span></h3>
+      <% if (plan.limits.apiAccess) { %>
+        <% if (me.api_key) { %><p><code><%= me.api_key %></code></p><% } %>
+        <form method="post" action="/dashboard/account/api-key"><button class="btn" type="submit"><%= me.api_key ? 'Regenerate key' : 'Create API key' %></button></form>
+        <pre style="margin-top:12px">curl -X POST <%= baseUrl %>/api/v1/links \
+  -H "Authorization: Bearer YOUR_KEY" -H "Content-Type: application/json" \
+  -d '{"url":"https://example.com"}'
+
+curl <%= baseUrl %>/api/v1/monitors -H "Authorization: Bearer YOUR_KEY"</pre>
+      <% } else { %><p class="muted small">Create short links and read monitor status from your own apps. <a href="/pricing">Upgrade to Pro</a>.</p><% } %>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+      <h3>Payments</h3>
+      <% const paid = payments.filter(p => p.status === 'paid'); %>
+      <% if (paid.length) { %>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Date</th><th>Plan</th><th class="num">Amount</th><th>Payment ID</th></tr></thead>
+          <tbody><% for (const p of paid) { %>
+            <tr><td><%= new Date(p.paid_at).toLocaleDateString('en-IN') %></td><td><%= PLANS[p.plan].name %> · <%= p.months %> mo</td>
+              <td class="num"><%= formatPrice(p.amount, p.currency) %></td><td class="mono small"><%= p.payment_id %></td></tr>
+          <% } %></tbody>
+        </table></div>
+      <% } else { %><p class="muted small">No payments yet.</p><% } %>
+    </div>
+
+    <div class="card">
+      <h3>Change password</h3>
+      <form method="post" action="/dashboard/account/password" class="inline-form">
+        <div class="field"><label for="pw-cur">Current</label><input id="pw-cur" type="password" name="current" required autocomplete="current-password"></div>
+        <div class="field"><label for="pw-new">New (8+)</label><input id="pw-new" type="password" name="next" minlength="8" required autocomplete="new-password"></div>
+        <button class="btn" type="submit">Update</button>
+      </form>
+      <p class="small muted" style="margin-top:12px">Signed in as <%= me.email %>. To delete your account, <a href="/contact">contact us</a>.</p>
+    </div>
+  </div>
+</div>
+<%- include('../partials/foot') %>

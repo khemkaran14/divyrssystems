@@ -1,0 +1,48 @@
+<%- include('partials/head') %>
+<section class="hero center" style="padding-bottom:32px">
+  <div class="container">
+    <h1>Pricing</h1>
+    <p class="lead">Prepaid monthly or yearly. No auto-renewal, no hidden fees. Yearly plans get 2 months free.</p>
+    <div class="toggle" style="margin-top:12px">
+      <a href="?cur=INR" class="<%= cur === 'INR' ? 'on' : '' %>">₹ INR</a>
+      <a href="?cur=USD" class="<%= cur === 'USD' ? 'on' : '' %>">$ USD</a>
+    </div>
+  </div>
+</section>
+<section class="section" style="padding-top:24px">
+  <div class="container">
+    <div class="grid grid-3">
+      <% for (const p of Object.values(PLANS)) { const L = p.limits; %>
+      <div class="card price-card <%= p.id === 'pro' ? 'featured' : '' %>">
+        <h3><%= p.name %></h3>
+        <p class="muted small"><%= p.tagline %></p>
+        <div class="price"><%= formatPrice(p.price[cur], cur) %><small> /month</small></div>
+        <p class="small muted"><%= p.id === 'free' ? 'Free forever' : 'or ' + formatPrice(p.price[cur] * 10, cur) + ' /year' %></p>
+        <ul class="checks">
+          <li><%= L.monitors %> uptime monitors</li>
+          <li>Checks every <%= L.intervalMin %> minute<%= L.intervalMin > 1 ? 's' : '' %></li>
+          <li class="<%= L.emailAlerts ? '' : 'no' %>">Email down/up alerts</li>
+          <li class="<%= L.statusPage ? '' : 'no' %>">Public status page</li>
+          <li class="<%= L.whiteLabel ? '' : 'no' %>">White-label status page (no Divyrs branding)</li>
+          <li><%= L.links === Infinity ? 'Unlimited' : L.links %> short links<%= p.id === 'free' ? '' : ' + custom codes' %></li>
+          <li>Unlimited invoices &amp; QR codes</li>
+          <li><%= L.savedInvoices === Infinity ? 'Unlimited' : L.savedInvoices %> saved invoices</li>
+          <li class="<%= L.invoiceWatermark ? 'no' : '' %>">No "Made with Divyrs" footer on invoices</li>
+          <li class="<%= L.apiAccess ? '' : 'no' %>">REST API access</li>
+          <% if (p.id === 'business') { %><li>Priority email &amp; WhatsApp support</li><% } %>
+        </ul>
+        <% if (p.id === 'free') { %>
+          <a class="btn block" href="<%= user ? '/dashboard' : '/signup' %>"><%= user ? 'Go to dashboard' : 'Start free' %></a>
+        <% } else { %>
+          <div class="grid" style="gap:8px">
+            <a class="btn <%= p.id === 'pro' ? 'primary' : '' %> block" href="/billing/checkout?plan=<%= p.id %>&cur=<%= cur %>&months=1">Buy 1 month — <%= formatPrice(p.price[cur], cur) %></a>
+            <a class="btn block" href="/billing/checkout?plan=<%= p.id %>&cur=<%= cur %>&months=12">Buy 1 year — <%= formatPrice(p.price[cur] * 10, cur) %></a>
+          </div>
+        <% } %>
+      </div>
+      <% } %>
+    </div>
+    <p class="center small muted" style="margin-top:24px"><%= cur === 'INR' ? 'Prices exclude 18% GST where applicable.' : 'Prices in US dollars.' %> Need more, a team account or a custom deployment? <a href="/contact">Contact sales</a>.</p>
+  </div>
+</section>
+<%- include('partials/foot') %>

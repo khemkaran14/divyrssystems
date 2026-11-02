@@ -1,0 +1,85 @@
+<%- include('partials/head') %>
+<section class="hero center">
+  <div class="container">
+    <span class="badge">Free plan · No credit card</span>
+    <h1 style="margin-top:16px">Everyday business tools,<br><span>without the enterprise price</span></h1>
+    <p class="lead">Make GST invoices, know the minute your website goes down, and share trackable links and QR codes — all from one simple dashboard built for freelancers, professionals and growing companies.</p>
+    <div class="btn-row">
+      <a class="btn primary lg" href="/signup">Create free account</a>
+      <a class="btn lg" href="/tools/invoice">Try the invoice maker →</a>
+    </div>
+    <div class="trust">
+      <span>🇮🇳 GST-ready invoices</span><span>⏱ 1-minute uptime checks</span><span>💳 Pay in ₹ or $</span><span>🔒 Your data stays yours</span>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="center" style="margin-bottom:36px">
+      <h2>Four tools. One login.</h2>
+      <p class="lead">Start with any of them for free. Upgrade only when you need more.</p>
+    </div>
+    <div class="grid grid-4">
+      <a class="card" href="/tools/invoice"><div class="icon">🧾</div><h3>Invoice Generator</h3><p class="muted small">GST invoices with CGST/SGST/IGST, HSN codes and PDF download. Save clients and past invoices.</p></a>
+      <a class="card" href="/tools/uptime"><div class="icon">📡</div><h3>Uptime Monitor</h3><p class="muted small">We check your websites every minute and email you the moment one goes down. Public status pages.</p></a>
+      <a class="card" href="/tools/links"><div class="icon">🔗</div><h3>Link Shortener</h3><p class="muted small">Short, branded links with click counts for campaigns, WhatsApp, visiting cards and social posts.</p></a>
+      <a class="card" href="/tools/qr"><div class="icon">▦</div><h3>QR Code Generator</h3><p class="muted small">High-resolution PNG and SVG QR codes in your brand colours. Free forever.</p></a>
+    </div>
+  </div>
+</section>
+
+<section class="section soft">
+  <div class="container">
+    <div class="center" style="margin-bottom:36px"><h2>Who uses Divyrs</h2></div>
+    <div class="grid grid-3">
+      <div class="card"><h3>Freelancers &amp; consultants</h3><p class="muted">Send professional invoices in minutes, track which links clients open, and look bigger than you are.</p></div>
+      <div class="card"><h3>Web agencies &amp; developers</h3><p class="muted">Monitor every client website from one dashboard. Share a status page so clients see uptime for themselves.</p></div>
+      <div class="card"><h3>Shops &amp; small companies</h3><p class="muted">GST billing without expensive software, QR codes for your counter and menus, and alerts if your online store goes down.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="center" style="margin-bottom:36px">
+      <h2>Simple pricing</h2>
+      <p class="lead">Free to start. Pro is less than a cup of coffee a week.</p>
+    </div>
+    <div class="grid grid-3">
+      <% for (const p of Object.values(PLANS)) { %>
+      <div class="card price-card <%= p.id === 'pro' ? 'featured' : '' %>">
+        <h3><%= p.name %></h3>
+        <p class="muted small"><%= p.tagline %></p>
+        <div class="price"><%= formatPrice(p.price[cur], cur) %><small> /month</small></div>
+        <ul class="checks">
+          <li><%= p.limits.monitors %> uptime monitors</li>
+          <li><%= p.limits.links === Infinity ? 'Unlimited' : p.limits.links %> short links</li>
+          <li><%= p.limits.savedInvoices === Infinity ? 'Unlimited saved invoices' : p.limits.savedInvoices + ' saved invoices' %></li>
+        </ul>
+        <a class="btn <%= p.id === 'pro' ? 'primary' : '' %> block" href="<%= p.id === 'free' ? '/signup' : '/pricing' %>"><%= p.id === 'free' ? 'Start free' : 'See details' %></a>
+      </div>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<section class="section soft">
+  <div class="container" style="max-width:780px">
+    <h2 class="center">Questions</h2>
+    <details><summary>Is the free plan really free?</summary><p>Yes. No card needed, no time limit. You get 2 monitors, 10 short links, 3 saved invoices and unlimited QR codes.</p></details>
+    <details><summary>Can I pay in rupees?</summary><p>Yes. Indian customers pay in INR by UPI, cards, net banking or wallets through Razorpay. International customers pay in USD by card.</p></details>
+    <details><summary>Do I get a GST invoice for my subscription?</summary><p>A payment receipt is emailed right after you pay. Contact us with your company name and GSTIN for a GST tax invoice.</p></details>
+    <details><summary>Can I cancel any time?</summary><p>Plans are prepaid monthly or yearly with no auto-renewal. If you don't renew, your account simply returns to the Free plan.</p></details>
+    <details><summary>Do you offer custom plans for companies?</summary><p>Yes — more monitors, team access, custom domains or on-premise setup. <a href="/contact">Talk to us</a>.</p></details>
+  </div>
+</section>
+
+<section class="section center">
+  <div class="container">
+    <h2>Start in 30 seconds</h2>
+    <p class="lead">One account for all tools. Upgrade, downgrade or stay free — your choice.</p>
+    <div class="btn-row"><a class="btn primary lg" href="/signup">Create free account</a></div>
+  </div>
+</section>
+<%- include('partials/foot') %>

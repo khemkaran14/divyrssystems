@@ -1,0 +1,35 @@
+</main>
+<footer class="footer">
+  <div class="container">
+    <div class="grid">
+      <div>
+        <a class="logo" href="/"><span class="logo-mark">D</span> Divyrs Systems</a>
+        <p class="small" style="margin-top:10px">Simple, affordable online tools for freelancers, professionals and companies.</p>
+        <p class="small"><%= business.email %><% if (business.phone) { %> · <%= business.phone %><% } %></p>
+      </div>
+      <div>
+        <h4>Tools</h4>
+        <a href="/tools/invoice">Invoice generator</a>
+        <a href="/tools/uptime">Uptime monitor</a>
+        <a href="/tools/links">Link shortener</a>
+        <a href="/tools/qr">QR code generator</a>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <a href="/about">About</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/contact">Contact</a>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/refund">Refunds</a>
+        <a href="/shipping">Delivery</a>
+      </div>
+    </div>
+    <p class="small" style="margin-top:32px">© <%= new Date().getFullYear() %> <%= business.name %>. All rights reserved.</p>
+  </div>
+</footer>
+</body>
+</html>

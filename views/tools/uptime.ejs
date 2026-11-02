@@ -1,0 +1,15 @@
+<%- include('../partials/head') %>
+<section class="hero"><div class="container" style="max-width:860px">
+  <span class="badge">Uptime monitoring</span>
+  <h1 style="margin-top:12px">Know your website is down before your customers do</h1>
+  <p class="lead">Divyrs checks your sites around the clock and emails you the moment one stops responding — and again when it's back.</p>
+  <div class="btn-row"><a class="btn primary lg" href="<%= user ? '/dashboard/monitors' : '/signup?next=/dashboard/monitors' %>">Monitor a website free</a><a class="btn lg" href="/pricing">Pricing</a></div>
+</div></section>
+<section class="section" style="padding-top:0"><div class="container" style="max-width:860px">
+  <div class="grid grid-3">
+    <div class="card"><h3>Every minute</h3><p class="muted small">Pro and Business sites are checked every 60 seconds. Free sites every 5 minutes.</p></div>
+    <div class="card"><h3>Instant alerts</h3><p class="muted small">Email the moment a site goes down and when it recovers, with the error and response time.</p></div>
+    <div class="card"><h3>Status pages</h3><p class="muted small">A public page showing uptime for all your sites — perfect for agencies to share with clients.</p></div>
+  </div>
+</div></section>
+<%- include('../partials/foot') %>

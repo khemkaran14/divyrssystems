@@ -1,0 +1,8 @@
+<%- include('../partials/head') %>
+<section class="hero"><div class="container" style="max-width:860px">
+  <span class="badge">Link shortener</span>
+  <h1 style="margin-top:12px">Short links that tell you who clicked</h1>
+  <p class="lead">Share clean links on WhatsApp, Instagram, SMS and print. See click counts per link. Pro users pick their own codes like <code><%= baseUrl.replace(/^https?:\/\//, '') %>/s/diwali-sale</code>.</p>
+  <div class="btn-row"><a class="btn primary lg" href="<%= user ? '/dashboard/links' : '/signup?next=/dashboard/links' %>">Create a short link</a><a class="btn lg" href="/tools/qr">Make a QR code</a></div>
+</div></section>
+<%- include('../partials/foot') %>

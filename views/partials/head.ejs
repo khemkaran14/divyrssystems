@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= title %> | Divyrs Systems</title>
+<meta name="description" content="<%= description || 'Divyrs Systems: simple online tools for professionals and companies — GST invoice generator, website uptime monitoring, short links and QR codes. Free plan, Pro from ₹499/month.' %>">
+<meta property="og:title" content="<%= title %> | Divyrs Systems">
+<meta property="og:type" content="website">
+<meta property="og:url" content="<%= baseUrl + path %>">
+<link rel="canonical" href="<%= baseUrl + path %>">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<header class="nav">
+  <div class="container">
+    <a class="logo" href="/"><span class="logo-mark">D</span> Divyrs Systems</a>
+    <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+    <nav class="nav-links">
+      <a href="/tools" class="<%= path.startsWith('/tools') ? 'active' : '' %>">Tools</a>
+      <a href="/pricing" class="<%= path === '/pricing' ? 'active' : '' %>">Pricing</a>
+      <a href="/about" class="<%= path === '/about' ? 'active' : '' %>">About</a>
+      <a href="/contact" class="<%= path === '/contact' ? 'active' : '' %>">Contact</a>
+      <% if (user) { %>
+        <% if (isAdmin) { %><a href="/admin">Admin</a><% } %>
+        <a class="btn primary sm" href="/dashboard">Dashboard</a>
+      <% } else { %>
+        <a href="/login">Log in</a>
+        <a class="btn primary sm" href="/signup">Start free</a>
+      <% } %>
+    </nav>
+  </div>
+</header>
+<main>

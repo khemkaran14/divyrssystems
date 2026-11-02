@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= owner.name %> — Status</title>
+<meta http-equiv="refresh" content="60">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<section class="section"><div class="container" style="max-width:820px">
+  <% const allUp = monitors.every(m => m.status !== 'down'); %>
+  <h1 style="font-size:2rem"><%= owner.name %> status</h1>
+  <div class="alert <%= allUp ? 'success' : 'error' %>" style="font-weight:600"><%= allUp ? '✅ All systems operational' : '🔴 Some systems are having problems' %></div>
+  <div class="grid">
+  <% for (const m of monitors) { const h = history[m.id]; const up = m.checks_total ? (100 * m.checks_up / m.checks_total).toFixed(2) : '—'; %>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;gap:12px">
+        <strong><%= m.name %></strong>
+        <span class="badge <%= m.status === 'up' ? 'ok' : m.status === 'down' ? 'bad' : 'warn' %>"><%= m.status === 'up' ? 'Operational' : m.status === 'down' ? 'Down' : 'Pending' %></span>
+      </div>
+      <div class="bars" style="margin-top:12px">
+        <% for (let i = 0; i < 60 - h.length; i++) { %><span></span><% } %>
+        <% for (const c of h) { %><span class="<%= c.up ? 'up' : 'down' %>"></span><% } %>
+      </div>
+      <p class="small muted" style="margin:8px 0 0"><%= up %>% uptime</p>
+    </div>
+  <% } %>
+  <% if (!monitors.length) { %><p class="muted">No services listed yet.</p><% } %>
+  </div>
+  <% if (!whiteLabel) { %><p class="center small muted" style="margin-top:32px">Powered by <a href="/">Divyrs Uptime Monitor</a></p><% } %>
+</div></section>
+</body>
+</html>
