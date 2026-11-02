@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Daily database backup. Add to crontab:  15 3 * * * /var/www/divyrs/deploy/backup.sh
+# Daily database backup (install-vps.sh adds it to crontab automatically).
 set -euo pipefail
 APP_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 mkdir -p "$APP_DIR/backups"
