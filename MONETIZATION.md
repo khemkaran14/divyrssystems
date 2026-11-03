@@ -1,3 +1,15 @@
+# Divyrs RegData: the main product
+
+**What it is:** an API that turns every RBI and SEBI circular, direction, penalty and order into structured data (obligations, deadlines, who it applies to, penalised parties), plus enforcement-action search and bulk screening by company or person name.
+
+**Plans:** Developer free (100 calls, 7-day delay) · Starter ₹14,999 / $179 a month · Business ₹49,999 / $599 a month · Enterprise custom (SLA, resale rights). Yearly = 10× monthly.
+
+**First customers to approach:** NBFC and fintech compliance heads, compliance/GRC and lending software vendors, KYB/due-diligence companies (they can buy the enforcement data as a feed), law firms.
+
+**Next regulators:** IRDAI, MCA, GST/CBIC, PFRDA, IFSCA (add feeds in `src/regdata/sources.js`).
+
+---
+
 # How divyrs.com makes money
 
 ## The idea in one line

@@ -74,8 +74,13 @@ const PLANS = {
 
 const CURRENCIES = ['INR', 'USD'];
 
+const { REG_PLANS } = require('./regdata/plans');
+
+// Looks up any sellable plan: tool plans or RegData API plans.
+const anyPlan = (id) => PLANS[id] || REG_PLANS[id] || null;
+
 function priceFor(planId, currency, months) {
-  const plan = PLANS[planId];
+  const plan = anyPlan(planId);
   if (!plan || !CURRENCIES.includes(currency)) return null;
   const monthly = plan.price[currency];
   return months === 12 ? monthly * 10 : monthly;
@@ -95,4 +100,4 @@ function formatPrice(amount, currency) {
   return '$' + amount.toLocaleString('en-US');
 }
 
-module.exports = { PLANS, CURRENCIES, priceFor, effectivePlan, formatPrice };
+module.exports = { PLANS, CURRENCIES, priceFor, effectivePlan, formatPrice, anyPlan };

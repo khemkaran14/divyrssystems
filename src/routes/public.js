@@ -135,7 +135,7 @@ router.get('/robots.txt', (req, res) => {
   res.type('text/plain').send(`User-agent: *\nDisallow: /dashboard\nDisallow: /admin\nDisallow: /billing\nSitemap: ${config.baseUrl}/sitemap.xml\n`);
 });
 router.get('/sitemap.xml', (req, res) => {
-  const pages = ['', '/tools', '/tools/invoice', '/tools/qr', '/tools/uptime', '/tools/links', '/tools/booking', '/tools/forms',
+  const pages = ['', '/regdata', '/regdata/changes', '/regdata/enforcement', '/regdata/docs', '/tools', '/tools/invoice', '/tools/qr', '/tools/uptime', '/tools/links', '/tools/booking', '/tools/forms',
     '/tools/business-card', '/tools/gst-calculator', '/tools/emi-calculator', '/pricing', '/about', '/contact', '/privacy', '/terms', '/refund'];
   res.type('application/xml').send(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
     pages.map((p) => `  <url><loc>${config.baseUrl}${p}</loc></url>`).join('\n') + '\n</urlset>\n');

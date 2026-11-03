@@ -1,0 +1,67 @@
+<%- include('../partials/head') %>
+<div class="container dash">
+  <%- include('../partials/dash-side') %>
+  <div style="min-width:0">
+    <h1 style="font-size:1.8rem">RegData API</h1>
+    <% if (msg) { %><div class="alert success"><%= msg %></div><% } %>
+    <% if (error) { %><div class="alert error"><%= error %> <% if (/plan/.test(error)) { %><a href="/regdata#pricing">See plans</a><% } %></div><% } %>
+    <% if (newSecret) { %><div class="alert">Webhook signing secret (shown once): <code><%= newSecret %></code></div><% } %>
+
+    <div class="grid grid-3" style="margin-bottom:20px">
+      <div class="card"><div class="muted small">Plan</div><div class="stat" style="font-size:1.5rem"><%= regPlan.name %></div>
+        <div class="small muted"><%= regPlan.id === 'reg_free' ? 'Data delayed by ' + regPlan.limits.delayDays + ' days' : 'Until ' + new Date(me.reg_plan_expires).toLocaleDateString('en-IN') %></div></div>
+      <div class="card"><div class="muted small">Calls this month</div><div class="stat" style="font-size:1.5rem"><%= used.toLocaleString('en-IN') %> <span class="small muted">/ <%= regPlan.limits.callsMonth.toLocaleString('en-IN') %></span></div>
+        <div style="height:8px;background:var(--line);border-radius:4px;margin-top:8px;overflow:hidden"><div style="height:100%;width:<%= Math.min(100, 100 * used / regPlan.limits.callsMonth) %>%;background:var(--brand)"></div></div></div>
+      <div class="card"><div class="muted small">Webhooks</div><div class="stat" style="font-size:1.5rem"><%= hooks.length %> <span class="small muted">/ <%= regPlan.limits.webhooks %></span></div>
+        <a class="small" href="/regdata#pricing"><%= regPlan.id === 'reg_business' ? 'Need more? Contact us' : 'Upgrade' %></a></div>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+      <h3>API key</h3>
+      <% if (me.reg_api_key) { %><p><code><%= me.reg_api_key %></code></p><% } else { %><p class="muted small">No key yet.</p><% } %>
+      <form method="post" action="/dashboard/regdata/key" onsubmit="return <%= me.reg_api_key ? "confirm('Create a new key? The current key will stop working.')" : 'true' %>"><button class="btn <%= me.reg_api_key ? '' : 'primary' %>" type="submit"><%= me.reg_api_key ? 'Regenerate key' : 'Create API key' %></button></form>
+<pre style="margin-top:14px">curl "<%= baseUrl %>/api/regdata/v1/changes?regulator=RBI&amp;limit=5" \
+  -H "Authorization: Bearer <%= me.reg_api_key || 'rdk_your_key' %>"
+
+curl "<%= baseUrl %>/api/regdata/v1/enforcement?name=ABC%20Securities" \
+  -H "Authorization: Bearer <%= me.reg_api_key || 'rdk_your_key' %>"</pre>
+      <p class="small"><a href="/regdata/docs">Full API documentation →</a> · <a href="/regdata/enforcement">Search enforcement actions on the website →</a></p>
+    </div>
+
+    <div class="card">
+      <h3>Webhooks &amp; watchlists</h3>
+      <% if (!regPlan.limits.webhooks) { %><p class="muted small">Get pushed the moment something relevant is published, or when a name on your watchlist is penalised. Available on Starter and Business. <a href="/regdata#pricing">Upgrade</a></p><% } %>
+      <% for (const h of hooks) { %>
+        <div style="border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+            <div><code><%= h.url %></code> <span class="badge <%= h.active ? (h.last_status === 'ok' || !h.last_status ? 'ok' : 'warn') : 'bad' %>"><%= h.active ? (h.last_status || 'no deliveries yet') : 'disabled' %></span></div>
+            <div class="btn-row">
+              <form method="post" action="/dashboard/regdata/webhooks/<%= h.id %>/test"><button class="btn sm" type="submit">Send test</button></form>
+              <form method="post" action="/dashboard/regdata/webhooks/<%= h.id %>/delete" onsubmit="return confirm('Delete this webhook?')"><button class="btn sm danger" type="submit">Delete</button></form>
+            </div>
+          </div>
+          <div class="small muted" style="margin-top:6px">
+            Events: <%= (h.filters.events || []).join(', ') || 'all' %> · Regulators: <%= (h.filters.regulators || []).join(', ') || 'all' %> · Applies to: <%= (h.filters.applies_to || []).join(', ') || 'any' %> · Impact: <%= (h.filters.impact || []).join(', ') || 'any' %><% if ((h.filters.watchlist || []).length) { %> · Watchlist: <%= h.filters.watchlist.length %> names<% } %>
+          </div>
+        </div>
+      <% } %>
+      <% if (regPlan.limits.webhooks && hooks.length < regPlan.limits.webhooks) { %>
+        <form method="post" action="/dashboard/regdata/webhooks" style="margin-top:14px">
+          <div class="field"><label for="wh-url">Your HTTPS endpoint</label><input id="wh-url" name="url" placeholder="https://yourapp.com/hooks/regdata" required></div>
+          <div class="grid grid-3" style="gap:12px">
+            <div class="field"><label>Events</label>
+              <label style="font-weight:500;display:flex;gap:6px"><input type="checkbox" name="events" value="change" checked style="width:auto"> New changes</label>
+              <label style="font-weight:500;display:flex;gap:6px"><input type="checkbox" name="events" value="enforcement" checked style="width:auto"> Enforcement actions</label></div>
+            <div class="field"><label>Regulators</label><% for (const r of REGULATORS) { %><label style="font-weight:500;display:flex;gap:6px"><input type="checkbox" name="regulators" value="<%= r %>" style="width:auto"> <%= r %></label><% } %><span class="small muted">None ticked = all</span></div>
+            <div class="field"><label>Impact</label><% for (const i of ['high', 'medium', 'low']) { %><label style="font-weight:500;display:flex;gap:6px"><input type="checkbox" name="impact" value="<%= i %>" style="width:auto"> <%= i %></label><% } %><span class="small muted">None ticked = any</span></div>
+          </div>
+          <div class="field"><label for="wh-app">Applies to (hold Ctrl/⌘ to pick several; none = any)</label>
+            <select id="wh-app" name="applies_to" multiple size="5"><% for (const a of APPLIES_TO) { %><option value="<%= a %>"><%= a.replace(/_/g, ' ') %></option><% } %></select></div>
+          <div class="field"><label for="wh-watch">Watchlist (one company or person per line, optional)</label><textarea id="wh-watch" name="watchlist" rows="3" placeholder="ABC Securities Pvt Ltd&#10;XYZ Finance Limited"></textarea></div>
+          <button class="btn primary" type="submit">Add webhook</button>
+        </form>
+      <% } %>
+    </div>
+  </div>
+</div>
+<%- include('../partials/foot') %>

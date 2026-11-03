@@ -4,7 +4,7 @@ const db = require('../db');
 const config = require('../config');
 const payments = require('../payments');
 const { requireUser } = require('../auth');
-const { PLANS, CURRENCIES, priceFor } = require('../plans');
+const { CURRENCIES, priceFor, anyPlan } = require('../plans');
 const { sendMail } = require('../mailer');
 
 const router = express.Router();
@@ -23,10 +23,10 @@ async function webhook(req, res) {
 }
 
 router.get('/checkout', requireUser, async (req, res) => {
-  const plan = PLANS[req.query.plan];
+  const plan = anyPlan(req.query.plan);
   const currency = CURRENCIES.includes(req.query.cur) ? req.query.cur : res.locals.cur;
   const months = req.query.months === '12' ? 12 : 1;
-  if (!plan || plan.id === 'free') return res.redirect('/pricing');
+  if (!plan || plan.id === 'free' || plan.id === 'reg_free') return res.redirect(String(req.query.plan || '').startsWith('reg_') ? '/regdata#pricing' : '/pricing');
 
   if (!payments.enabled()) {
     return res.render('error', { title: 'Payments coming soon', message: 'Online payments are being set up. Please contact us to upgrade and we will activate your plan manually.' });
@@ -59,12 +59,13 @@ router.post('/verify', requireUser, async (req, res) => {
   if (before !== 'paid') {
     await sendMail({
       to: req.user.email,
-      subject: `Payment received — ${PLANS[p.plan].name} plan activated`,
-      text: `Hi ${req.user.name},\n\nThanks for upgrading to Divyrs ${PLANS[p.plan].name}.\n` +
+      subject: `Payment received — ${anyPlan(p.plan).name} plan activated`,
+      text: `Hi ${req.user.name},\n\nThanks for upgrading to Divyrs ${anyPlan(p.plan).name}.\n` +
         `Amount: ${p.currency} ${p.amount}\nPeriod: ${p.months} month(s)\nPayment ID: ${paymentId}\n\n${config.baseUrl}/dashboard\n`,
     });
   }
-  res.redirect('/dashboard/account?msg=' + encodeURIComponent('Payment successful. Your plan is active.'));
+  const back = p.plan.startsWith('reg_') ? '/dashboard/regdata' : '/dashboard/account';
+  res.redirect(back + '?msg=' + encodeURIComponent('Payment successful. Your plan is active.'));
 });
 
 module.exports = router;

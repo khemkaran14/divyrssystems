@@ -1,0 +1,28 @@
+<%- include('../partials/head') %>
+<section class="section" style="padding-top:36px"><div class="container" style="max-width:860px">
+  <p class="small"><a href="/regdata/changes">← All changes</a></p>
+  <div class="small muted"><span class="badge"><%= d.regulator %></span> <%= new Date(d.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) %> · <%= d.doc_type.replace(/_/g, ' ') %><% if (d.ref_no) { %> · <%= d.ref_no %><% } %></div>
+  <h1 style="font-size:1.8rem;margin-top:8px"><%= d.title %></h1>
+  <div class="btn-row" style="margin:10px 0 20px">
+    <% if (d.impact) { %><span class="badge <%= d.impact === 'high' ? 'bad' : d.impact === 'medium' ? 'warn' : '' %>"><%= d.impact %> impact</span><% } %>
+    <% if (d.effective_date) { %><span class="badge">Effective <%= d.effective_date %></span><% } %>
+    <% if (d.review_status === 'verified') { %><span class="badge ok">✓ Verified</span><% } %>
+    <% for (const a of change.applies_to) { %><span class="badge"><%= a.replace(/_/g, ' ') %></span><% } %>
+  </div>
+  <% if (d.summary) { %><div class="card"><h3>Summary</h3><p style="margin:0"><%= d.summary %></p></div><% } %>
+  <% if (actions.length) { %>
+    <h2 style="font-size:1.2rem;margin-top:28px">Parties named</h2>
+    <div class="card table-wrap" style="padding:8px"><table>
+      <thead><tr><th>Name</th><th>Type</th><th>Action</th><th class="num">Amount</th></tr></thead>
+      <tbody><% for (const a of actions) { %><tr><td><%= a.entity_name %></td><td class="small"><%= a.entity_type.replace(/_/g, ' ') %></td><td class="small"><%= a.action_type.replace(/_/g, ' ') %></td><td class="num"><%= a.amount_inr ? '₹' + a.amount_inr.toLocaleString('en-IN') : '—' %></td></tr><% } %></tbody>
+    </table></div>
+  <% } %>
+  <div class="card" style="margin-top:24px;background:var(--brand-soft);border-color:transparent">
+    <h3>In the API</h3>
+    <p class="muted" style="margin:0 0 12px"><%= obligationsCount %> obligation<%= obligationsCount === 1 ? '' : 's' %> and <%= deadlinesCount %> deadline<%= deadlinesCount === 1 ? '' : 's' %> extracted, each with the PDF page it comes from. Get them as JSON, with alerts for changes like this.</p>
+    <div class="btn-row"><a class="btn primary" href="/regdata">Get API access</a><a class="btn" href="/regdata/docs">API docs</a></div>
+  </div>
+  <p style="margin-top:24px"><a href="<%= d.url %>" rel="noopener nofollow" target="_blank">Official source ↗</a><% if (d.pdf_url) { %> · <a href="<%= d.pdf_url %>" rel="noopener nofollow" target="_blank">PDF ↗</a><% } %></p>
+  <p class="small muted">Information only, not legal advice. Always rely on the official text.</p>
+</div></section>
+<%- include('../partials/foot') %>

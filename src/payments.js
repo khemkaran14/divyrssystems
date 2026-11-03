@@ -44,9 +44,13 @@ const markPaid = db.transaction((orderId, paymentId) => {
   const user = db.prepare('SELECT * FROM users WHERE id = ?').get(p.user_id);
   const now = Date.now();
   // Same plan still active: add time on top. Otherwise start from today.
-  const base = user.plan === p.plan && user.plan_expires > now ? user.plan_expires : now;
+  const isReg = p.plan.startsWith('reg_');
+  const curPlan = isReg ? user.reg_plan : user.plan;
+  const curExp = isReg ? user.reg_plan_expires : user.plan_expires;
+  const base = curPlan === p.plan && curExp > now ? curExp : now;
   const expires = base + p.months * 30 * 86400000;
-  db.prepare('UPDATE users SET plan = ?, plan_expires = ? WHERE id = ?').run(p.plan, expires, user.id);
+  const cols = isReg ? 'reg_plan = ?, reg_plan_expires = ?' : 'plan = ?, plan_expires = ?';
+  db.prepare(`UPDATE users SET ${cols} WHERE id = ?`).run(p.plan, expires, user.id);
   db.prepare("UPDATE payments SET status = 'paid', payment_id = ?, paid_at = ? WHERE id = ?").run(paymentId, now, p.id);
   return { ...p, status: 'paid' };
 });

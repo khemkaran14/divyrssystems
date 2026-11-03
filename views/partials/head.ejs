@@ -18,6 +18,7 @@
     <a class="logo" href="/"><span class="logo-mark">D</span> Divyrs Systems</a>
     <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
     <nav class="nav-links">
+      <a href="/regdata" class="<%= path.startsWith('/regdata') ? 'active' : '' %>">RegData API</a>
       <a href="/tools" class="<%= path.startsWith('/tools') ? 'active' : '' %>">Tools</a>
       <a href="/pricing" class="<%= path === '/pricing' ? 'active' : '' %>">Pricing</a>
       <a href="/about" class="<%= path === '/about' ? 'active' : '' %>">About</a>

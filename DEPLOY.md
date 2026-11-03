@@ -109,3 +109,20 @@ pm2 logs divyrs      # see errors and the "[mail disabled]" messages if SMTP isn
 pm2 status
 npm test             # run the tests
 ```
+
+
+## RegData API (regulatory changes + enforcement actions)
+
+It runs inside the same app; no extra server needed.
+
+1. **Test the regulator feeds from your VPS** (this saves nothing):
+   ```bash
+   cd /root/divyrssystems && npm run regdata:check
+   ```
+   Each feed should show ✔ with recent RBI/SEBI items. If one shows ✘, send the output to Claude.
+2. **Add your Claude API key** to `.env` (`ANTHROPIC_API_KEY=...`), then `pm2 restart divyrs`. Without it, RegData only reads titles.
+3. **Open `/admin/regdata`** (signed in as `ADMIN_EMAIL`): click *Check feeds now*, then *Process 10 waiting*. After that it runs by itself every 30 minutes.
+4. **Review** high-impact items in the admin review queue and mark them *Verified*.
+5. Status any time: `npm run regdata:status`.
+
+Feeds and settings: `src/regdata/sources.js` and the `REGDATA_*` lines in `.env.example`.

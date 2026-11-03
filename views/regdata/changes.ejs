@@ -1,0 +1,21 @@
+<%- include('../partials/head') %>
+<section class="section" style="padding-top:36px"><div class="container" style="max-width:900px">
+  <p class="small"><a href="/regdata">← RegData API</a></p>
+  <h1 style="font-size:2rem">Latest regulatory changes</h1>
+  <p class="muted">New RBI and SEBI circulars, directions, notifications and orders. Full obligations and deadlines are in the <a href="/regdata/docs">API</a>.</p>
+  <form class="inline-form" method="get" style="margin:18px 0">
+    <div class="field" style="flex:0 1 160px"><label for="reg">Regulator</label><select id="reg" name="regulator"><option value="">All</option><% for (const r of REGULATORS) { %><option <%= filter.regulator === r ? 'selected' : '' %>><%= r %></option><% } %></select></div>
+    <div class="field"><label for="q">Keyword</label><input id="q" name="q" value="<%= filter.q %>" placeholder="KYC, digital lending, cybersecurity…"></div>
+    <button class="btn" type="submit">Filter</button>
+  </form>
+  <% if (!rows.length) { %><p class="muted">Nothing found.</p><% } %>
+  <% for (const d of rows) { %>
+    <a class="card" href="/regdata/changes/<%= d.id %>" style="margin-bottom:10px;padding:14px 18px">
+      <div class="small muted"><span class="badge"><%= d.regulator %></span> <%= new Date(d.published_at).toLocaleDateString('en-IN') %> · <%= d.doc_type.replace(/_/g, ' ') %><% if (d.impact) { %> · <span class="badge <%= d.impact === 'high' ? 'bad' : d.impact === 'medium' ? 'warn' : '' %>"><%= d.impact %> impact</span><% } %><% if (d.is_enforcement) { %> · <span class="badge warn">enforcement</span><% } %></div>
+      <div style="font-weight:600;margin-top:4px"><%= d.title %></div>
+      <% if (d.summary) { %><p class="small muted" style="margin:6px 0 0"><%= d.summary.slice(0, 220) %><%= d.summary.length > 220 ? '…' : '' %></p><% } %>
+    </a>
+  <% } %>
+  <% if (more) { %><a class="btn" href="?<%= filter.regulator ? 'regulator=' + encodeURIComponent(filter.regulator) + '&' : '' %><%= filter.q ? 'q=' + encodeURIComponent(filter.q) + '&' : '' %>before=<%= rows[rows.length - 1].id %>">Older →</a><% } %>
+</div></section>
+<%- include('../partials/foot') %>

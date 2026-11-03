@@ -1,6 +1,7 @@
 <%- include('partials/head') %>
 <section class="section" style="padding-top:32px"><div class="container">
   <h1 style="font-size:1.8rem">Admin</h1>
+  <p><a class="btn" href="/admin/regdata">RegData admin: feeds, review queue, API customers →</a></p>
   <% if (msg) { %><div class="alert success"><%= msg %></div><% } %>
   <div class="grid grid-4">
     <div class="card"><div class="muted small">Users</div><div class="stat"><%= stats.users %></div></div>

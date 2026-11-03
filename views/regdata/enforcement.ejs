@@ -1,0 +1,33 @@
+<%- include('../partials/head') %>
+<section class="section" style="padding-top:36px"><div class="container" style="max-width:900px">
+  <p class="small"><a href="/regdata">← RegData API</a></p>
+  <h1 style="font-size:2rem">Enforcement actions search</h1>
+  <p class="muted">Check whether a company or person has been penalised or named in an order by RBI or SEBI.</p>
+  <form class="card inline-form" method="get" style="margin:18px 0">
+    <div class="field"><label for="n">Company or person name</label><input id="n" name="name" value="<%= name %>" placeholder="e.g. ABC Securities" required maxlength="200"></div>
+    <button class="btn primary" type="submit">Search</button>
+  </form>
+  <% if (!user) { %><p class="small muted">Searching needs a free account (100 searches a month). For bulk screening use the <a href="/regdata/docs#screen">API</a>.</p><% } %>
+  <% if (gate) { %><div class="alert error"><%= gate %> <a href="/regdata#pricing">Upgrade</a></div><% } %>
+  <% if (results) { %>
+    <h2 style="font-size:1.2rem"><%= results.length %> match<%= results.length === 1 ? '' : 'es' %> for "<%= name %>"</h2>
+    <% if (!results.length) { %><div class="alert success">No enforcement actions found for this name in our database.</div><% } %>
+    <% for (const a of results) { %>
+      <div class="card" style="margin-bottom:10px;padding:14px 18px">
+        <div class="small muted"><span class="badge"><%= a.regulator %></span> <%= a.action_date %> · <%= a.action_type.replace(/_/g, ' ') %><%= a.amount_inr ? ' · ₹' + a.amount_inr.toLocaleString('en-IN') : '' %> · match <%= Math.round(a.match_confidence * 100) %>%</div>
+        <div style="font-weight:600;margin-top:4px"><%= a.entity_name %></div>
+        <% if (a.reason) { %><p class="small muted" style="margin:6px 0 0"><%= a.reason %></p><% } %>
+        <p class="small" style="margin:6px 0 0"><a href="/regdata/changes/<%= a.change_id.replace('chg_', '') %>">Details</a> · <a href="<%= a.url %>" rel="noopener nofollow" target="_blank">Official order ↗</a></p>
+      </div>
+    <% } %>
+  <% } %>
+  <h2 style="font-size:1.2rem;margin-top:32px">Latest actions</h2>
+  <div class="card table-wrap" style="padding:8px"><table>
+    <thead><tr><th>Date</th><th>Regulator</th><th>Name</th><th>Action</th><th class="num">Amount</th></tr></thead>
+    <tbody>
+      <% for (const a of latest) { %><tr><td class="small"><%= a.action_date %></td><td><%= a.regulator %></td><td><a href="/regdata/changes/<%= a.document_id %>"><%= a.entity_name %></a></td><td class="small"><%= a.action_type.replace(/_/g, ' ') %></td><td class="num"><%= a.amount_inr ? '₹' + a.amount_inr.toLocaleString('en-IN') : '—' %></td></tr><% } %>
+      <% if (!latest.length) { %><tr><td colspan="5" class="muted">No actions processed yet.</td></tr><% } %>
+    </tbody>
+  </table></div>
+</div></section>
+<%- include('../partials/foot') %>

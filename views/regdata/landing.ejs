@@ -1,0 +1,129 @@
+<%- include('../partials/head') %>
+<section class="hero"><div class="container">
+  <div class="grid grid-2" style="align-items:center;gap:40px">
+    <div>
+      <span class="badge">Divyrs RegData · API</span>
+      <h1 style="margin-top:14px">India's regulatory data, <span>as an API</span></h1>
+      <p class="lead">Every RBI and SEBI circular, direction, penalty and order turned into structured data within minutes of publication: who it applies to, what must be done, deadlines, and which parties were penalised.</p>
+      <div class="btn-row">
+        <a class="btn primary lg" href="<%= user ? '/dashboard/regdata' : '/signup?next=/dashboard/regdata' %>">Get a free API key</a>
+        <a class="btn lg" href="/regdata/docs">Read the docs</a>
+      </div>
+      <p class="small muted" style="margin-top:14px">Free developer plan · No card needed · Pay in ₹ or $</p>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="small muted" style="padding:10px 16px;border-bottom:1px solid var(--line)"><code>GET /api/regdata/v1/changes?applies_to=nbfc&amp;impact=high</code></div>
+      <pre style="margin:0;border-radius:0;max-height:360px"><%= sampleChange %></pre>
+    </div>
+  </div>
+  <div class="grid grid-4" style="margin-top:40px">
+    <div class="card center"><div class="stat"><%= stats.documents.toLocaleString('en-IN') %></div><div class="small muted">documents processed</div></div>
+    <div class="card center"><div class="stat"><%= stats.actions.toLocaleString('en-IN') %></div><div class="small muted">enforcement actions</div></div>
+    <div class="card center"><div class="stat"><%= [...new Set(SOURCES.map(s => s.regulator))].length %></div><div class="small muted">regulators live (more coming)</div></div>
+    <div class="card center"><div class="stat">30 min</div><div class="small muted">how often feeds are checked</div></div>
+  </div>
+</div></section>
+
+<section class="section"><div class="container">
+  <div class="center" style="margin-bottom:32px"><h2>Two APIs, one key</h2></div>
+  <div class="grid grid-2">
+    <div class="card">
+      <div class="icon">📜</div>
+      <h3>Regulatory Change API</h3>
+      <p class="muted">A clean feed of new rules with obligations, deadlines, effective dates, the entity types affected and the earlier circulars they amend. Each item links to the exact page of the official PDF.</p>
+      <ul class="checks"><li>Filter by regulator, entity type, impact, date or keyword</li><li>Webhooks the moment something relevant is published</li><li>Full-text search across the archive</li></ul>
+    </div>
+    <div class="card">
+      <div class="icon">⚖️</div>
+      <h3>Enforcement Actions API</h3>
+      <p class="muted">Penalties, adjudication and settlement orders, licence cancellations and restrictions, searchable by company or person name with fuzzy matching.</p>
+      <ul class="checks"><li>Screen up to 100 vendors, borrowers or partners in one call</li><li>Watchlist alerts when a name you track is penalised</li><li>Amounts in rupees, dates, reasons and source orders</li></ul>
+      <pre style="margin-top:8px;max-height:220px"><%= sampleAction %></pre>
+    </div>
+  </div>
+</div></section>
+
+<section class="section soft"><div class="container">
+  <div class="center" style="margin-bottom:32px"><h2>Who uses RegData</h2></div>
+  <div class="grid grid-3">
+    <div class="card"><h3>Compliance teams</h3><p class="muted small">Banks, NBFCs, payment companies, brokers, AMCs and insurers stop reading regulator websites by hand and get an audit trail of every change.</p></div>
+    <div class="card"><h3>Software vendors</h3><p class="muted small">GRC, lending, onboarding and KYB platforms embed regulatory updates and enforcement checks in their own product.</p></div>
+    <div class="card"><h3>Lenders &amp; procurement</h3><p class="muted small">Check borrowers, vendors and partners against regulator penalties and orders before you sign.</p></div>
+    <div class="card"><h3>Law &amp; advisory firms</h3><p class="muted small">Track every change for every client sector and brief clients the same day.</p></div>
+    <div class="card"><h3>AI products</h3><p class="muted small">Give your agents and copilots reliable, cited Indian regulatory data instead of web search.</p></div>
+    <div class="card"><h3>Investors &amp; analysts</h3><p class="muted small">Spot regulatory risk in portfolio companies and the sectors you cover.</p></div>
+  </div>
+</div></section>
+
+<section class="section"><div class="container">
+  <div class="grid grid-2" style="gap:32px;align-items:start">
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><h2 style="font-size:1.4rem">Latest changes</h2><a href="/regdata/changes">All →</a></div>
+      <% if (!latest.length) { %><p class="muted">The first feeds are being processed. Check back in a few minutes.</p><% } %>
+      <% for (const d of latest) { %>
+        <a class="card" href="/regdata/changes/<%= d.id %>" style="margin-bottom:10px;padding:14px 18px">
+          <div class="small muted"><span class="badge"><%= d.regulator %></span> <%= new Date(d.published_at).toLocaleDateString('en-IN') %><% if (d.impact) { %> · <span class="badge <%= d.impact === 'high' ? 'bad' : d.impact === 'medium' ? 'warn' : '' %>"><%= d.impact %> impact</span><% } %></div>
+          <div style="font-weight:600;margin-top:4px"><%= d.title %></div>
+        </a>
+      <% } %>
+    </div>
+    <div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><h2 style="font-size:1.4rem">Latest enforcement actions</h2><a href="/regdata/enforcement">Search →</a></div>
+      <% if (!actions.length) { %><p class="muted">No actions processed yet.</p><% } %>
+      <% for (const a of actions) { %>
+        <div class="card" style="margin-bottom:10px;padding:14px 18px">
+          <div class="small muted"><span class="badge"><%= a.regulator %></span> <%= a.action_date %> · <%= a.action_type.replace(/_/g, ' ') %><%= a.amount_inr ? ' · ₹' + a.amount_inr.toLocaleString('en-IN') : '' %></div>
+          <div style="font-weight:600;margin-top:4px"><%= a.entity_name %></div>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div></section>
+
+<section class="section soft" id="pricing"><div class="container">
+  <div class="center" style="margin-bottom:28px">
+    <h2>Pricing</h2>
+    <p class="lead">Both APIs are included in every plan. Yearly plans get 2 months free.</p>
+    <div class="toggle"><a href="?cur=INR#pricing" class="<%= cur === 'INR' ? 'on' : '' %>">₹ INR</a><a href="?cur=USD#pricing" class="<%= cur === 'USD' ? 'on' : '' %>">$ USD</a></div>
+  </div>
+  <div class="grid grid-4">
+    <% for (const p of Object.values(REG_PLANS)) { const L = p.limits; %>
+      <div class="card price-card <%= p.id === 'reg_starter' ? 'featured' : '' %>">
+        <h3><%= p.name %></h3><p class="muted small"><%= p.tagline %></p>
+        <div class="price"><%= formatPrice(p.price[cur], cur) %><small> /month</small></div>
+        <ul class="checks">
+          <li><%= L.callsMonth.toLocaleString('en-IN') %> API calls a month</li>
+          <li class="<%= L.delayDays ? 'no' : '' %>"><%= L.delayDays ? 'Data delayed by ' + L.delayDays + ' days' : 'Real-time data' %></li>
+          <li class="<%= L.webhooks ? '' : 'no' %>"><%= L.webhooks ? L.webhooks + ' webhooks & watchlists' : 'No webhooks' %></li>
+          <li>Changes + enforcement APIs</li>
+          <li>Bulk name screening</li>
+        </ul>
+        <% if (p.id === 'reg_free') { %>
+          <a class="btn block" href="<%= user ? '/dashboard/regdata' : '/signup?next=/dashboard/regdata' %>">Get free key</a>
+        <% } else { %>
+          <div class="grid" style="gap:8px">
+            <a class="btn <%= p.id === 'reg_starter' ? 'primary' : '' %> block" href="/billing/checkout?plan=<%= p.id %>&cur=<%= cur %>&months=1">Buy monthly</a>
+            <a class="btn block" href="/billing/checkout?plan=<%= p.id %>&cur=<%= cur %>&months=12">Buy yearly — <%= formatPrice(p.price[cur] * 10, cur) %></a>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+    <div class="card price-card">
+      <h3>Enterprise</h3><p class="muted small">Banks, large NBFCs and resellers</p>
+      <div class="price" style="font-size:1.8rem">Custom</div>
+      <ul class="checks"><li>Unlimited calls</li><li>Uptime agreement (SLA)</li><li>Resale / embedding rights</li><li>Invoice billing, GST invoice</li><li>Priority support</li></ul>
+      <a class="btn block" href="/contact">Talk to us</a>
+    </div>
+  </div>
+  <p class="center small muted" style="margin-top:20px"><%= cur === 'INR' ? 'Prices exclude 18% GST.' : 'Prices in US dollars.' %></p>
+</div></section>
+
+<section class="section"><div class="container" style="max-width:780px">
+  <h2 class="center">Questions</h2>
+  <details><summary>Where does the data come from?</summary><p>Only official regulator publications (RBI and SEBI feeds, circulars and orders). Every record links to its source document.</p></details>
+  <details><summary>How accurate is it?</summary><p>Documents are read by AI that is instructed never to guess, and every obligation cites its page. High-impact items are checked by a person; those carry <code>"verified": true</code>.</p></details>
+  <details><summary>Which regulators are next?</summary><p>IRDAI, MCA, GST/CBIC, PFRDA and IFSCA are on the roadmap. Tell us which matters most to you.</p></details>
+  <details><summary>Is this legal advice?</summary><p>No. RegData is information to help your team find and act on changes faster. Always rely on the official text.</p></details>
+  <details><summary>Can we embed it in our product?</summary><p>Yes, on the Enterprise plan with resale rights. <a href="/contact">Contact us</a>.</p></details>
+</div></section>
+<%- include('../partials/foot') %>

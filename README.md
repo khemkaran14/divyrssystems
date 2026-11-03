@@ -1,6 +1,8 @@
 # Divyrs Systems
 
-Online tools for professionals and companies, with free and paid plans:
+**Main product: Divyrs RegData API** (`/regdata`): RBI and SEBI regulatory changes and enforcement actions as structured data, with obligations, deadlines, penalised parties, fuzzy name search, bulk screening, webhooks and watchlists. Docs at `/regdata/docs`; code in `src/regdata/` and `src/routes/regdata-*.js`.
+
+Also included: online tools for professionals and companies, with free and paid plans:
 
 - **Invoice / Quotation / Proforma / Receipt maker** — CGST/SGST/IGST, HSN codes, amount in words, PDF download
 - **Appointment booking pages** — working hours, timezones, email confirmations, no double bookings (`/book/<name>`)

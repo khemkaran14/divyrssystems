@@ -1,0 +1,80 @@
+<%- include('../partials/head') %>
+<% const parse = (s) => { try { return JSON.parse(s); } catch (_) { return []; } }; %>
+<section class="section" style="padding-top:32px"><div class="container">
+  <p class="small"><a href="/admin">← Admin</a></p>
+  <h1 style="font-size:1.8rem">RegData admin</h1>
+  <% if (msg) { %><div class="alert success"><%= msg %></div><% } %>
+  <div class="grid grid-4">
+    <div class="card"><div class="muted small">Documents ready</div><div class="stat"><%= stats.documents %></div></div>
+    <div class="card"><div class="muted small">Enforcement actions</div><div class="stat"><%= stats.actions %></div></div>
+    <div class="card"><div class="muted small">Waiting / failed</div><div class="stat"><%= stats.pending %> / <%= stats.failed %></div></div>
+    <div class="card"><div class="muted small">AI extraction</div><div class="stat" style="font-size:1.2rem"><%= aiOn ? 'On · ' + aiModel : 'Off (rules only)' %></div>
+      <div class="small muted"><%= aiOn ? (aiToday ? aiToday.runs : 0) + ' runs today, ' + aiLeft + ' left' : 'Set ANTHROPIC_API_KEY in .env' %></div></div>
+  </div>
+
+  <div class="grid grid-2" style="margin-top:20px">
+    <div class="card">
+      <h3>Feeds</h3>
+      <div class="table-wrap"><table><tbody>
+        <% for (const s of SOURCES) { const r = sources.find(x => x.id === s.id) || {}; %>
+          <tr><td><strong><%= s.id %></strong><div class="small muted"><%= s.url %></div></td>
+            <td><span class="badge <%= r.last_status === 'ok' ? 'ok' : r.last_status === 'error' ? 'bad' : '' %>"><%= r.last_status || 'not run' %></span><% if (r.last_error) { %><div class="small" style="color:var(--bad)"><%= r.last_error %></div><% } %></td>
+            <td class="small muted"><%= r.last_fetched ? new Date(r.last_fetched).toLocaleString('en-IN') : '' %></td></tr>
+        <% } %>
+      </tbody></table></div>
+      <div class="btn-row" style="margin-top:12px">
+        <form method="post" action="/admin/regdata/collect"><button class="btn" type="submit">Check feeds now</button></form>
+        <form method="post" action="/admin/regdata/process"><input type="hidden" name="n" value="10"><button class="btn" type="submit">Process 10 waiting</button></form>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Add a document by URL</h3>
+      <p class="small muted">For older master directions or documents not in the feeds.</p>
+      <form method="post" action="/admin/regdata/add">
+        <div class="grid grid-2" style="gap:10px">
+          <div class="field"><label>Regulator</label><select name="regulator"><% for (const r of REGULATORS) { %><option><%= r %></option><% } %></select></div>
+          <div class="field"><label>Title (optional)</label><input name="title"></div>
+        </div>
+        <div class="field"><label>URL (page or PDF)</label><input name="url" required placeholder="https://www.rbi.org.in/…"></div>
+        <button class="btn primary" type="submit">Add</button>
+      </form>
+    </div>
+  </div>
+
+  <h2 style="font-size:1.3rem;margin-top:32px">Review</h2>
+  <p class="small muted">Check high-impact items against the source, then mark them verified. Rejected items are hidden from the API.</p>
+  <div class="btn-row" style="margin-bottom:12px">
+    <% for (const f of ['unreviewed', 'verified', 'rejected', 'enforcement', 'pending', 'failed']) { %><a class="btn sm <%= filter === f ? 'primary' : '' %>" href="?show=<%= f %>"><%= f %></a><% } %>
+  </div>
+  <% for (const d of docs) { const obl = parse(d.obligations); %>
+    <div class="card" style="margin-bottom:12px;padding:16px 20px">
+      <div class="small muted">#<%= d.id %> · <span class="badge"><%= d.regulator %></span> <%= new Date(d.published_at).toLocaleDateString('en-IN') %> · <%= d.doc_type %> · <%= d.extraction || d.status %><% if (d.impact) { %> · <span class="badge <%= d.impact === 'high' ? 'bad' : d.impact === 'medium' ? 'warn' : '' %>"><%= d.impact %></span><% } %><% if (counts[d.id]) { %> · <span class="badge warn"><%= counts[d.id] %> parties</span><% } %></div>
+      <div style="font-weight:600;margin:4px 0"><a href="<%= d.url %>" target="_blank" rel="noopener"><%= d.title %> ↗</a></div>
+      <% if (d.error) { %><div class="small" style="color:var(--bad)"><%= d.error %></div><% } %>
+      <% if (d.summary) { %><p class="small" style="margin:4px 0"><%= d.summary %></p><% } %>
+      <% if (obl.length) { %><details style="border:none;padding:4px 0"><summary class="small"><%= obl.length %> obligations</summary><ul class="small"><% for (const o of obl) { %><li><%= o.what %> — <em><%= o.who %></em><%= o.deadline ? ' by ' + o.deadline : '' %><%= o.page ? ' (p.' + o.page + ')' : '' %></li><% } %></ul></details><% } %>
+      <div class="btn-row" style="margin-top:8px">
+        <form method="post" action="/admin/regdata/docs/<%= d.id %>/review" class="btn-row">
+          <input type="hidden" name="show" value="<%= filter %>">
+          <select name="impact" style="width:auto"><option value="">impact: keep</option><option>high</option><option>medium</option><option>low</option></select>
+          <button class="btn sm primary" name="status" value="verified" type="submit">✓ Verify</button>
+          <button class="btn sm danger" name="status" value="rejected" type="submit">Reject</button>
+        </form>
+        <form method="post" action="/admin/regdata/docs/<%= d.id %>/retry"><input type="hidden" name="show" value="<%= filter %>"><button class="btn sm" type="submit">Re-extract</button></form>
+      </div>
+    </div>
+  <% } %>
+  <% if (!docs.length) { %><p class="muted">Nothing here.</p><% } %>
+
+  <h2 style="font-size:1.3rem;margin-top:32px">API customers</h2>
+  <div class="card table-wrap" style="padding:8px"><table>
+    <thead><tr><th>Name</th><th>Email</th><th>Plan</th><th>Set plan (bank transfer / enterprise)</th></tr></thead>
+    <tbody><% for (const u of users) { const active = u.reg_plan !== 'reg_free' && u.reg_plan_expires > Date.now(); %>
+      <tr><td><%= u.name %></td><td><%= u.email %></td><td><%= active ? REG_PLANS[u.reg_plan].name + ' → ' + new Date(u.reg_plan_expires).toLocaleDateString('en-IN') : 'Developer' %></td>
+        <td><form method="post" action="/admin/regdata/users/<%= u.id %>/plan" style="display:flex;gap:6px">
+          <select name="plan" style="width:auto"><% for (const p of Object.values(REG_PLANS)) { %><option value="<%= p.id %>"><%= p.name %></option><% } %></select>
+          <input name="days" type="number" value="30" min="0" style="width:80px"><button class="btn sm" type="submit">Set</button></form></td></tr>
+    <% } %><% if (!users.length) { %><tr><td colspan="4" class="muted">No API users yet.</td></tr><% } %></tbody>
+  </table></div>
+</div></section>
+<%- include('../partials/foot') %>

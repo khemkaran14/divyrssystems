@@ -3,7 +3,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const config = require('./src/config');
 const { loadUser, sameOrigin } = require('./src/auth');
-const { PLANS, CURRENCIES, formatPrice } = require('./src/plans');
+const { PLANS, CURRENCIES, formatPrice, anyPlan } = require('./src/plans');
 const billing = require('./src/routes/billing');
 const monitor = require('./src/monitor');
 
@@ -41,7 +41,7 @@ app.use((req, res, next) => {
   }
   if (req.query.cur && CURRENCIES.includes(req.query.cur)) res.cookie('cur', cur, { maxAge: 31536000000, sameSite: 'lax' });
   Object.assign(res.locals, {
-    cur, PLANS, formatPrice, business: config.business, baseUrl: config.baseUrl,
+    cur, PLANS, anyPlan, formatPrice, business: config.business, baseUrl: config.baseUrl,
     // Safe to print inside <script> tags.
     json: (v) => JSON.stringify(v ?? null).replace(/</g, '\\u003c').replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029'),
     path: req.path, title: 'Divyrs Systems', description: null,
@@ -49,6 +49,11 @@ app.use((req, res, next) => {
   next();
 });
 
+const regSite = require('./src/routes/regdata-site');
+app.use('/', regSite.pub);
+app.use('/dashboard/regdata', regSite.dash);
+app.use('/admin/regdata', regSite.admin);
+app.use('/api/regdata/v1', require('./src/routes/regdata-api'));
 app.use('/', require('./src/routes/public'));
 app.use('/', require('./src/routes/account'));
 app.use('/dashboard', require('./src/routes/dashboard'));
@@ -68,6 +73,7 @@ app.use((err, req, res, next) => {
 if (require.main === module) {
   app.listen(config.port, '127.0.0.1', () => console.log(`Divyrs running on http://127.0.0.1:${config.port}`));
   if (process.env.DISABLE_MONITOR !== '1') monitor.start();
+  if (process.env.DISABLE_REGDATA !== '1') require('./src/regdata/scheduler').start();
 }
 
 module.exports = app;

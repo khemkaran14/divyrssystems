@@ -1,0 +1,96 @@
+<%- include('../partials/head') %>
+<% const B = baseUrl + '/api/regdata/v1'; %>
+<div class="container dash">
+  <aside class="side">
+    <a href="#start">Getting started</a>
+    <a href="#changes">Changes</a>
+    <a href="#change">One change</a>
+    <a href="#enforcement">Enforcement search</a>
+    <a href="#screen">Bulk screening</a>
+    <a href="#webhooks">Webhooks</a>
+    <a href="#limits">Limits &amp; errors</a>
+    <a href="#values">Values</a>
+  </aside>
+  <div style="min-width:0">
+    <h1 style="font-size:2rem">RegData API</h1>
+    <p class="muted">Indian regulatory changes and enforcement actions as JSON. Base URL: <code><%= B %></code></p>
+
+    <h2 id="start" style="font-size:1.3rem;margin-top:28px">Getting started</h2>
+    <ol>
+      <li><a href="/signup?next=/dashboard/regdata">Create a free account</a> and open <a href="/dashboard/regdata">Dashboard → RegData API</a>.</li>
+      <li>Create an API key (starts with <code>rdk_</code>). Keep it secret; use it from your server, not a browser.</li>
+      <li>Send it as a bearer token:</li>
+    </ol>
+<pre>curl "<%= B %>/changes?regulator=RBI&amp;limit=5" \
+  -H "Authorization: Bearer rdk_your_key"</pre>
+
+    <h2 id="changes" style="font-size:1.3rem;margin-top:28px">GET /changes</h2>
+    <p>New regulatory documents, newest first.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Parameter</th><th>Example</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td><code>regulator</code></td><td><code>RBI,SEBI</code></td><td>One or more regulators</td></tr>
+        <tr><td><code>applies_to</code></td><td><code>nbfc,payment_aggregator</code></td><td>Entity types that must act (<a href="#values">list</a>)</td></tr>
+        <tr><td><code>impact</code></td><td><code>high,medium</code></td><td>high, medium or low</td></tr>
+        <tr><td><code>type</code></td><td><code>circular,master_direction</code></td><td>Document type</td></tr>
+        <tr><td><code>enforcement</code></td><td><code>true</code></td><td>Only documents that penalise or order named parties (or <code>false</code> to exclude them)</td></tr>
+        <tr><td><code>q</code></td><td><code>cybersecurity</code></td><td>Keyword search in title and summary</td></tr>
+        <tr><td><code>since</code>, <code>until</code></td><td><code>2026-10-01</code></td><td>Published date range</td></tr>
+        <tr><td><code>limit</code>, <code>cursor</code></td><td><code>50</code>, <code>chg_1020</code></td><td>Page size (max 100) and the <code>next_cursor</code> from the previous page</td></tr>
+      </tbody>
+    </table></div>
+    <p>Response: <code>{"data": [change, …], "next_cursor": "chg_…" | null}</code>. A change looks like:</p>
+    <pre><%= sampleChange %></pre>
+    <p class="small muted"><code>verified: true</code> means a person checked the extraction. <code>extraction</code> is <code>"ai"</code> or <code>"rules"</code> (title-based, without obligations).</p>
+
+    <h2 id="change" style="font-size:1.3rem;margin-top:28px">GET /changes/{id}</h2>
+    <p>One change, plus any <code>enforcement_actions</code> it contains.</p>
+
+    <h2 id="enforcement" style="font-size:1.3rem;margin-top:28px">GET /enforcement</h2>
+    <p>With <code>name</code>: fuzzy search for a company or person. Without it: the latest actions.</p>
+<pre>curl "<%= B %>/enforcement?name=ABC%20Securities" -H "Authorization: Bearer rdk_your_key"</pre>
+    <div class="table-wrap"><table>
+      <tbody>
+        <tr><td><code>name</code></td><td>Company or person name. Suffixes like Pvt Ltd, Limited, Mr. are ignored.</td></tr>
+        <tr><td><code>min_confidence</code></td><td>0.3–1, default 0.6. Each result has <code>match_confidence</code>.</td></tr>
+        <tr><td><code>regulator</code>, <code>since</code>, <code>limit</code></td><td>As above</td></tr>
+        <tr><td><code>action_type</code></td><td>When listing without a name: <code>monetary_penalty</code>, <code>settlement</code>, <code>debarment</code>, …</td></tr>
+      </tbody>
+    </table></div>
+    <pre><%= sampleAction %></pre>
+
+    <h2 id="screen" style="font-size:1.3rem;margin-top:28px">POST /enforcement/screen</h2>
+    <p>Check up to 100 names at once (vendors, borrowers, partners). Counts as one call per name.</p>
+<pre>curl -X POST "<%= B %>/enforcement/screen" \
+  -H "Authorization: Bearer rdk_your_key" -H "Content-Type: application/json" \
+  -d '{"names": ["ABC Securities Pvt Ltd", "XYZ Finance Limited"], "min_confidence": 0.8}'</pre>
+    <p>Response: <code>{"data": [{"name", "flagged", "matches": [action, …]}], "flagged": 1}</code></p>
+
+    <h2 id="webhooks" style="font-size:1.3rem;margin-top:28px">Webhooks</h2>
+    <p>Starter and Business plans. Create them in the dashboard or by API:</p>
+<pre>curl -X POST "<%= B %>/webhooks" -H "Authorization: Bearer rdk_your_key" -H "Content-Type: application/json" \
+  -d '{"url": "https://yourapp.com/hooks/regdata",
+       "events": ["change", "enforcement"],
+       "regulators": ["RBI"], "applies_to": ["nbfc"], "impact": ["high"],
+       "watchlist": ["ABC Securities", "XYZ Finance"]}'</pre>
+    <p>We POST <code>{"id", "event", "created", "data"}</code> where <code>event</code> is <code>change.created</code> or <code>enforcement.created</code>. With a <code>watchlist</code>, enforcement events are sent only when a listed name matches. Failed deliveries are retried for about 9 hours.</p>
+    <p><strong>Verify the signature</strong> in the <code>Divyrs-Signature: t=…,v1=…</code> header: compute HMAC-SHA256 of <code>t + "." + raw_body</code> with your <code>whsec_</code> secret and compare to <code>v1</code>.</p>
+<pre>// Node.js
+const [t, v1] = header.split(',').map((p) => p.split('=')[1]);
+const ok = crypto.createHmac('sha256', SECRET).update(`${t}.${rawBody}`).digest('hex') === v1;</pre>
+    <p>Also: <code>GET /webhooks</code>, <code>DELETE /webhooks/{id}</code>.</p>
+
+    <h2 id="limits" style="font-size:1.3rem;margin-top:28px">Limits &amp; errors</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Plan</th><th class="num">Calls / month</th><th class="num">Per minute</th><th>Data</th><th class="num">Webhooks</th></tr></thead>
+      <tbody><% for (const p of Object.values(REG_PLANS)) { %><tr><td><%= p.name %></td><td class="num"><%= p.limits.callsMonth.toLocaleString('en-IN') %></td><td class="num"><%= p.limits.perMinute %></td><td><%= p.limits.delayDays ? p.limits.delayDays + '-day delay' : 'Real-time' %></td><td class="num"><%= p.limits.webhooks %></td></tr><% } %></tbody>
+    </table></div>
+    <p>Responses include <code>X-Usage-Month</code> and <code>X-Usage-Limit</code>. <code>GET /usage</code> shows your usage. Errors look like <code>{"error": {"code", "message"}}</code>: <code>401 invalid_api_key</code>, <code>404 not_found</code>, <code>429 rate_limited</code> / <code>quota_exceeded</code>, <code>402</code> for features above your plan.</p>
+
+    <h2 id="values" style="font-size:1.3rem;margin-top:28px">Values</h2>
+    <p><strong>Regulators live:</strong> <%= REGULATORS.join(', ') %>. <code>GET /regulators</code> shows when each feed was last checked.</p>
+    <p><strong>applies_to:</strong> <% for (const a of APPLIES_TO) { %><code><%= a %></code> <% } %></p>
+    <p class="small muted">RegData is information, not legal advice. Every record links to the official source.</p>
+  </div>
+</div>
+<%- include('../partials/foot') %>

@@ -44,7 +44,7 @@ curl <%= baseUrl %>/api/v1/monitors -H "Authorization: Bearer YOUR_KEY"</pre>
         <div class="table-wrap"><table>
           <thead><tr><th>Date</th><th>Plan</th><th class="num">Amount</th><th>Payment ID</th></tr></thead>
           <tbody><% for (const p of paid) { %>
-            <tr><td><%= new Date(p.paid_at).toLocaleDateString('en-IN') %></td><td><%= PLANS[p.plan].name %> · <%= p.months %> mo</td>
+            <tr><td><%= new Date(p.paid_at).toLocaleDateString('en-IN') %></td><td><%= anyPlan(p.plan).name %> · <%= p.months %> mo</td>
               <td class="num"><%= formatPrice(p.amount, p.currency) %></td><td class="mono small"><%= p.payment_id %></td></tr>
           <% } %></tbody>
         </table></div>
