@@ -17,7 +17,7 @@
   <h2>RegData data handling</h2>
   <ul>
     <li>RegData only processes documents that regulators publish publicly. We do not ingest your customers' personal data.</li>
-    <li>Names you send to the enforcement search or screening API are used only to answer that request. We record the number of calls for billing, not the names.</li>
+    <li>Names you send to the enforcement search or screening API are used only to answer that request; our application records the number of calls for billing, not the names. Standard web-server logs, kept for about 14 days, can include the address of website searches. For sensitive lists, use the POST screening API, whose names are never in an address.</li>
     <li>Watchlist names you save in a webhook are stored so we can alert you, and are deleted when you delete the webhook or your account.</li>
     <li>Public regulator documents are read with the help of AI models (Anthropic Claude). Only those public documents are sent for processing.</li>
   </ul>

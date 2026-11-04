@@ -5,6 +5,7 @@
     <h1 style="font-size:1.8rem">Hi <%= user.name.split(' ')[0] %> 👋</h1>
     <p class="muted">You're on the <strong><%= plan.name %></strong> plan<% if (plan.id !== 'free') { %> until <%= new Date(user.plan_expires).toLocaleDateString('en-IN') %><% } %>.
       <% if (plan.id !== 'business') { %><a href="/pricing">Upgrade</a><% } %></p>
+    <%- include('../partials/verify-banner') %>
     <% if (flash) { %><div class="alert success"><%= flash %></div><% } %>
     <% if (down.length) { %><div class="alert error">🔴 Down right now: <%= down.map(m => m.name).join(', ') %></div><% } %>
     <a class="card band" href="/dashboard/regdata" style="margin-top:20px">

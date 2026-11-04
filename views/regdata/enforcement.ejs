@@ -10,7 +10,10 @@
   <% if (!user) { %><p class="small muted">Searching needs a free account (100 searches a month). For bulk screening use the <a href="/regdata/docs#screen">API</a>.</p><% } %>
   <% if (gate) { %><div class="alert error"><%= gate %> <a href="/regdata#pricing">Upgrade</a></div><% } %>
   <% if (results) { %>
-    <h2 style="font-size:1.2rem"><%= results.length %> match<%= results.length === 1 ? '' : 'es' %> for "<%= name %>"</h2>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <h2 style="font-size:1.2rem;margin:0"><%= results.length %> match<%= results.length === 1 ? '' : 'es' %> for "<%= name %>"</h2>
+      <% if (results.length) { %><a class="btn sm" href="/regdata/export/enforcement.csv?name=<%= encodeURIComponent(name) %>">⬇ Download CSV</a><% } %>
+    </div>
     <% if (!results.length) { %><div class="alert success">No enforcement actions found for this name in our database.</div><% } %>
     <% for (const a of results) { %>
       <div class="card" style="margin-bottom:10px;padding:14px 18px">

@@ -31,10 +31,12 @@ router.post('/signup', rateLimit(10, 3600000), async (req, res) => {
   const info = db.prepare('INSERT INTO users (email, name, password_hash, created_at) VALUES (?,?,?,?)')
     .run(email, name, await hashPassword(password), Date.now());
   createSession(res, info.lastInsertRowid);
+  const verifyToken = crypto.randomBytes(24).toString('hex');
+  db.prepare('UPDATE users SET verify_token = ? WHERE id = ?').run(sha256(verifyToken), info.lastInsertRowid);
   sendMail({
     to: email,
-    subject: 'Welcome to Divyrs Systems',
-    text: `Hi ${name},\n\nYour account is ready.\n\n` +
+    subject: 'Welcome to Divyrs Systems — please confirm your email',
+    text: `Hi ${name},\n\nYour account is ready. Please confirm your email address:\n${config.baseUrl}/verify/${verifyToken}\n\n` +
       `• RegData API (regulatory changes & enforcement data): ${config.baseUrl}/dashboard/regdata\n` +
       `• Tools (invoices, booking page, business card, uptime & SSL, forms, links): ${config.baseUrl}/dashboard\n` +
       `• API docs: ${config.baseUrl}/regdata/docs\n\nQuestions? Just reply to this email.\n\n— ${config.business.name}\n`,
@@ -56,6 +58,26 @@ router.post('/login', rateLimit(10, 900000), async (req, res) => {
   }
   createSession(res, user.id);
   res.redirect(safeNext(req.body.next));
+});
+
+// ---------------- email verification ----------------
+router.get('/verify/:token', (req, res) => {
+  const t = String(req.params.token);
+  const user = /^[a-f0-9]{48}$/.test(t) && db.prepare('SELECT id FROM users WHERE verify_token = ?').get(sha256(t));
+  if (!user) return res.status(400).render('error', { title: 'Link not valid', message: 'This confirmation link is invalid or was already used. Log in and send a new one from your dashboard.' });
+  db.prepare('UPDATE users SET email_verified = 1, verify_token = NULL WHERE id = ?').run(user.id);
+  res.redirect('/dashboard?msg=' + encodeURIComponent('Email confirmed. Thank you!'));
+});
+
+router.post('/verify/resend', rateLimit(5, 3600000), async (req, res) => {
+  if (!req.user) return res.redirect('/login');
+  if (!req.user.email_verified) {
+    const t = crypto.randomBytes(24).toString('hex');
+    db.prepare('UPDATE users SET verify_token = ? WHERE id = ?').run(sha256(t), req.user.id);
+    await sendMail({ to: req.user.email, subject: 'Confirm your email for Divyrs', text: `Hi ${req.user.name},\n\nConfirm your email address:\n${config.baseUrl}/verify/${t}\n` });
+  }
+  const back = typeof req.body.back === 'string' && /^\/dashboard/.test(req.body.back) ? req.body.back : '/dashboard';
+  res.redirect(back + '?msg=' + encodeURIComponent('Confirmation email sent. Check your inbox.'));
 });
 
 // ---------------- password reset ----------------

@@ -1,0 +1,35 @@
+<%- include('../partials/head') %>
+<% const obl = parse(d.obligations, []), dls = parse(d.deadlines, []), am = parse(d.amends, []), ap = parse(d.applies_to, []), tp = parse(d.topics, []); %>
+<section class="section" style="padding-top:32px"><div class="container" style="max-width:900px">
+  <p class="small"><a href="/admin/regdata">← RegData admin</a> · <a href="<%= d.url %>" target="_blank" rel="noopener">Open official source ↗</a><% if (d.pdf_url) { %> · <a href="<%= d.pdf_url %>" target="_blank" rel="noopener">PDF ↗</a><% } %></p>
+  <h1 style="font-size:1.6rem">Edit #<%= d.id %> <span class="badge"><%= d.regulator %></span></h1>
+  <form method="post" class="card">
+    <div class="field"><label>Title</label><input name="title" value="<%= d.title %>"></div>
+    <div class="grid grid-4" style="gap:12px">
+      <div class="field"><label>Type</label><select name="doc_type"><% for (const t of DOC_TYPES) { %><option <%= d.doc_type === t ? 'selected' : '' %>><%= t %></option><% } %></select></div>
+      <div class="field"><label>Impact</label><select name="impact"><option value="">—</option><% for (const i of ['high', 'medium', 'low']) { %><option <%= d.impact === i ? 'selected' : '' %>><%= i %></option><% } %></select></div>
+      <div class="field"><label>Published</label><input type="date" name="published" value="<%= new Date(d.published_at).toISOString().slice(0, 10) %>"></div>
+      <div class="field"><label>Effective</label><input type="date" name="effective_date" value="<%= d.effective_date || '' %>"></div>
+    </div>
+    <div class="grid grid-2" style="gap:12px">
+      <div class="field"><label>Reference no.</label><input name="ref_no" value="<%= d.ref_no || '' %>"></div>
+      <div class="field"><label>Topics (comma-separated)</label><input name="topics" value="<%= tp.join(', ') %>"></div>
+    </div>
+    <div class="field"><label>Summary</label><textarea name="summary" rows="4"><%= d.summary || '' %></textarea></div>
+    <div class="field"><label>Applies to (Ctrl/⌘ for several)</label><select name="applies_to" multiple size="6"><% for (const a of APPLIES_TO) { %><option value="<%= a %>" <%= ap.includes(a) ? 'selected' : '' %>><%= a.replace(/_/g, ' ') %></option><% } %></select></div>
+    <div class="field"><label>Obligations — one per line: <code>what | who | YYYY-MM-DD deadline | page</code></label>
+      <textarea name="obligations" rows="5" class="mono"><%= obl.map(o => [o.what, o.who, o.deadline || '', o.page || ''].join(' | ')).join('\n') %></textarea></div>
+    <div class="field"><label>Deadlines — one per line: <code>YYYY-MM-DD | what</code></label>
+      <textarea name="deadlines" rows="3" class="mono"><%= dls.map(x => x.date + ' | ' + x.what).join('\n') %></textarea></div>
+    <div class="field"><label>Amends / supersedes — one reference per line</label>
+      <textarea name="amends" rows="2" class="mono"><%= am.join('\n') %></textarea></div>
+    <div class="field"><label>Parties (enforcement) — one per line: <code>name | entity type | action type | amount ₹ | YYYY-MM-DD | reason</code></label>
+      <textarea name="parties" rows="4" class="mono"><%= actions.map(a => [a.entity_name, a.entity_type, a.action_type, a.amount_inr || '', a.action_date || '', a.reason || ''].join(' | ')).join('\n') %></textarea>
+      <span class="small muted">Entity types: <%= ENTITY_TYPES.join(', ') %>. Action types: <%= ACTION_TYPES.join(', ') %>.</span></div>
+    <div class="btn-row">
+      <button class="btn" type="submit">Save</button>
+      <button class="btn primary" type="submit" name="verify" value="1">Save &amp; mark verified</button>
+    </div>
+  </form>
+</div></section>
+<%- include('../partials/foot') %>

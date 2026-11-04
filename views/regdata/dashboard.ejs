@@ -3,6 +3,7 @@
   <%- include('../partials/dash-side') %>
   <div style="min-width:0">
     <h1 style="font-size:1.8rem">RegData API</h1>
+    <%- include('../partials/verify-banner') %>
     <% if (msg) { %><div class="alert success"><%= msg %></div><% } %>
     <% if (error) { %><div class="alert error"><%= error %> <% if (/plan/.test(error)) { %><a href="/regdata#pricing">See plans</a><% } %></div><% } %>
     <% if (newSecret) { %><div class="alert">Webhook signing secret (shown once): <code><%= newSecret %></code></div><% } %>
@@ -26,6 +27,38 @@
 curl "<%= baseUrl %>/api/regdata/v1/enforcement?name=ABC%20Securities" \
   -H "Authorization: Bearer <%= me.reg_api_key || 'rdk_your_key' %>"</pre>
       <p class="small"><a href="/regdata/docs">Full API documentation →</a> · <a href="/regdata/enforcement">Search enforcement actions on the website →</a></p>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+      <h3>Email digests &amp; watchlists</h3>
+      <p class="small muted">No coding needed: get new changes and penalties by email at 8am IST. <%= digestLimits.paid ? 'Choose daily or weekly, filter by regulator, entity type and impact, and add a watchlist of names.' : 'The free plan includes one weekly digest of important items. Upgrade for daily digests with filters, obligations and watchlists.' %></p>
+      <% for (const d of digests) { %>
+        <div style="border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+          <div><strong><%= d.frequency === 'daily' ? 'Daily' : 'Weekly' %></strong> to <%= d.email %> <% if (!d.confirmed) { %><span class="badge warn">waiting for email confirmation</span><% } %>
+            <div class="small muted">Regulators: <%= (d.filters.regulators || []).join(', ') || 'all' %> · Applies to: <%= (d.filters.applies_to || []).join(', ') || 'any' %> · Impact: <%= (d.filters.impact || []).join(', ') || (digestLimits.paid ? 'any' : 'high & medium') %><% if ((d.filters.watchlist || []).length) { %> · Watchlist: <%= d.filters.watchlist.length %> names<% } %><%= d.last_sent ? ' · last sent ' + new Date(d.last_sent).toLocaleDateString('en-IN') : '' %></div></div>
+          <div class="btn-row">
+            <form method="post" action="/dashboard/regdata/digests/<%= d.id %>/preview"><button class="btn sm" type="submit">Send preview</button></form>
+            <form method="post" action="/dashboard/regdata/digests/<%= d.id %>/delete" onsubmit="return confirm('Delete this digest?')"><button class="btn sm danger" type="submit">Delete</button></form>
+          </div>
+        </div>
+      <% } %>
+      <% if (digests.length < digestLimits.max) { %>
+        <form method="post" action="/dashboard/regdata/digests" style="margin-top:10px">
+          <div class="grid grid-3" style="gap:12px">
+            <div class="field"><label>How often</label><select name="frequency"><% for (const f of digestLimits.frequencies) { %><option value="<%= f %>"><%= f === 'daily' ? 'Daily' : 'Weekly (Mondays)' %></option><% } %></select></div>
+            <% if (digestLimits.paid) { %>
+              <div class="field"><label>Regulators</label><% for (const r of REGULATORS) { %><label style="font-weight:500;display:flex;gap:6px"><input type="checkbox" name="regulators" value="<%= r %>" style="width:auto"> <%= r %></label><% } %><span class="small muted">None = all</span></div>
+              <div class="field"><label>Impact</label><% for (const i of ['high', 'medium', 'low']) { %><label style="font-weight:500;display:flex;gap:6px"><input type="checkbox" name="impact" value="<%= i %>" style="width:auto"> <%= i %></label><% } %><span class="small muted">None = any</span></div>
+            <% } %>
+          </div>
+          <% if (digestLimits.paid) { %>
+            <div class="field"><label for="dg-app">Applies to (Ctrl/⌘ for several; none = any)</label><select id="dg-app" name="applies_to" multiple size="5"><% for (const a of APPLIES_TO) { %><option value="<%= a %>"><%= a.replace(/_/g, ' ') %></option><% } %></select></div>
+            <div class="field"><label for="dg-watch">Watchlist: companies or people to flag if penalised (one per line)</label><textarea id="dg-watch" name="watchlist" rows="3" placeholder="Our vendors, borrowers, partners…"></textarea></div>
+          <% } %>
+          <button class="btn primary" type="submit">Create digest</button>
+        </form>
+      <% } %>
+      <p class="small" style="margin-top:12px">Quick exports: <a href="/regdata/export/changes.csv">changes (CSV)</a> · <a href="/regdata/export/enforcement.csv">enforcement actions (CSV)</a></p>
     </div>
 
     <div class="card">
@@ -60,6 +93,14 @@ curl "<%= baseUrl %>/api/regdata/v1/enforcement?name=ABC%20Securities" \
           <div class="field"><label for="wh-watch">Watchlist (one company or person per line, optional)</label><textarea id="wh-watch" name="watchlist" rows="3" placeholder="ABC Securities Pvt Ltd&#10;XYZ Finance Limited"></textarea></div>
           <button class="btn primary" type="submit">Add webhook</button>
         </form>
+      <% } %>
+      <% if (deliveries.length) { %>
+        <h4 style="margin:20px 0 8px">Recent deliveries</h4>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Time</th><th>Event</th><th>Endpoint</th><th>Status</th></tr></thead>
+          <tbody><% for (const d of deliveries) { %><tr><td class="small"><%= new Date(d.created_at).toLocaleString('en-IN') %></td><td class="small"><%= d.event %></td><td class="small mono"><%= d.url.replace(/^https:\/\//, '').slice(0, 40) %></td>
+            <td><span class="badge <%= d.status === 'sent' ? 'ok' : d.status === 'failed' ? 'bad' : 'warn' %>"><%= d.status %><%= d.attempts > 1 ? ' · ' + d.attempts + ' tries' : '' %></span><% if (d.last_error && d.status !== 'sent') { %><div class="small" style="color:var(--bad)"><%= d.last_error %></div><% } %></td></tr><% } %></tbody>
+        </table></div>
       <% } %>
     </div>
   </div>

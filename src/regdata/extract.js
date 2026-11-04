@@ -18,9 +18,10 @@ const nullable = (t) => ({ anyOf: [{ type: t }, { type: 'null' }] });
 const SCHEMA = {
   type: 'object',
   additionalProperties: false,
-  required: ['doc_type', 'ref_no', 'summary', 'impact', 'effective_date', 'applies_to', 'topics', 'obligations', 'deadlines', 'amends', 'enforcement_actions'],
+  required: ['doc_type', 'published_date', 'ref_no', 'summary', 'impact', 'effective_date', 'applies_to', 'topics', 'obligations', 'deadlines', 'amends', 'enforcement_actions'],
   properties: {
     doc_type: { type: 'string', enum: DOC_TYPES },
+    published_date: nullable('string'),
     ref_no: nullable('string'),
     summary: { type: 'string' },
     impact: { type: 'string', enum: ['high', 'medium', 'low'] },
@@ -70,6 +71,7 @@ Rules:
 - applies_to: the types of regulated entities that must act. Empty if none.
 - obligations: concrete things a regulated entity must do, each with who must do it, the deadline (YYYY-MM-DD if stated, else null) and the 1-based PDF page where it appears (null if not a PDF or unknown).
 - deadlines: every dated requirement, as YYYY-MM-DD.
+- published_date: the date printed on the document (YYYY-MM-DD), else null.
 - effective_date: YYYY-MM-DD if stated, else null.
 - amends: reference numbers or titles of earlier circulars/directions this document amends, supersedes or withdraws.
 - enforcement_actions: only when the document imposes a penalty, passes an order, cancels a licence/registration, settles proceedings or imposes restrictions on specific named entities or persons. One entry per named party. amount_inr in whole rupees (e.g. "₹2.50 lakh" = 250000) or null. action_date YYYY-MM-DD of the order or press release if stated. reason: one sentence on what the party did wrong.

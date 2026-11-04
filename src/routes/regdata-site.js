@@ -10,6 +10,12 @@ const { APPLIES_TO } = require('../regdata/extract');
 const ai = require('../regdata/extract');
 const { requireUser, requireAdmin, rateLimit } = require('../auth');
 const { createWebhook } = require('./regdata-api');
+const digest = require('../regdata/digest');
+const { DOC_TYPES } = require('../regdata/rules');
+
+// CSV cell: quote everything and stop Excel from running formulas.
+const csvCell = (v) => { let s = v == null ? '' : Array.isArray(v) ? v.join('; ') : String(v); if (/^[=+\-@]/.test(s)) s = "'" + s; return '"' + s.replace(/"/g, '""') + '"'; };
+const toCsv = (cols, rows) => '\ufeff' + [cols.map(csvCell).join(','), ...rows.map((r) => cols.map((c) => csvCell(r[c])).join(','))].join('\n');
 
 const pub = express.Router();
 const dash = express.Router();
@@ -65,6 +71,19 @@ pub.get('/regdata/docs', (req, res) => {
   res.render('regdata/docs', { title: 'RegData API documentation', APPLIES_TO, REGULATORS, REG_PLANS, sampleChange: JSON.stringify(SAMPLE_CHANGE, null, 2), sampleAction: JSON.stringify(SAMPLE_ACTION, null, 2) });
 });
 
+const topics = require('../regdata/topics');
+pub.get('/regdata/topics', (req, res) => {
+  const counts = Object.fromEntries(topics.TOPICS.map((t) => [t.slug, store.listChanges({ ...t.f, limit: 100 }).rows.length]));
+  res.render('regdata/topics', { title: 'Indian regulatory topics — RBI & SEBI', description: 'Browse RBI and SEBI regulatory changes and penalties by topic: digital lending, KYC, cybersecurity, NBFCs, payments, brokers and more.', TOPICS: topics.TOPICS, counts });
+});
+pub.get('/regdata/topics/:slug', (req, res, next) => {
+  const t = topics.bySlug[req.params.slug];
+  if (!t) return next();
+  const rows = store.listChanges({ ...t.f, limit: 40 }).rows;
+  const apiQuery = new URLSearchParams(Object.entries(t.f).map(([k, v]) => [k, Array.isArray(v) ? v.join(',') : String(v)])).toString();
+  res.render('regdata/topic', { title: `${t.name}: latest RBI & SEBI updates`, description: t.intro, t, rows, apiQuery, TOPICS: topics.TOPICS });
+});
+
 pub.get('/regdata/changes', (req, res) => {
   const regulator = REGULATORS.includes(req.query.regulator) ? [req.query.regulator] : null;
   const before = parseInt(req.query.before, 10) || undefined;
@@ -102,6 +121,67 @@ pub.get('/regdata/enforcement', rateLimit(60, 600000), (req, res) => {
   res.render('regdata/enforcement', { title: 'RBI & SEBI enforcement actions — penalties and orders', name, results, latest, gate });
 });
 
+// ---------------------------------------------------------------- newsletter (no account needed)
+pub.post('/regdata/subscribe', rateLimit(10, 3600000), (req, res) => {
+  const r = digest.subscribeNewsletter(req.body.email);
+  res.render('regdata/subscribed', { title: 'Indian Regulatory Roundup', ok: !r.error, error: r.error || null, mode: 'pending' });
+});
+pub.get('/regdata/digest/confirm/:token', (req, res) => {
+  const ok = digest.confirm(req.params.token);
+  res.render('regdata/subscribed', { title: 'Subscription confirmed', ok, error: ok ? null : 'This link is not valid any more.', mode: 'confirmed' });
+});
+pub.get('/regdata/digest/unsubscribe/:token', (req, res) => {
+  const ok = digest.unsubscribe(req.params.token);
+  res.render('regdata/subscribed', { title: 'Unsubscribed', ok, error: ok ? null : 'You were already unsubscribed.', mode: 'unsubscribed' });
+});
+// One-click unsubscribe from email clients (RFC 8058).
+pub.post('/regdata/digest/unsubscribe/:token', (req, res) => { digest.unsubscribe(req.params.token); res.sendStatus(200); });
+
+// ---------------------------------------------------------------- CSV / Excel export (signed in)
+function exportAllowed(req, res) {
+  if (!req.user) { res.redirect('/signup?next=' + encodeURIComponent(req.originalUrl)); return null; }
+  const plan = regPlanFor(req.user);
+  const used = db.prepare('SELECT calls FROM reg_usage WHERE user_id = ? AND month = ?').get(req.user.id, month())?.calls || 0;
+  if (used >= plan.limits.callsMonth) { res.status(429).render('error', { title: 'Monthly limit reached', message: `Exports count as one API call. You have used all ${plan.limits.callsMonth} on the ${plan.name} plan this month.` }); return null; }
+  db.prepare('INSERT INTO reg_usage (user_id, month, calls) VALUES (?, ?, 1) ON CONFLICT(user_id, month) DO UPDATE SET calls = calls + 1').run(req.user.id, month());
+  return plan;
+}
+const csvList = (v, allowed) => (v ? String(v).split(',').filter((x) => !allowed || allowed.includes(x)) : null);
+
+pub.get('/regdata/export/changes.csv', (req, res) => {
+  const plan = exportAllowed(req, res); if (!plan) return;
+  const q = req.query;
+  const max = plan.id === 'reg_free' ? 200 : 5000;
+  const rows = [];
+  let before;
+  while (rows.length < max) {
+    const r = store.listChanges({
+      regulator: csvList(q.regulator, REGULATORS), type: csvList(q.type, DOC_TYPES), impact: csvList(q.impact, ['high', 'medium', 'low']),
+      applies_to: csvList(q.applies_to, APPLIES_TO), q: q.q ? String(q.q).slice(0, 100) : undefined,
+      since: /^\d{4}-\d{2}-\d{2}$/.test(q.since || '') ? Date.parse(q.since) : undefined,
+      maxPublished: plan.limits.delayDays ? Date.now() - plan.limits.delayDays * 86400000 : undefined, before, limit: 100,
+    });
+    rows.push(...r.rows.map((d) => {
+      const c = store.formatChange(d);
+      return { ...c, obligations: c.obligations.map((o) => o.what + (o.deadline ? ` (by ${o.deadline})` : '')), deadlines: c.deadlines.map((x) => `${x.date}: ${x.what}`) };
+    }));
+    if (!r.more) break;
+    before = r.rows[r.rows.length - 1].id;
+  }
+  res.attachment(`regdata-changes-${new Date().toISOString().slice(0, 10)}.csv`).type('text/csv')
+    .send(toCsv(['published', 'regulator', 'doc_type', 'ref_no', 'title', 'impact', 'effective_date', 'applies_to', 'summary', 'obligations', 'deadlines', 'amends', 'verified', 'url', 'page'], rows.slice(0, max)));
+});
+
+pub.get('/regdata/export/enforcement.csv', (req, res) => {
+  const plan = exportAllowed(req, res); if (!plan) return;
+  const maxDate = plan.limits.delayDays ? new Date(Date.now() - plan.limits.delayDays * 86400000).toISOString().slice(0, 10) : undefined;
+  const rows = req.query.name
+    ? store.searchActions({ name: String(req.query.name).slice(0, 200), maxDate, minConfidence: 0.6, limit: 100 })
+    : store.listActions({ regulator: csvList(req.query.regulator, REGULATORS), maxDate, limit: 100 }).rows.map((a) => store.formatAction(a));
+  res.attachment(`regdata-enforcement-${new Date().toISOString().slice(0, 10)}.csv`).type('text/csv')
+    .send(toCsv(['action_date', 'regulator', 'entity_name', 'entity_type', 'action_type', 'amount_inr', 'reason', 'match_confidence', 'url', 'pdf_url'], rows));
+});
+
 // ---------------------------------------------------------------- customer dashboard
 dash.use(requireUser);
 
@@ -110,12 +190,17 @@ function dashPage(req, res, extra = {}) {
   const plan = regPlanFor(me);
   const used = db.prepare('SELECT calls FROM reg_usage WHERE user_id = ? AND month = ?').get(me.id, month())?.calls || 0;
   const hooks = db.prepare('SELECT * FROM reg_webhooks WHERE user_id = ? ORDER BY id').all(me.id).map((h) => ({ ...h, filters: parse(h.filters, {}) }));
-  res.render('regdata/dashboard', { title: 'RegData API', me, regPlan: plan, used, hooks, REG_PLANS, REGULATORS, APPLIES_TO, msg: req.query.msg || null, error: null, newSecret: null, ...extra });
+  const digests = db.prepare('SELECT * FROM reg_digests WHERE user_id = ? ORDER BY id').all(me.id).map((d) => ({ ...d, filters: parse(d.filters, {}) }));
+  const deliveries = db.prepare('SELECT d.id, d.event, d.status, d.attempts, d.last_error, d.created_at, w.url FROM reg_deliveries d JOIN reg_webhooks w ON w.id = d.webhook_id WHERE w.user_id = ? ORDER BY d.id DESC LIMIT 20').all(me.id);
+  res.render('regdata/dashboard', { title: 'RegData API', me, regPlan: plan, used, hooks, digests, deliveries, digestLimits: digest.limitsFor(me), REG_PLANS, REGULATORS, APPLIES_TO, msg: req.query.msg || null, error: null, newSecret: null, ...extra });
 }
 
 dash.get('/', (req, res) => dashPage(req, res));
 
 dash.post('/key', (req, res) => {
+  if (!req.user.email_verified && !res.locals.isAdmin) {
+    return res.redirect('/dashboard/regdata?msg=' + encodeURIComponent('Please confirm your email first — we sent you a link.'));
+  }
   db.prepare('UPDATE users SET reg_api_key = ? WHERE id = ?').run('rdk_' + crypto.randomBytes(24).toString('hex'), req.user.id);
   res.redirect('/dashboard/regdata?msg=' + encodeURIComponent('New API key created. Any old key stopped working.'));
 });
@@ -129,6 +214,30 @@ dash.post('/webhooks', async (req, res) => {
   });
   if (r.error) return dashPage(req, res, { error: r.error });
   dashPage(req, res, { msg: 'Webhook added. Copy the signing secret now — it is shown only once.', newSecret: r.secret });
+});
+
+dash.post('/digests', (req, res) => {
+  const me = db.prepare('SELECT * FROM users WHERE id = ?').get(req.user.id);
+  const arr = (v) => [].concat(v || []).map(String).filter(Boolean);
+  const r = digest.createForUser(me, {
+    frequency: req.body.frequency, regulators: arr(req.body.regulators).filter((x) => REGULATORS.includes(x)),
+    applies_to: arr(req.body.applies_to).filter((x) => APPLIES_TO.includes(x)), impact: arr(req.body.impact).filter((x) => ['high', 'medium', 'low'].includes(x)),
+    watchlist: String(req.body.watchlist || '').split('\n').map((s) => s.trim().slice(0, 200)).filter(Boolean),
+  });
+  if (r.error) return dashPage(req, res, { error: r.error });
+  res.redirect('/dashboard/regdata?msg=' + encodeURIComponent(me.email_verified ? 'Digest created. It arrives at 8am IST.' : 'Digest created. It starts once you confirm your email.'));
+});
+
+dash.post('/digests/:id/delete', (req, res) => {
+  db.prepare('DELETE FROM reg_digests WHERE id = ? AND user_id = ?').run(req.params.id, req.user.id);
+  res.redirect('/dashboard/regdata?msg=Digest+deleted');
+});
+
+dash.post('/digests/:id/preview', rateLimit(10, 3600000), async (req, res) => {
+  const d = db.prepare('SELECT * FROM reg_digests WHERE id = ? AND user_id = ?').get(req.params.id, req.user.id);
+  if (d) await digest.sendOne({ ...d, last_sent: null }, { force: true });
+  if (d) db.prepare('UPDATE reg_digests SET last_sent = ? WHERE id = ?').run(d.last_sent, d.id); // a preview doesn't change the schedule
+  res.redirect('/dashboard/regdata?msg=' + encodeURIComponent('Preview sent to ' + req.user.email));
 });
 
 dash.post('/webhooks/:id/delete', (req, res) => {
@@ -184,6 +293,54 @@ admin.post('/add', async (req, res) => {
   if (!/^https?:\/\//.test(url)) return back(res, 'Enter a full URL.');
   const id = await pipeline.addByUrl({ regulator, url, title: String(req.body.title || '').trim() || null });
   back(res, id ? `Added (#${id}). It is processed within a minute.` : 'That URL is already in the database.', 'pending');
+});
+
+admin.post('/import', async (req, res) => {
+  const lines = String(req.body.urls || '').split(/\s+/).filter(Boolean).slice(0, 2000);
+  const r = await pipeline.importUrls(lines, { regulator: REGULATORS.includes(req.body.regulator) ? req.body.regulator : null });
+  back(res, `Imported ${r.added} new documents (${r.skipped} already known, ${r.scanned} archive pages scanned).` + (r.errors.length ? ' Problems: ' + r.errors.slice(0, 3).join(' | ') : '') + ' They are processed 5 per minute.', 'pending');
+});
+
+// ---- manual correction of extracted data
+const ENTITY_TYPES_ = require('../regdata/rules').ENTITY_TYPES;
+const ACTION_TYPES_ = require('../regdata/rules').ACTION_TYPES;
+const lines = (v) => String(v || '').split('\n').map((l) => l.trim()).filter(Boolean);
+const iso = (v) => (/^\d{4}-\d{2}-\d{2}$/.test(String(v || '').trim()) ? String(v).trim() : null);
+
+admin.get('/docs/:id/edit', (req, res, next) => {
+  const d = db.prepare('SELECT * FROM reg_documents WHERE id = ?').get(req.params.id);
+  if (!d) return next();
+  const actions = db.prepare('SELECT * FROM reg_actions WHERE document_id = ?').all(d.id);
+  res.render('regdata/edit', { title: 'Edit #' + d.id, d, actions, parse, APPLIES_TO, DOC_TYPES, ENTITY_TYPES: ENTITY_TYPES_, ACTION_TYPES: ACTION_TYPES_ });
+});
+
+admin.post('/docs/:id/edit', (req, res, next) => {
+  const d = db.prepare('SELECT * FROM reg_documents WHERE id = ?').get(req.params.id);
+  if (!d) return next();
+  const b = req.body;
+  // Lines like "what | who | deadline | page"
+  const obligations = lines(b.obligations).map((l) => { const [what, who, deadline, page] = l.split('|').map((x) => (x || '').trim()); return { what, who: who || 'Regulated entity', deadline: iso(deadline), page: parseInt(page, 10) || null }; }).filter((o) => o.what);
+  const deadlines = lines(b.deadlines).map((l) => { const [date, ...what] = l.split('|').map((x) => x.trim()); return { date: iso(date), what: what.join(' | ') }; }).filter((x) => x.date && x.what);
+  const parties = lines(b.parties).map((l) => {
+    const [name, et, at, amount, date, ...reason] = l.split('|').map((x) => (x || '').trim());
+    return { entity_name: name, entity_type: ENTITY_TYPES_.includes(et) ? et : 'other', action_type: ACTION_TYPES_.includes(at) ? at : 'other',
+      amount_inr: parseInt(String(amount).replace(/[^0-9]/g, ''), 10) || null, action_date: iso(date), reason: reason.join(' | ') || null };
+  }).filter((a) => a.entity_name);
+  store.saveResult(d.id, {
+    doc_type: DOC_TYPES.includes(b.doc_type) ? b.doc_type : d.doc_type, ref_no: String(b.ref_no || '').trim() || null,
+    summary: String(b.summary || '').trim() || null, impact: ['high', 'medium', 'low'].includes(b.impact) ? b.impact : null,
+    effective_date: iso(b.effective_date), applies_to: [].concat(b.applies_to || []).filter((x) => APPLIES_TO.includes(x)),
+    topics: lines(String(b.topics || '').replace(/,/g, '\n')), obligations, deadlines, amends: lines(b.amends),
+    enforcement_actions: parties, pdf_url: d.pdf_url, extraction: d.extraction || 'rules', model: d.model,
+  });
+  const title = String(b.title || '').trim();
+  const pub = iso(b.published);
+  db.prepare('UPDATE reg_documents SET title = COALESCE(?, title), published_at = COALESCE(?, published_at), review_status = ?, notified = 1 WHERE id = ?')
+    .run(title || null, pub ? Date.parse(pub) : null, b.verify ? 'verified' : d.review_status, d.id);
+  db.prepare('DELETE FROM reg_documents_fts WHERE rowid = ?').run(d.id);
+  const nd = db.prepare('SELECT title, summary FROM reg_documents WHERE id = ?').get(d.id);
+  db.prepare('INSERT INTO reg_documents_fts (rowid, title, summary) VALUES (?, ?, ?)').run(d.id, nd.title, nd.summary || '');
+  back(res, `Saved #${d.id}${b.verify ? ' and marked verified' : ''}.`);
 });
 
 admin.post('/docs/:id/review', (req, res) => {

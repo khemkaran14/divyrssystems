@@ -1,0 +1,12 @@
+<%- include('../partials/head') %>
+<section class="section" style="padding-top:36px"><div class="container">
+  <p class="small"><a href="/regdata">← RegData API</a></p>
+  <h1 style="font-size:2rem">Browse by topic</h1>
+  <p class="muted">The latest RBI and SEBI changes and enforcement actions, grouped by subject. Updated automatically every 30 minutes.</p>
+  <div class="grid grid-3" style="margin-top:20px">
+    <% for (const t of TOPICS) { %>
+      <a class="card" href="/regdata/topics/<%= t.slug %>"><h3><%= t.name %></h3><p class="muted small"><%= t.intro %></p><span class="badge"><%= counts[t.slug] >= 100 ? '100+' : counts[t.slug] %> items</span></a>
+    <% } %>
+  </div>
+</div></section>
+<%- include('../partials/foot') %>

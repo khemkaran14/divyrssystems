@@ -140,3 +140,17 @@ In `/root/divyrssystems/.env` (then `pm2 restart divyrs`):
 | `GRIEVANCE_OFFICER`, `GRIEVANCE_EMAIL` | Required in the privacy policy under the DPDP Act |
 | `ANTHROPIC_API_KEY` | RegData document reading |
 | `RAZORPAY_*` | Online payments |
+
+## Production checks (do once)
+
+1. **Uptime monitor:** add `https://divyrs.com/healthz` to a free monitor (UptimeRobot or Better Stack) with alerts to your phone. It returns 200 when the app and database are fine.
+2. **Off-site backups:**
+   ```bash
+   rclone config            # add Google Drive or Backblaze B2 (optionally wrap it in an encrypted "crypt" remote)
+   nano /root/divyrssystems/.env     # set RCLONE_REMOTE=yourremote:divyrs-backups
+   /root/divyrssystems/deploy/backup.sh   # should print "Backup copied to ..."
+   ```
+3. **Alerts to you** (automatic once SMTP and ADMIN_EMAIL are set): app crashes, RegData feeds failing for 3+ hours, failed documents, processing backlog, and a short daily report at 9am IST.
+4. **Back-fill the archive:** in `/admin/regdata` → *Back-fill the archive*, paste RBI/SEBI archive listing pages or document links (or `npm run regdata:import -- urls.txt` / `node bin/regdata.js import urls.txt`). They are processed 5 per minute, with dates taken from each document.
+
+Your business kit (sales one-pager, demo script, outreach messages, pilot and contract templates, security answers, launch checklist) is in `business/`.

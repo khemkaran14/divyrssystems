@@ -1,0 +1,22 @@
+<%- include('../partials/head') %>
+<section class="section" style="padding-top:36px"><div class="container" style="max-width:900px">
+  <p class="small"><a href="/regdata/topics">← All topics</a></p>
+  <h1 style="font-size:2rem"><%= t.name %></h1>
+  <p class="lead"><%= t.intro %></p>
+  <div class="card" style="background:var(--brand-soft);border-color:transparent;margin:16px 0">
+    <p style="margin:0 0 8px"><strong>Get this topic by API or email.</strong> Same filter: <code>GET /api/regdata/v1/changes?<%= apiQuery %></code></p>
+    <div class="btn-row"><a class="btn primary sm" href="<%= user ? '/dashboard/regdata' : '/signup?next=/dashboard/regdata' %>">Get API key / email digest</a><a class="btn sm" href="/regdata/docs">API docs</a></div>
+  </div>
+  <% if (!rows.length) { %><p class="muted">Nothing in this topic yet. New documents are added every 30 minutes.</p><% } %>
+  <% for (const d of rows) { %>
+    <a class="card" href="/regdata/changes/<%= d.id %>" style="margin-bottom:10px;padding:14px 18px">
+      <div class="small muted"><span class="badge"><%= d.regulator %></span> <%= new Date(d.published_at).toLocaleDateString('en-IN') %> · <%= d.doc_type.replace(/_/g, ' ') %><% if (d.impact) { %> · <span class="badge <%= d.impact === 'high' ? 'bad' : d.impact === 'medium' ? 'warn' : '' %>"><%= d.impact %> impact</span><% } %></div>
+      <div style="font-weight:600;margin-top:4px"><%= d.title %></div>
+      <% if (d.summary) { %><p class="small muted" style="margin:6px 0 0"><%= d.summary.slice(0, 220) %><%= d.summary.length > 220 ? '…' : '' %></p><% } %>
+    </a>
+  <% } %>
+  <div style="margin-top:28px"><%- include('../partials/newsletter') %></div>
+  <h2 style="font-size:1.2rem;margin-top:32px">Other topics</h2>
+  <div class="btn-row"><% for (const o of TOPICS.filter(x => x.slug !== t.slug)) { %><a class="btn sm" href="/regdata/topics/<%= o.slug %>"><%= o.name %></a><% } %></div>
+</div></section>
+<%- include('../partials/foot') %>

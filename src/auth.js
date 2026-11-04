@@ -56,7 +56,7 @@ function requireAdmin(req, res, next) {
 function sameOrigin(req, res, next) {
   if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next();
   // Webhook, API and form endpoints are meant to be called from other sites.
-  if (req.path === '/billing/webhook' || req.path.startsWith('/api/') || req.path.startsWith('/f/')) return next();
+  if (req.path === '/billing/webhook' || req.path.startsWith('/api/') || req.path.startsWith('/f/') || req.path.startsWith('/regdata/digest/unsubscribe/')) return next();
   const origin = req.get('origin') || req.get('referer') || '';
   const host = req.get('host');
   try {

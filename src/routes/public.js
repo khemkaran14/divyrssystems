@@ -150,7 +150,7 @@ router.get('/robots.txt', (req, res) => {
   res.type('text/plain').send(`User-agent: *\nDisallow: /dashboard\nDisallow: /admin\nDisallow: /billing\nSitemap: ${config.baseUrl}/sitemap.xml\n`);
 });
 router.get('/sitemap.xml', (req, res) => {
-  const pages = ['', '/regdata', '/regdata/changes', '/regdata/enforcement', '/regdata/docs', '/regdata/status', '/tools', '/tools/invoice', '/tools/qr',
+  const pages = ['', '/regdata', '/regdata/topics', ...require('../regdata/topics').TOPICS.map((t) => '/regdata/topics/' + t.slug), '/regdata/changes', '/regdata/enforcement', '/regdata/docs', '/regdata/status', '/tools', '/tools/invoice', '/tools/qr',
     '/tools/uptime', '/tools/links', '/tools/booking', '/tools/forms', '/tools/business-card', '/tools/gst-calculator', '/tools/emi-calculator',
     '/pricing', '/about', '/contact', '/security', '/privacy', '/terms', '/refund', '/shipping'];
   // Every public regulatory change page, newest first (search engines cap sitemaps at 50,000 URLs).

@@ -11,15 +11,17 @@ if (config.smtp.host && config.smtp.user && config.smtp.pass) {
   });
 }
 
-async function sendMail({ to, subject, text, replyTo }) {
+async function sendMail({ to, subject, text, html, replyTo, headers }) {
   if (!transport) {
     console.log(`[mail disabled] to=${to} subject="${subject}"\n${text}`);
     return;
   }
   try {
-    await transport.sendMail({ from: config.smtp.from, to, subject, text, replyTo });
+    await transport.sendMail({ from: config.smtp.from, to, subject, text, html, replyTo, headers });
+    return true;
   } catch (err) {
     console.error('Mail send failed:', err.message);
+    return false;
   }
 }
 

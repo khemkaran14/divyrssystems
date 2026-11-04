@@ -1,0 +1,6 @@
+<% if (user && !user.email_verified) { %>
+  <div class="alert" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+    <span>📧 Please confirm your email address (<%= user.email %>). We sent you a link.</span>
+    <form method="post" action="/verify/resend"><input type="hidden" name="back" value="<%= path %>"><button class="btn sm" type="submit">Resend link</button></form>
+  </div>
+<% } %>

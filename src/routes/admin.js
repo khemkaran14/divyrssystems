@@ -26,6 +26,15 @@ router.get('/', (req, res) => {
     users: db.prepare('SELECT id, name, email, plan, plan_expires, created_at FROM users ORDER BY created_at DESC LIMIT 100').all(),
     payments: db.prepare("SELECT p.*, u.email FROM payments p JOIN users u ON u.id = p.user_id WHERE p.status='paid' ORDER BY p.paid_at DESC LIMIT 100").all(),
     messages: db.prepare('SELECT * FROM messages ORDER BY created_at DESC LIMIT 100').all(),
+    traffic: (() => {
+      const since = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
+      const days = db.prepare('SELECT day, SUM(views) v FROM page_views WHERE day >= ? GROUP BY day ORDER BY day').all(since);
+      const top = db.prepare('SELECT path, SUM(views) v FROM page_views WHERE day >= ? GROUP BY path ORDER BY v DESC LIMIT 15').all(since);
+      const signups = db.prepare('SELECT COUNT(*) n FROM users WHERE created_at >= ?').get(Date.now() - 30 * 86400000).n;
+      let subscribers = 0;
+      try { subscribers = db.prepare('SELECT COUNT(*) n FROM reg_digests WHERE confirmed = 1').get().n; } catch (_) { /* table created later */ }
+      return { days, top, total: days.reduce((n, d) => n + d.v, 0), signups, subscribers };
+    })(),
     msg: req.query.msg || null,
   });
 });

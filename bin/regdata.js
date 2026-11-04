@@ -4,6 +4,7 @@
 //   node bin/regdata.js collect    fetch feeds and save new items
 //   node bin/regdata.js process 20 read + extract up to 20 pending items
 //   node bin/regdata.js status     counts and feed health
+//   node bin/regdata.js import urls.txt   back-fill: document links or archive pages, one per line
 require('../src/config');
 const fetcher = require('../src/regdata/fetch');
 const { SOURCES } = require('../src/regdata/sources');
@@ -31,6 +32,7 @@ const rules = require('../src/regdata/rules');
   const store = require('../src/regdata/store');
   if (cmd === 'collect') console.log(await pipeline.collectAll());
   else if (cmd === 'process') console.log(await pipeline.processPending(Number(arg) || 10));
+  else if (cmd === 'import') console.log(await pipeline.importUrls(require('fs').readFileSync(arg, 'utf8').split(/\s+/)));
   else {
     console.log(store.stats());
     console.log(store.db.prepare('SELECT id, last_status, last_error, items_seen, datetime(last_fetched/1000, "unixepoch") AS checked FROM reg_sources').all());

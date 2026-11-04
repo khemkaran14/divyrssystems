@@ -25,10 +25,36 @@ app.use((req, res, next) => {
 
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: config.isProd ? '7d' : 0 }));
 
+// Health check for uptime monitors (UptimeRobot, Better Stack, your own Divyrs monitor).
+const ops = require('./src/ops');
+app.get('/healthz', (req, res) => { const h = ops.health(); res.status(h.ok ? 200 : 503).json(h); });
+
+// Privacy-friendly page counts: no cookies, no IPs, just page + day.
+const db = require('./src/db');
+const BOT_RE = /bot|crawl|spider|slurp|preview|monitor|curl|wget|python|node-fetch|headless/i;
+const normalizePath = (p) => p
+  .replace(/^\/regdata\/changes\/\d+$/, '/regdata/changes/:id')
+  .replace(/^\/(c|book|status|s|f|reset|verify)\/[^/]+.*$/, '/$1/:x')
+  .replace(/^\/dashboard\/.*$/, '/dashboard/*')
+  .replace(/^\/admin.*$/, '/admin')
+  .slice(0, 120);
+app.use((req, res, next) => {
+  if (req.method !== 'GET' || req.path.startsWith('/api/') || BOT_RE.test(req.get('user-agent') || '')) return next();
+  res.on('finish', () => {
+    if (res.statusCode !== 200 || !String(res.get('content-type') || '').includes('text/html')) return;
+    try {
+      db.prepare('INSERT INTO page_views (day, path, views) VALUES (?, ?, 1) ON CONFLICT(day, path) DO UPDATE SET views = views + 1')
+        .run(new Date().toISOString().slice(0, 10), normalizePath(req.path));
+    } catch (_) { /* never break a page for analytics */ }
+  });
+  next();
+});
+
 // Razorpay webhook must see the raw body.
 app.post('/billing/webhook', express.raw({ type: 'application/json', limit: '1mb' }), billing.webhook);
 
 app.use(express.urlencoded({ extended: false, limit: '300kb' })); // business-card photos
+
 app.use(cookieParser(config.sessionSecret));
 app.use(sameOrigin);
 app.use(loadUser);
@@ -75,6 +101,7 @@ if (require.main === module) {
   app.listen(config.port, '127.0.0.1', () => console.log(`Divyrs running on http://127.0.0.1:${config.port}`));
   if (process.env.DISABLE_MONITOR !== '1') monitor.start();
   if (process.env.DISABLE_REGDATA !== '1') require('./src/regdata/scheduler').start();
+  ops.installCrashAlerts();
 }
 
 module.exports = app;

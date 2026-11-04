@@ -154,7 +154,25 @@ function actionsFromTitle({ regulator, title, text }) {
     .map((name) => ({ entity_name: name, entity_type: guessEntityType(name), action_type: actionType, amount_inr: amount, reason: null }));
 }
 
+// ---------------------------------------------------------------- dates in text
+const MONTHS = { jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5, jul: 6, aug: 7, sep: 8, sept: 8, oct: 9, nov: 10, dec: 11 };
+// First plausible date in a document ("November 2, 2026", "2 Nov 2026", "02.11.2026", "02/11/2026"). Day comes first in numeric dates.
+function findDate(text, maxMs = Date.now() + 86400000) {
+  const s = clean(text).slice(0, 5000);
+  const cands = [];
+  let m;
+  const re1 = /\b(jan|feb|mar|apr|may|jun|jul|aug|sept?|oct|nov|dec)[a-z]*\.?\s+(\d{1,2}),?\s+((?:19|20)\d{2})\b/gi;
+  while ((m = re1.exec(s))) cands.push([m.index, Date.UTC(+m[3], MONTHS[m[1].toLowerCase()], +m[2])]);
+  const re2 = /\b(\d{1,2})(?:st|nd|rd|th)?\s+(jan|feb|mar|apr|may|jun|jul|aug|sept?|oct|nov|dec)[a-z]*\.?,?\s+((?:19|20)\d{2})\b/gi;
+  while ((m = re2.exec(s))) cands.push([m.index, Date.UTC(+m[3], MONTHS[m[2].toLowerCase()], +m[1])]);
+  const re3 = /\b(\d{1,2})[./-](\d{1,2})[./-]((?:19|20)\d{2})\b/g;
+  while ((m = re3.exec(s))) if (+m[2] >= 1 && +m[2] <= 12) cands.push([m.index, Date.UTC(+m[3], +m[2] - 1, +m[1])]);
+  const ok = cands.filter(([, t]) => Number.isFinite(t) && t > Date.UTC(1990, 0, 1) && t <= maxMs).sort((a, b) => a[0] - b[0]);
+  return ok.length ? ok[0][1] : null;
+}
+
 module.exports = {
+  findDate,
   ENTITY_TYPES, ACTION_TYPES, DOC_TYPES,
   clean, classify, parseAmountInr, normalizeName, nameSimilarity, guessEntityType, actionsFromTitle,
 };

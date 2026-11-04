@@ -13,6 +13,22 @@
     <div class="card"><div class="muted small">Bookings</div><div class="stat"><%= stats.bookings %></div></div>
   </div>
 
+  <h2 style="font-size:1.3rem;margin-top:36px">Traffic (last 30 days)</h2>
+  <div class="grid grid-3">
+    <div class="card"><div class="muted small">Page views</div><div class="stat"><%= traffic.total.toLocaleString('en-IN') %></div></div>
+    <div class="card"><div class="muted small">Sign-ups</div><div class="stat"><%= traffic.signups %></div><div class="small muted"><%= traffic.total ? (100 * traffic.signups / traffic.total).toFixed(1) + '% of views' : '' %></div></div>
+    <div class="card"><div class="muted small">Digest &amp; newsletter subscribers</div><div class="stat"><%= traffic.subscribers %></div></div>
+  </div>
+  <% const maxV = Math.max(1, ...traffic.days.map(d => d.v)); %>
+  <div class="card" style="margin-top:16px">
+    <div style="display:flex;align-items:flex-end;gap:3px;height:120px">
+      <% for (const d of traffic.days) { %><div title="<%= d.day %>: <%= d.v %> views" style="flex:1;background:var(--brand);border-radius:3px 3px 0 0;height:<%= Math.max(2, 100 * d.v / maxV) %>%"></div><% } %>
+      <% if (!traffic.days.length) { %><p class="muted small">No visits recorded yet.</p><% } %>
+    </div>
+    <div class="table-wrap" style="margin-top:14px"><table><thead><tr><th>Page</th><th class="num">Views</th></tr></thead>
+      <tbody><% for (const t of traffic.top) { %><tr><td class="mono small"><%= t.path %></td><td class="num"><%= t.v %></td></tr><% } %></tbody></table></div>
+  </div>
+
   <h2 style="font-size:1.3rem;margin-top:36px">Users (latest 100)</h2>
   <div class="card table-wrap" style="padding:8px"><table>
     <thead><tr><th>Name</th><th>Email</th><th>Plan</th><th>Joined</th><th>Set plan manually</th></tr></thead>

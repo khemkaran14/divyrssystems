@@ -165,6 +165,24 @@ function addCols(table, cols) {
 addCols('users', [['company', 'TEXT'], ['gstin', 'TEXT'], ['billing_address', 'TEXT'], ['billing_state', 'TEXT'], ['phone', 'TEXT']]);
 addCols('payments', [['base_amount', 'INTEGER'], ['tax_amount', 'INTEGER'], ['invoice_no', 'TEXT']]);
 addCols('messages', [['topic', 'TEXT'], ['phone', 'TEXT']]);
+{
+  const hadVerified = db.prepare('PRAGMA table_info(users)').all().some((c) => c.name === 'email_verified');
+  addCols('users', [['email_verified', 'INTEGER NOT NULL DEFAULT 0'], ['verify_token', 'TEXT']]);
+  // Accounts created before email verification existed are treated as verified.
+  if (!hadVerified) db.exec('UPDATE users SET email_verified = 1');
+}
+db.exec(`
+CREATE TABLE IF NOT EXISTS page_views (
+  day TEXT NOT NULL,
+  path TEXT NOT NULL,
+  views INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY (day, path)
+);
+CREATE TABLE IF NOT EXISTS alerts_sent (
+  key TEXT PRIMARY KEY,
+  sent_at INTEGER NOT NULL
+);
+`);
 const monitorCols = db.prepare('PRAGMA table_info(monitors)').all().map((c) => c.name);
 for (const [col, type] of [['ssl_expires', 'INTEGER'], ['ssl_checked', 'INTEGER'], ['ssl_alerted', 'INTEGER'], ['ssl_error', 'TEXT']]) {
   if (!monitorCols.includes(col)) db.exec(`ALTER TABLE monitors ADD COLUMN ${col} ${type}`);

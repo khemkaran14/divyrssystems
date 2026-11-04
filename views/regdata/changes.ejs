@@ -2,7 +2,7 @@
 <section class="section" style="padding-top:36px"><div class="container" style="max-width:900px">
   <p class="small"><a href="/regdata">← RegData API</a></p>
   <h1 style="font-size:2rem">Latest regulatory changes</h1>
-  <p class="muted">New RBI and SEBI circulars, directions, notifications and orders. Full obligations and deadlines are in the <a href="/regdata/docs">API</a>.</p>
+  <p class="muted">New RBI and SEBI circulars, directions, notifications and orders. Full obligations and deadlines are in the <a href="/regdata/docs">API</a>. <a href="/regdata/topics">Browse by topic →</a></p>
   <form class="inline-form" method="get" style="margin:18px 0">
     <div class="field" style="flex:0 1 160px"><label for="reg">Regulator</label><select id="reg" name="regulator"><option value="">All</option><% for (const r of REGULATORS) { %><option <%= filter.regulator === r ? 'selected' : '' %>><%= r %></option><% } %></select></div>
     <div class="field"><label for="q">Keyword</label><input id="q" name="q" value="<%= filter.q %>" placeholder="KYC, digital lending, cybersecurity…"></div>
@@ -16,6 +16,10 @@
       <% if (d.summary) { %><p class="small muted" style="margin:6px 0 0"><%= d.summary.slice(0, 220) %><%= d.summary.length > 220 ? '…' : '' %></p><% } %>
     </a>
   <% } %>
+  <div class="btn-row" style="margin:6px 0 16px">
+    <a class="btn sm" href="/regdata/export/changes.csv?<%= filter.regulator ? 'regulator=' + encodeURIComponent(filter.regulator) + '&' : '' %><%= filter.q ? 'q=' + encodeURIComponent(filter.q) : '' %>">⬇ Download as Excel (CSV)</a>
+  </div>
   <% if (more) { %><a class="btn" href="?<%= filter.regulator ? 'regulator=' + encodeURIComponent(filter.regulator) + '&' : '' %><%= filter.q ? 'q=' + encodeURIComponent(filter.q) + '&' : '' %>before=<%= rows[rows.length - 1].id %>">Older →</a><% } %>
+  <div style="margin-top:32px"><%- include('../partials/newsletter') %></div>
 </div></section>
 <%- include('../partials/foot') %>

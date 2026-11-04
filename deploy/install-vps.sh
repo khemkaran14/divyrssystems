@@ -104,6 +104,11 @@ else
     --interpreter "$NODE_BIN" --max-memory-restart 300M --time >/dev/null
 fi
 "$PM2" save >/dev/null
+# Rotate logs so they never fill the disk (10 MB per file, 14 kept). Shared by all your PM2 apps.
+if ! "$PM2" describe pm2-logrotate >/dev/null 2>&1 && ! "$PM2" ls 2>/dev/null | grep -q pm2-logrotate; then
+  PATH="$NODE_DIR:$PATH" "$PM2" install pm2-logrotate >/dev/null 2>&1 && \
+  "$PM2" set pm2-logrotate:max_size 10M >/dev/null && "$PM2" set pm2-logrotate:retain 14 >/dev/null && ok "Log rotation enabled" || warn "Could not install pm2-logrotate (optional)"
+fi
 [ "${NEW_PM2:-0}" = 1 ] && "$PM2" startup systemd -u root --hp /root >/dev/null && ok "PM2 will start on boot"
 
 for i in $(seq 1 15); do
@@ -195,6 +200,7 @@ fi
 command -v crontab >/dev/null || { apt-get install -y -qq cron >/dev/null && { systemctl enable --now cron 2>/dev/null || true; }; }
 if ! crontab -l 2>/dev/null | grep -qF "$APP_DIR/deploy/backup.sh"; then
   command -v sqlite3 >/dev/null || apt-get install -y -qq sqlite3 >/dev/null
+  command -v rclone >/dev/null || apt-get install -y -qq rclone >/dev/null || true
   (crontab -l 2>/dev/null; echo "15 3 * * * $APP_DIR/deploy/backup.sh") | crontab -
   ok "Daily database backup at 03:15 into $APP_DIR/backups"
 fi
@@ -205,3 +211,5 @@ echo "   Admin:     sign up at https://$DOMAIN/signup with ${ADMIN_EMAIL:-the AD
 echo "   Settings:  nano $APP_DIR/.env   then   pm2 restart $APP_NAME"
 echo "   Logs:      pm2 logs $APP_NAME"
 echo "   Update:    run this same command again"
+echo "   Health:    https://$DOMAIN/healthz  (add it to a free uptime monitor such as UptimeRobot)"
+grep -qE '^RCLONE_REMOTE=.+' .env || echo "   Backups:   only on this server so far. Run 'rclone config', then set RCLONE_REMOTE=yourremote:divyrs-backups in .env"

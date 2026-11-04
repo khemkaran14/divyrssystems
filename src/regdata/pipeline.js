@@ -1,5 +1,5 @@
 // Collect new items from feeds, then read + extract each one.
-const { SOURCES } = require('./sources');
+const { SOURCES, hostAllowed } = require('./sources');
 const fetcher = require('./fetch');
 const rules = require('./rules');
 const ai = require('./extract');
@@ -94,6 +94,7 @@ function cleanAi(data, doc, loaded) {
     })).filter((a) => a.entity_name),
     pdf_url: loaded ? loaded.pdfUrl : null,
     extraction: 'ai',
+    published_date: isoDate(data.published_date),
   };
   // If the AI missed a clear penalty headline, fall back to the rule-based parties.
   if (!r.enforcement_actions.length && rules.classify(doc).isEnforcement) {
@@ -103,7 +104,7 @@ function cleanAi(data, doc, loaded) {
 }
 
 async function processDocument(doc) {
-  const source = SOURCES.find((s) => s.id === doc.source_id) || null;
+  const source = SOURCES.find((s) => s.id === doc.source_id) || SOURCES.find((s) => hostAllowed(s, doc.url)) || null;
   let loaded = null;
   try {
     loaded = await fetcher.loadDocument(source, doc.url);
@@ -127,6 +128,12 @@ async function processDocument(doc) {
   }
   if (!result) result = rulesResult(doc, loaded);
   store.saveResult(doc.id, { ...result, model });
+  // Imported (back-filled) documents: use the date printed on the document, not the import time.
+  if (doc.source_id === 'manual' || doc.source_id === 'backfill') {
+    const t = result.published_date ? Date.parse(result.published_date) : rules.findDate(`${doc.title} ${loaded?.text || ''}`);
+    if (t) db.prepare('UPDATE reg_documents SET published_at = ? WHERE id = ?').run(t, doc.id);
+    if (doc.source_id === 'backfill') db.prepare('UPDATE reg_documents SET notified = 1 WHERE id = ?').run(doc.id); // history is not news
+  }
   webhooks.enqueueForDocument(doc.id);
   return result.extraction;
 }
@@ -154,4 +161,50 @@ async function addByUrl({ regulator, url, title }) {
   return store.addDocument({ source_id: 'manual', regulator, guid: url, url, title: t.slice(0, 500), published_at: Date.now(), doc_type: c.docType, is_enforcement: c.isEnforcement ? 1 : 0 });
 }
 
-module.exports = { collectSource, collectAll, processPending, processDocument, addByUrl, aiBudgetLeft };
+// Links on regulator archive pages that point to individual documents.
+const DOC_LINK = [
+  /rbi\.org\.in\/(scripts\/)?(NotificationUser\.aspx\?Id=\d+|BS_PressReleaseDisplay\.aspx\?prid=\d+|BS_CircularIndexDisplay\.aspx\?Id=\d+|BS_ViewMasDirections\.aspx\?id=\d+)/i,
+  /rbidocs\.rbi\.org\.in\/rdocs\/.+\.pdf$/i,
+  /sebi\.gov\.in\/(legal\/(circulars|master-circulars|regulations)|enforcement\/orders|media-and-notifications\/press-releases)\/[^?#]+\.html$/i,
+];
+
+// Bulk back-fill: a list of document URLs and/or archive pages to scan for document links.
+async function importUrls(lines, { regulator } = {}) {
+  const out = { added: 0, skipped: 0, scanned: 0, errors: [] };
+  const addOne = (url, title) => {
+    const src = SOURCES.find((s) => hostAllowed(s, url));
+    const reg = src ? src.regulator : regulator;
+    if (!reg) { out.errors.push(`Unknown regulator for ${url}`); return; }
+    const c = rules.classify({ regulator: reg, title: title || url, url });
+    const id = store.addDocument({ source_id: 'backfill', regulator: reg, guid: url, url, title: (title || url).slice(0, 500), published_at: Date.now(), doc_type: c.docType, is_enforcement: c.isEnforcement ? 1 : 0 });
+    if (id) out.added++; else out.skipped++;
+  };
+  for (const raw of lines) {
+    const url = String(raw).trim();
+    if (!/^https?:\/\//i.test(url)) continue;
+    if (DOC_LINK.some((re) => re.test(url))) { addOne(url); continue; }
+    // Otherwise treat it as an archive/listing page and pull out document links with their link text as titles.
+    const src = SOURCES.find((s) => hostAllowed(s, url));
+    if (!src) { out.errors.push(`Not a regulator page: ${url}`); continue; }
+    try {
+      const html = (await fetcher.get(url)).buf.toString('utf8');
+      out.scanned++;
+      const re = /<a\b[^>]*href\s*=\s*["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
+      let m;
+      const seen = new Set();
+      while ((m = re.exec(html))) {
+        let href;
+        try { href = new URL(m[1].replace(/&amp;/g, '&'), url).href; } catch (_) { continue; }
+        if (seen.has(href) || !DOC_LINK.some((x) => x.test(href)) || !hostAllowed(src, href)) continue;
+        seen.add(href);
+        const title = rules.clean(m[2]);
+        addOne(href, title.length > 8 ? title : null);
+      }
+    } catch (e) {
+      out.errors.push(`${url}: ${e.message}`);
+    }
+  }
+  return out;
+}
+
+module.exports = { collectSource, collectAll, processPending, processDocument, addByUrl, importUrls, aiBudgetLeft };

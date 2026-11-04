@@ -28,6 +28,12 @@
       </div>
     </div>
     <div class="card">
+      <h3>Back-fill the archive</h3>
+      <p class="small muted">Paste document links, or regulator archive/listing pages (we pick out every circular, order and press release on them). One per line, up to 2,000. Dates are taken from each document.</p>
+      <form method="post" action="/admin/regdata/import" style="margin-bottom:20px">
+        <div class="field"><textarea name="urls" rows="4" class="mono" placeholder="https://www.sebi.gov.in/sebiweb/home/HomeAction.do?doListing=yes&amp;sid=1&amp;ssid=7&amp;smid=0&#10;https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=12345"></textarea></div>
+        <button class="btn" type="submit">Import</button>
+      </form>
       <h3>Add a document by URL</h3>
       <p class="small muted">For older master directions or documents not in the feeds.</p>
       <form method="post" action="/admin/regdata/add">
@@ -60,6 +66,7 @@
           <button class="btn sm primary" name="status" value="verified" type="submit">✓ Verify</button>
           <button class="btn sm danger" name="status" value="rejected" type="submit">Reject</button>
         </form>
+        <a class="btn sm" href="/admin/regdata/docs/<%= d.id %>/edit">Edit</a>
         <form method="post" action="/admin/regdata/docs/<%= d.id %>/retry"><input type="hidden" name="show" value="<%= filter %>"><button class="btn sm" type="submit">Re-extract</button></form>
       </div>
     </div>
