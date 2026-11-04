@@ -38,7 +38,7 @@
   <h2 style="font-size:1.3rem;margin-top:36px">Contact messages</h2>
   <div class="grid">
     <% for (const m of messages) { %>
-      <div class="card"><strong><%= m.name %></strong> <span class="muted small">&lt;<%= m.email %>&gt; <%= m.company ? '· ' + m.company : '' %> · <%= new Date(m.created_at).toLocaleString('en-IN') %></span>
+      <div class="card"><strong><%= m.name %></strong> <% if (m.topic) { %><span class="badge"><%= m.topic %></span> <% } %><span class="muted small">&lt;<%= m.email %>&gt; <%= m.company ? '· ' + m.company : '' %><%= m.phone ? ' · ' + m.phone : '' %> · <%= new Date(m.created_at).toLocaleString('en-IN') %></span>
         <p style="white-space:pre-line;margin:8px 0 0"><%= m.body %></p></div>
     <% } %>
     <% if (!messages.length) { %><p class="muted">No messages yet.</p><% } %>

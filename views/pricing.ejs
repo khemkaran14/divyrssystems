@@ -2,15 +2,24 @@
 <section class="hero center" style="padding-bottom:32px">
   <div class="container">
     <h1>Pricing</h1>
-    <p class="lead">Prepaid monthly or yearly. No auto-renewal, no hidden fees. Yearly plans get 2 months free.</p>
+    <p class="lead">Two products, one account. Prepaid monthly or yearly, no auto-renewal, no hidden fees. Yearly plans get 2 months free.</p>
     <div class="toggle" style="margin-top:12px">
       <a href="?cur=INR" class="<%= cur === 'INR' ? 'on' : '' %>">₹ INR</a>
       <a href="?cur=USD" class="<%= cur === 'USD' ? 'on' : '' %>">$ USD</a>
     </div>
   </div>
 </section>
-<section class="section" style="padding-top:24px">
+<section class="section" style="padding-top:24px" id="regdata">
   <div class="container">
+    <h2 style="font-size:1.5rem">RegData API <span class="badge">For companies</span></h2>
+    <p class="muted">RBI &amp; SEBI regulatory changes and enforcement actions as structured data. <a href="/regdata">What's included →</a></p>
+    <%- include('partials/regdata-pricing') %>
+  </div>
+</section>
+<section class="section soft" id="tools">
+  <div class="container">
+    <h2 style="font-size:1.5rem">Business tools <span class="badge">For professionals &amp; small teams</span></h2>
+    <p class="muted">Invoices, booking page, business cards, uptime &amp; SSL monitoring, website forms, short links and QR codes. <a href="/tools">See all tools →</a></p>
     <div class="grid grid-3">
       <% for (const p of Object.values(PLANS)) { const L = p.limits; %>
       <div class="card price-card <%= p.id === 'pro' ? 'featured' : '' %>">
@@ -47,7 +56,7 @@
       </div>
       <% } %>
     </div>
-    <p class="center small muted" style="margin-top:24px"><%= cur === 'INR' ? 'Prices exclude 18% GST where applicable.' : 'Prices in US dollars.' %> Need more, a team account or a custom deployment? <a href="/contact">Contact sales</a>.</p>
+    <p class="center small muted" style="margin-top:24px"><%= cur === 'INR' ? (business.gstRate ? 'Prices exclude ' + business.gstRate + '% GST, added at checkout.' : 'Prices in Indian rupees.') : 'Prices in US dollars.' %> Need more, a team account or a custom deployment? <a href="/contact">Contact sales</a>.</p>
   </div>
 </section>
 <%- include('partials/foot') %>

@@ -31,5 +31,11 @@ module.exports = {
     email: env.SUPPORT_EMAIL || 'support@divyrs.com',
     phone: env.SUPPORT_PHONE || '',
     gstin: env.GSTIN || '',
+    // Two-letter state code for GST place-of-supply, e.g. MH, DL, KA.
+    state: (env.BUSINESS_STATE || '').toUpperCase(),
+    // GST is charged on INR sales only when you have a GSTIN.
+    gstRate: env.GSTIN ? Number(env.GST_RATE || 18) : 0,
+    grievanceOfficer: env.GRIEVANCE_OFFICER || 'Grievance Officer',
+    grievanceEmail: env.GRIEVANCE_EMAIL || env.SUPPORT_EMAIL || 'support@divyrs.com',
   },
 };

@@ -1,0 +1,17 @@
+<%- include('partials/head') %>
+<section class="section"><div class="container" style="max-width:440px">
+  <div class="card">
+    <h1 style="font-size:1.8rem">Reset your password</h1>
+    <% if (sent) { %>
+      <div class="alert success">If an account exists for that email, a reset link is on its way. It works for 1 hour.</div>
+      <p class="small"><a href="/login">Back to log in</a></p>
+    <% } else { %>
+      <p class="muted small">Enter your account email and we'll send you a link.</p>
+      <form method="post" action="/forgot">
+        <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required autocomplete="email"></div>
+        <button class="btn primary block" type="submit">Send reset link</button>
+      </form>
+    <% } %>
+  </div>
+</div></section>
+<%- include('partials/foot') %>

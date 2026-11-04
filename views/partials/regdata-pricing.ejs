@@ -1,0 +1,29 @@
+  <div class="grid grid-4">
+    <% for (const p of Object.values(REG_PLANS)) { const L = p.limits; %>
+      <div class="card price-card <%= p.id === 'reg_starter' ? 'featured' : '' %>">
+        <h3><%= p.name %></h3><p class="muted small"><%= p.tagline %></p>
+        <div class="price"><%= formatPrice(p.price[cur], cur) %><small> /month</small></div>
+        <ul class="checks">
+          <li><%= L.callsMonth.toLocaleString('en-IN') %> API calls a month</li>
+          <li class="<%= L.delayDays ? 'no' : '' %>"><%= L.delayDays ? 'Data delayed by ' + L.delayDays + ' days' : 'Real-time data' %></li>
+          <li class="<%= L.webhooks ? '' : 'no' %>"><%= L.webhooks ? L.webhooks + ' webhooks & watchlists' : 'No webhooks' %></li>
+          <li>Changes + enforcement APIs</li>
+          <li>Bulk name screening</li>
+        </ul>
+        <% if (p.id === 'reg_free') { %>
+          <a class="btn block" href="<%= user ? '/dashboard/regdata' : '/signup?next=/dashboard/regdata' %>">Get free key</a>
+        <% } else { %>
+          <div class="grid" style="gap:8px">
+            <a class="btn <%= p.id === 'reg_starter' ? 'primary' : '' %> block" href="/billing/checkout?plan=<%= p.id %>&cur=<%= cur %>&months=1">Buy monthly</a>
+            <a class="btn block" href="/billing/checkout?plan=<%= p.id %>&cur=<%= cur %>&months=12">Buy yearly — <%= formatPrice(p.price[cur] * 10, cur) %></a>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+    <div class="card price-card">
+      <h3>Enterprise</h3><p class="muted small">Banks, large NBFCs and resellers</p>
+      <div class="price" style="font-size:1.8rem">Custom</div>
+      <ul class="checks"><li>Unlimited calls</li><li>Uptime agreement (SLA)</li><li>Resale / embedding rights</li><li>Invoice billing, GST invoice</li><li>Priority support</li></ul>
+      <a class="btn block" href="/contact">Talk to us</a>
+    </div>
+  </div>

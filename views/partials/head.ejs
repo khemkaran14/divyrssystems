@@ -4,11 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><%= title %> | Divyrs Systems</title>
-<meta name="description" content="<%= description || 'Divyrs Systems: simple online tools for professionals and companies — GST invoice generator, website uptime monitoring, short links and QR codes. Free plan, Pro from ₹499/month.' %>">
+<meta name="description" content="<%= description || 'Divyrs Systems: the RegData API for RBI and SEBI regulatory changes and enforcement actions, plus GST invoices, booking pages, digital business cards and uptime monitoring for Indian businesses.' %>">
 <meta property="og:title" content="<%= title %> | Divyrs Systems">
 <meta property="og:type" content="website">
 <meta property="og:url" content="<%= baseUrl + path %>">
+<meta property="og:description" content="<%= description || 'Regulatory data API and business tools for India.' %>">
+<meta property="og:image" content="<%= baseUrl %>/og.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="canonical" href="<%= baseUrl + path %>">
+<script type="application/ld+json"><%- json({ '@context': 'https://schema.org', '@type': 'Organization', name: business.name, url: baseUrl, logo: baseUrl + '/favicon.svg', email: business.email }) %></script>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/css/style.css">
 </head>

@@ -3,6 +3,9 @@ const crypto = require('crypto');
 const db = require('../db');
 const { requireUser, hashPassword, checkPassword } = require('../auth');
 const { parseHttpUrl, isPublicUrl } = require('../safeurl');
+const config = require('../config');
+const { STATES, GSTIN_RE, financialYear } = require('../gst');
+const { anyPlan } = require('../plans');
 
 const router = express.Router();
 router.use(requireUser);
@@ -129,7 +132,7 @@ router.post('/invoices/:id/delete', (req, res) => {
 function accountPage(req, res, msg = null, error = null) {
   const payments = db.prepare('SELECT * FROM payments WHERE user_id = ? ORDER BY created_at DESC LIMIT 50').all(req.user.id);
   const user = db.prepare('SELECT * FROM users WHERE id = ?').get(req.user.id);
-  res.render('dashboard/account', { title: 'Account & billing', payments, me: user, msg, error });
+  res.render('dashboard/account', { title: 'Account & billing', payments, me: user, msg, error, STATES });
 }
 
 router.get('/account', (req, res) => accountPage(req, res, req.query.msg || null));
@@ -148,6 +151,80 @@ router.post('/account/status-slug', (req, res) => {
   if (taken) return accountPage(req, res, null, 'That name is taken.');
   db.prepare('UPDATE users SET status_slug = ? WHERE id = ?').run(slug, req.user.id);
   accountPage(req, res, 'Status page saved.');
+});
+
+router.post('/account/billing', (req, res) => {
+  const company = String(req.body.company || '').trim().slice(0, 200);
+  const gstin = String(req.body.gstin || '').trim().toUpperCase();
+  const address = String(req.body.billing_address || '').trim().slice(0, 500);
+  const state = STATES[req.body.billing_state] ? req.body.billing_state : null;
+  const phone = String(req.body.phone || '').trim().slice(0, 30);
+  if (gstin && !GSTIN_RE.test(gstin)) return accountPage(req, res, null, 'That GSTIN does not look right (15 characters, e.g. 27ABCDE1234F1Z5).');
+  db.prepare('UPDATE users SET company = ?, gstin = ?, billing_address = ?, billing_state = ?, phone = ? WHERE id = ?')
+    .run(company || null, gstin || null, address || null, state, phone || null, req.user.id);
+  accountPage(req, res, 'Billing details saved. They appear on future invoices.');
+});
+
+// Printable invoice for a paid order (Ctrl+P / Save as PDF).
+router.get('/account/payments/:id/invoice', (req, res, next) => {
+  const isAdmin = res.locals.isAdmin;
+  const p = db.prepare("SELECT * FROM payments WHERE id = ? AND status = 'paid'").get(req.params.id);
+  if (!p || (p.user_id !== req.user.id && !isAdmin)) return next();
+  const buyer = db.prepare('SELECT * FROM users WHERE id = ?').get(p.user_id);
+  const base = p.base_amount ?? p.amount;
+  const tax = p.tax_amount ?? 0;
+  const intra = tax && config.business.state && buyer.billing_state === config.business.state;
+  res.render('dashboard/invoice', {
+    title: 'Invoice ' + (p.invoice_no || p.order_id), p, buyer, base, tax, intra,
+    planName: anyPlan(p.plan)?.name || p.plan, STATES, fy: financialYear(p.paid_at),
+  });
+});
+
+// Download everything we hold about you (DPDP right to access).
+router.get('/account/export', (req, res) => {
+  const id = req.user.id;
+  const pick = (sql) => db.prepare(sql).all(id);
+  const user = db.prepare('SELECT id, email, name, company, gstin, billing_address, billing_state, phone, plan, plan_expires, reg_plan, reg_plan_expires, created_at FROM users WHERE id = ?').get(id);
+  const data = {
+    exported_at: new Date().toISOString(), account: user,
+    payments: pick('SELECT order_id, payment_id, plan, months, amount, currency, status, invoice_no, created_at, paid_at FROM payments WHERE user_id = ?'),
+    monitors: pick('SELECT name, url, status, created_at FROM monitors WHERE user_id = ?'),
+    links: pick('SELECT code, target, clicks, created_at FROM links WHERE user_id = ?'),
+    invoices: pick('SELECT number, client, total, currency, data, updated_at FROM invoices WHERE user_id = ?').map((r) => ({ ...r, data: JSON.parse(r.data) })),
+    forms: pick('SELECT name, notify_email, redirect_url, created_at FROM forms WHERE user_id = ?'),
+    form_submissions: pick('SELECT f.name AS form, s.data, s.created_at FROM form_submissions s JOIN forms f ON f.id = s.form_id WHERE f.user_id = ?').map((r) => ({ ...r, data: JSON.parse(r.data) })),
+    cards: pick('SELECT slug, data, views, updated_at FROM cards WHERE user_id = ?').map((r) => ({ ...r, data: JSON.parse(r.data) })),
+    booking_page: db.prepare('SELECT * FROM booking_pages WHERE user_id = ?').get(id) || null,
+    bookings: pick('SELECT date, time, name, email, phone, note, status, created_at FROM bookings WHERE user_id = ?'),
+    regdata_webhooks: pick('SELECT url, filters, active, created_at FROM reg_webhooks WHERE user_id = ?'),
+    regdata_usage: pick('SELECT month, calls FROM reg_usage WHERE user_id = ?'),
+  };
+  res.attachment('divyrs-my-data.json').json(data);
+});
+
+// Delete the account and everything linked to it. Payment records are kept for tax law, without personal details.
+router.post('/account/delete', async (req, res) => {
+  if (!(await checkPassword(String(req.body.password || ''), req.user.password_hash))) return accountPage(req, res, null, 'Password is wrong — account not deleted.');
+  if (String(req.body.confirm || '').trim().toUpperCase() !== 'DELETE') return accountPage(req, res, null, 'Type DELETE to confirm.');
+  const id = req.user.id;
+  db.transaction(() => {
+    const paid = db.prepare("SELECT COUNT(*) n FROM payments WHERE user_id = ? AND status = 'paid'").get(id).n;
+    if (paid) {
+      // Keep the account row as an anonymous shell so paid invoices remain valid for GST records.
+      db.prepare("DELETE FROM payments WHERE user_id = ? AND status != 'paid'").run(id);
+      for (const t of ['monitors', 'links', 'invoices', 'forms', 'cards', 'bookings', 'booking_pages', 'reg_webhooks', 'reg_usage', 'sessions', 'password_resets']) {
+        db.prepare(`DELETE FROM ${t} WHERE user_id = ?`).run(id);
+      }
+      db.prepare(`UPDATE users SET email = ?, name = 'Deleted user', password_hash = '!', phone = NULL, api_key = NULL, reg_api_key = NULL,
+        status_slug = NULL, plan = 'free', plan_expires = NULL, reg_plan = 'reg_free', reg_plan_expires = NULL WHERE id = ?`)
+        .run(`deleted-${id}-${Date.now()}@deleted.invalid`, id);
+    } else {
+      db.prepare('DELETE FROM payments WHERE user_id = ?').run(id);
+      db.prepare('DELETE FROM users WHERE id = ?').run(id);
+    }
+  })();
+  res.clearCookie('dv_session');
+  res.redirect('/?deleted=1');
 });
 
 router.post('/account/password', async (req, res) => {

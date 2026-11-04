@@ -3,6 +3,7 @@
 <div class="container dash">
   <aside class="side">
     <a href="#start">Getting started</a>
+    <a href="#samples">Code samples</a>
     <a href="#changes">Changes</a>
     <a href="#change">One change</a>
     <a href="#enforcement">Enforcement search</a>
@@ -10,6 +11,8 @@
     <a href="#webhooks">Webhooks</a>
     <a href="#limits">Limits &amp; errors</a>
     <a href="#values">Values</a>
+    <a href="/regdata/openapi.json">OpenAPI file</a>
+    <a href="/regdata/status">Status</a>
   </aside>
   <div style="min-width:0">
     <h1 style="font-size:2rem">RegData API</h1>
@@ -23,6 +26,40 @@
     </ol>
 <pre>curl "<%= B %>/changes?regulator=RBI&amp;limit=5" \
   -H "Authorization: Bearer rdk_your_key"</pre>
+
+    <p class="small">Machine-readable spec: <a href="/regdata/openapi.json">openapi.json</a> (import into Postman, Insomnia or a code generator). Feed health: <a href="/regdata/status">status page</a>.</p>
+
+    <h2 id="samples" style="font-size:1.3rem;margin-top:28px">Code samples</h2>
+    <p><strong>Python</strong> (requests)</p>
+<pre>import os, requests
+
+API = "<%= B %>"
+H = {"Authorization": f"Bearer {os.environ['DIVYRS_KEY']}"}
+
+# New high-impact rules for NBFCs this month
+r = requests.get(f"{API}/changes", headers=H,
+                 params={"applies_to": "nbfc", "impact": "high", "since": "2026-11-01"})
+for c in r.json()["data"]:
+    print(c["published"], c["title"])
+    for o in c["obligations"]:
+        print("  -", o["what"], "by", o["deadline"])
+
+# Screen vendors before onboarding
+r = requests.post(f"{API}/enforcement/screen", headers=H,
+                  json={"names": ["ABC Securities Pvt Ltd", "XYZ Finance Ltd"]})
+print(r.json()["flagged"], "flagged")</pre>
+    <p><strong>Node.js</strong> (built-in fetch)</p>
+<pre>const API = '<%= B %>';
+const headers = { Authorization: `Bearer ${process.env.DIVYRS_KEY}` };
+
+let cursor = null;
+do {  // page through every SEBI change since October
+  const url = new URL(API + '/changes');
+  url.search = new URLSearchParams({ regulator: 'SEBI', since: '2026-10-01', limit: '100', ...(cursor && { cursor }) });
+  const page = await (await fetch(url, { headers })).json();
+  page.data.forEach((c) => console.log(c.published, c.title));
+  cursor = page.next_cursor;
+} while (cursor);</pre>
 
     <h2 id="changes" style="font-size:1.3rem;margin-top:28px">GET /changes</h2>
     <p>New regulatory documents, newest first.</p>

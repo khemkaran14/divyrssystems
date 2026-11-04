@@ -149,9 +149,22 @@ CREATE TABLE IF NOT EXISTS bookings (
   created_at INTEGER NOT NULL
 );
 CREATE UNIQUE INDEX IF NOT EXISTS idx_booking_slot ON bookings(user_id, date, time) WHERE status = 'confirmed';
+
+CREATE TABLE IF NOT EXISTS password_resets (
+  token_hash TEXT PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  expires_at INTEGER NOT NULL
+);
 `);
 
 // Columns added after first release (safe to run on an existing database).
+function addCols(table, cols) {
+  const have = db.prepare(`PRAGMA table_info(${table})`).all().map((c) => c.name);
+  for (const [col, type] of cols) if (!have.includes(col)) db.exec(`ALTER TABLE ${table} ADD COLUMN ${col} ${type}`);
+}
+addCols('users', [['company', 'TEXT'], ['gstin', 'TEXT'], ['billing_address', 'TEXT'], ['billing_state', 'TEXT'], ['phone', 'TEXT']]);
+addCols('payments', [['base_amount', 'INTEGER'], ['tax_amount', 'INTEGER'], ['invoice_no', 'TEXT']]);
+addCols('messages', [['topic', 'TEXT'], ['phone', 'TEXT']]);
 const monitorCols = db.prepare('PRAGMA table_info(monitors)').all().map((c) => c.name);
 for (const [col, type] of [['ssl_expires', 'INTEGER'], ['ssl_checked', 'INTEGER'], ['ssl_alerted', 'INTEGER'], ['ssl_error', 'TEXT']]) {
   if (!monitorCols.includes(col)) db.exec(`ALTER TABLE monitors ADD COLUMN ${col} ${type}`);

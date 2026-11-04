@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const config = require('./src/config');
 const { loadUser, sameOrigin } = require('./src/auth');
 const { PLANS, CURRENCIES, formatPrice, anyPlan } = require('./src/plans');
+const { REG_PLANS } = require('./src/regdata/plans');
 const billing = require('./src/routes/billing');
 const monitor = require('./src/monitor');
 
@@ -41,7 +42,7 @@ app.use((req, res, next) => {
   }
   if (req.query.cur && CURRENCIES.includes(req.query.cur)) res.cookie('cur', cur, { maxAge: 31536000000, sameSite: 'lax' });
   Object.assign(res.locals, {
-    cur, PLANS, anyPlan, formatPrice, business: config.business, baseUrl: config.baseUrl,
+    cur, PLANS, REG_PLANS, anyPlan, formatPrice, business: config.business, baseUrl: config.baseUrl,
     // Safe to print inside <script> tags.
     json: (v) => JSON.stringify(v ?? null).replace(/</g, '\\u003c').replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029'),
     path: req.path, title: 'Divyrs Systems', description: null,

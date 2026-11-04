@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= title %></title><link rel="stylesheet" href="/css/style.css"><meta name="robots" content="noindex">
+<style>
+  body { background: var(--bg-soft); }
+  .inv { background: #fff; color: #111827; max-width: 820px; margin: 24px auto; padding: 40px; border-radius: 8px; box-shadow: var(--shadow); font-size: 14px; }
+  .inv table th, .inv table td { color: #111827; border-bottom: 1px solid #e5e7eb; }
+  .inv th { color: #6b7280; }
+  .inv h1 { color: #4f46e5; font-size: 26px; }
+  .row { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .tot { margin-left: auto; width: 300px; max-width: 100%; }
+  .tot div { display: flex; justify-content: space-between; padding: 4px 0; }
+  .tot .g { font-weight: 800; border-top: 2px solid #111827; margin-top: 6px; padding-top: 8px; }
+  @media print { body { background: #fff; } .noprint { display: none; } .inv { box-shadow: none; margin: 0; max-width: none; } }
+</style></head>
+<body>
+<div class="noprint center" style="padding-top:16px"><button class="btn primary" onclick="window.print()">Download PDF / Print</button> <a class="btn" href="/dashboard/account">Back</a></div>
+<div class="inv">
+  <% const cur = (n) => formatPrice(n, p.currency); const t = p.tax_amount || 0; %>
+  <div class="row">
+    <div>
+      <h1><%= t ? 'TAX INVOICE' : 'INVOICE' %></h1>
+      <div><strong><%= business.name %></strong></div>
+      <div style="white-space:pre-line"><%= business.address %></div>
+      <% if (business.gstin) { %><div>GSTIN: <%= business.gstin %></div><% } %>
+      <div><%= business.email %></div>
+    </div>
+    <div style="text-align:right">
+      <div>Invoice no: <strong><%= p.invoice_no || p.order_id %></strong></div>
+      <div>Date: <%= new Date(p.paid_at).toLocaleDateString('en-IN') %></div>
+      <div>Financial year: <%= fy %></div>
+      <div>Payment ID: <%= p.payment_id %></div>
+    </div>
+  </div>
+  <div style="margin:28px 0 20px">
+    <div style="color:#6b7280;font-size:12px;text-transform:uppercase">Billed to</div>
+    <div><strong><%= buyer.company || buyer.name %></strong></div>
+    <% if (buyer.company) { %><div><%= buyer.name %></div><% } %>
+    <% if (buyer.billing_address) { %><div style="white-space:pre-line"><%= buyer.billing_address %></div><% } %>
+    <% if (buyer.billing_state) { %><div>State: <%= STATES[buyer.billing_state] %> (place of supply)</div><% } %>
+    <% if (buyer.gstin) { %><div>GSTIN: <%= buyer.gstin %></div><% } %>
+    <div><%= buyer.email %></div>
+  </div>
+  <table>
+    <thead><tr><th>Description</th><th>SAC</th><th class="num">Period</th><th class="num">Amount</th></tr></thead>
+    <tbody><tr><td>Divyrs <%= planName %> subscription (online information and software services)</td><td>998431</td><td class="num"><%= p.months %> month<%= p.months > 1 ? 's' : '' %></td><td class="num"><%= cur(base) %></td></tr></tbody>
+  </table>
+  <div class="tot" style="margin-top:14px">
+    <div><span>Taxable value</span><span><%= cur(base) %></span></div>
+    <% if (t && intra) { %>
+      <div><span>CGST <%= business.gstRate / 2 %>%</span><span><%= cur(Math.floor(t / 2)) %></span></div>
+      <div><span>SGST <%= business.gstRate / 2 %>%</span><span><%= cur(t - Math.floor(t / 2)) %></span></div>
+    <% } else if (t) { %>
+      <div><span>IGST <%= business.gstRate %>%</span><span><%= cur(t) %></span></div>
+    <% } %>
+    <div class="g"><span>Total paid</span><span><%= cur(p.amount) %></span></div>
+  </div>
+  <% if (!t && p.currency !== 'INR' && business.gstin) { %><p class="small" style="margin-top:20px">Export of services, zero-rated supply.</p><% } %>
+  <% if (!business.gstin) { %><p class="small" style="margin-top:20px">The supplier is not registered under GST, so no GST is charged.</p><% } %>
+  <p class="small" style="margin-top:28px;color:#6b7280">This is a computer-generated invoice and needs no signature.</p>
+</div>
+</body></html>

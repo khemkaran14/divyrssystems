@@ -1,102 +1,86 @@
 <%- include('partials/head') %>
-<section class="hero center">
-  <div class="container">
-    <span class="badge">Free plan · No credit card</span>
-    <h1 style="margin-top:16px">Everyday business tools,<br><span>without the enterprise price</span></h1>
-    <p class="lead">GST invoices and quotations, an online booking page, a digital business card, website forms, uptime &amp; SSL alerts, short links and QR codes — all from one simple dashboard built for freelancers, professionals and growing companies.</p>
-    <div class="btn-row">
-      <a class="btn primary lg" href="/signup">Create free account</a>
-      <a class="btn lg" href="/tools/invoice">Try the invoice maker →</a>
-    </div>
-    <div class="trust">
-      <span>🇮🇳 GST-ready invoices</span><span>📅 Online bookings</span><span>⏱ 1-minute uptime checks</span><span>💳 Pay in ₹ or $</span><span>🔒 Your data stays yours</span>
-    </div>
-  </div>
-</section>
-
-<section class="section" style="padding:40px 0"><div class="container">
-  <a class="card band" href="/regdata">
+<% if (deleted) { %><div class="container" style="margin-top:16px"><div class="alert success">Your account has been deleted.</div></div><% } %>
+<section class="hero"><div class="container">
+  <div class="grid grid-2" style="align-items:center;gap:40px">
     <div>
-      <span class="badge">New · For banks, NBFCs, fintechs &amp; compliance software</span>
-      <h2 style="font-size:1.5rem;margin:10px 0 6px">RegData API: RBI &amp; SEBI changes and enforcement actions as structured data</h2>
-      <p class="muted" style="margin:0">Obligations, deadlines and penalised parties, within minutes of publication. Webhooks, watchlists and bulk name screening.</p>
-    </div>
-    <span class="btn primary">Explore the API →</span>
-  </a>
-</div></section>
-
-<section class="section">
-  <div class="container">
-    <div class="center" style="margin-bottom:36px">
-      <h2>Your business toolkit. One login.</h2>
-      <p class="lead">Start with any of them for free. Upgrade only when you need more.</p>
-    </div>
-    <div class="grid grid-4">
-      <a class="card" href="/tools/invoice"><div class="icon">🧾</div><h3>Invoices &amp; Quotations</h3><p class="muted small">GST invoices, quotations, proforma and receipts with CGST/SGST/IGST and PDF download.</p></a>
-      <a class="card" href="/tools/booking"><div class="icon">📅</div><h3>Booking Page</h3><p class="muted small">Clients book a free slot with you online. Confirmation emails for both sides.</p></a>
-      <a class="card" href="/tools/business-card"><div class="icon">🪪</div><h3>Digital Business Card</h3><p class="muted small">Call, WhatsApp, UPI pay and "Save contact" on one link, with a printable QR code.</p></a>
-      <a class="card" href="/tools/uptime"><div class="icon">📡</div><h3>Uptime &amp; SSL Monitor</h3><p class="muted small">Checks every minute. Email alerts when a site goes down or its SSL is about to expire.</p></a>
-      <a class="card" href="/tools/forms"><div class="icon">📨</div><h3>Website Forms</h3><p class="muted small">Contact and lead forms for any website. Every submission emailed and saved.</p></a>
-      <a class="card" href="/tools/links"><div class="icon">🔗</div><h3>Link Shortener</h3><p class="muted small">Short links with click counts for WhatsApp, Instagram, SMS and print.</p></a>
-      <a class="card" href="/tools/qr"><div class="icon">▦</div><h3>QR Code Generator</h3><p class="muted small">PNG and SVG QR codes for links, UPI and Wi-Fi. Free forever.</p></a>
-      <a class="card" href="/tools"><div class="icon">％</div><h3>GST &amp; EMI Calculators</h3><p class="muted small">Quick free calculators for everyday business maths.</p></a>
-    </div>
-  </div>
-</section>
-
-<section class="section soft">
-  <div class="container">
-    <div class="center" style="margin-bottom:36px"><h2>Who uses Divyrs</h2></div>
-    <div class="grid grid-3">
-      <div class="card"><h3>Freelancers &amp; consultants</h3><p class="muted">Let clients book calls online, send quotations and invoices in minutes, and share a digital card that looks bigger than you are.</p></div>
-      <div class="card"><h3>Web agencies &amp; developers</h3><p class="muted">Monitor uptime and SSL for every client site, add working contact forms without a backend, and share white-label status pages.</p></div>
-      <div class="card"><h3>Shops &amp; small companies</h3><p class="muted">GST billing without expensive software, digital cards for your sales team, UPI QR codes for your counter, and alerts if your store goes down.</p></div>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container">
-    <div class="center" style="margin-bottom:36px">
-      <h2>Simple pricing</h2>
-      <p class="lead">Free to start. Pro is less than a cup of coffee a week.</p>
-    </div>
-    <div class="grid grid-3">
-      <% for (const p of Object.values(PLANS)) { %>
-      <div class="card price-card <%= p.id === 'pro' ? 'featured' : '' %>">
-        <h3><%= p.name %></h3>
-        <p class="muted small"><%= p.tagline %></p>
-        <div class="price"><%= formatPrice(p.price[cur], cur) %><small> /month</small></div>
-        <ul class="checks">
-          <li><%= p.limits.monitors %> uptime monitors</li>
-          <li><%= p.limits.links === Infinity ? 'Unlimited' : p.limits.links %> short links</li>
-          <li><%= p.limits.savedInvoices === Infinity ? 'Unlimited saved invoices' : p.limits.savedInvoices + ' saved invoices' %></li>
-          <li><%= p.limits.bookingsMonth === Infinity ? 'Unlimited' : p.limits.bookingsMonth %> bookings a month</li>
-          <li><%= p.limits.cards %> digital business card<%= p.limits.cards > 1 ? 's' : '' %></li>
-        </ul>
-        <a class="btn <%= p.id === 'pro' ? 'primary' : '' %> block" href="<%= p.id === 'free' ? '/signup' : '/pricing' %>"><%= p.id === 'free' ? 'Start free' : 'See details' %></a>
+      <span class="badge">Divyrs Systems · Regulatory data for India</span>
+      <h1 style="margin-top:14px">Know every new rule <span>the day it's published</span></h1>
+      <p class="lead">The RegData API turns RBI and SEBI circulars, directions, penalties and orders into structured data: obligations, deadlines, who it applies to and who was penalised. Built for compliance teams, lenders and the software they use.</p>
+      <div class="btn-row">
+        <a class="btn primary lg" href="/regdata">Explore RegData API</a>
+        <a class="btn lg" href="/contact?topic=demo">Book a demo</a>
       </div>
+      <p class="small muted" style="margin-top:14px">Free developer key · Official sources only · Pay in ₹ or $</p>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px"><strong>Live from the regulators</strong><a class="small" href="/regdata/changes">All changes →</a></div>
+      <% if (!latest.length) { %><p class="muted small">Feeds are being processed. New items appear here within minutes.</p><% } %>
+      <% for (const d of latest) { %>
+        <a href="/regdata/changes/<%= d.id %>" style="display:block;padding:10px 0;border-top:1px solid var(--line);color:inherit">
+          <div class="small muted"><span class="badge"><%= d.regulator %></span> <%= new Date(d.published_at).toLocaleDateString('en-IN') %><% if (d.impact === 'high') { %> · <span class="badge bad">high impact</span><% } %><% if (d.is_enforcement) { %> · <span class="badge warn">enforcement</span><% } %></div>
+          <div style="font-weight:600;font-size:.95rem;margin-top:2px"><%= d.title %></div>
+        </a>
       <% } %>
     </div>
   </div>
-</section>
-
-<section class="section soft">
-  <div class="container" style="max-width:780px">
-    <h2 class="center">Questions</h2>
-    <details><summary>Is the free plan really free?</summary><p>Yes. No card needed, no time limit. You get a booking page (20 bookings a month), a digital business card, 1 website form, 2 uptime monitors, 10 short links, 3 saved invoices, and unlimited invoices, QR codes and calculators.</p></details>
-    <details><summary>Can I pay in rupees?</summary><p>Yes. Indian customers pay in INR by UPI, cards, net banking or wallets through Razorpay. International customers pay in USD by card.</p></details>
-    <details><summary>Do I get a GST invoice for my subscription?</summary><p>A payment receipt is emailed right after you pay. Contact us with your company name and GSTIN for a GST tax invoice.</p></details>
-    <details><summary>Can I cancel any time?</summary><p>Plans are prepaid monthly or yearly with no auto-renewal. If you don't renew, your account simply returns to the Free plan.</p></details>
-    <details><summary>Do you offer custom plans for companies?</summary><p>Yes — more monitors, team access, custom domains or on-premise setup. <a href="/contact">Talk to us</a>.</p></details>
+  <div class="trust" style="justify-content:flex-start">
+    <span>📜 <%= stats.documents.toLocaleString('en-IN') %> documents processed</span>
+    <span>⚖️ <%= stats.actions.toLocaleString('en-IN') %> enforcement actions</span>
+    <span>⏱ Feeds checked every 30 minutes</span>
+    <span>🔔 Webhooks &amp; watchlists</span>
   </div>
-</section>
+</div></section>
 
-<section class="section center">
-  <div class="container">
-    <h2>Start in 30 seconds</h2>
-    <p class="lead">One account for all tools. Upgrade, downgrade or stay free — your choice.</p>
-    <div class="btn-row"><a class="btn primary lg" href="/signup">Create free account</a></div>
+<section class="section"><div class="container">
+  <div class="center" style="margin-bottom:32px"><h2>What RegData gives you</h2><p class="lead">Two APIs with one key, plus pages your whole team can use.</p></div>
+  <div class="grid grid-3">
+    <div class="card"><div class="icon">📜</div><h3>Regulatory changes</h3><p class="muted small">Every new circular and direction with a summary, obligations, deadlines, effective date, affected entity types and the earlier rules it amends, each tied to the page of the official PDF.</p></div>
+    <div class="card"><div class="icon">⚖️</div><h3>Enforcement actions</h3><p class="muted small">Penalties, adjudication and settlement orders, licence cancellations and restrictions, searchable by company or person with fuzzy name matching.</p></div>
+    <div class="card"><div class="icon">🔔</div><h3>Alerts &amp; screening</h3><p class="muted small">Webhooks when something relevant is published, watchlists for names you care about, and bulk screening of up to 100 vendors or borrowers per call.</p></div>
   </div>
-</section>
+  <div class="center" style="margin-top:28px"><div class="btn-row"><a class="btn primary" href="/regdata#pricing">See API pricing</a><a class="btn" href="/regdata/docs">Read the docs</a><a class="btn" href="/regdata/enforcement">Search enforcement actions</a></div></div>
+</div></section>
+
+<section class="section soft"><div class="container">
+  <div class="center" style="margin-bottom:32px"><h2>Who it's for</h2></div>
+  <div class="grid grid-4">
+    <div class="card"><h3>Banks &amp; NBFCs</h3><p class="muted small">Never miss an RBI direction. Give auditors a record of every change and when you acted.</p></div>
+    <div class="card"><h3>Brokers, AMCs &amp; fintechs</h3><p class="muted small">Track SEBI circulars and check partners and vendors against enforcement orders.</p></div>
+    <div class="card"><h3>Software vendors</h3><p class="muted small">Embed regulatory updates and enforcement checks in your GRC, lending or onboarding product.</p></div>
+    <div class="card"><h3>Law &amp; advisory firms</h3><p class="muted small">Brief every client the same day, filtered to the sectors they're in.</p></div>
+  </div>
+</div></section>
+
+<section class="section"><div class="container">
+  <div class="center" style="margin-bottom:32px">
+    <h2>Also from Divyrs: business tools</h2>
+    <p class="lead">Free to start, for freelancers, professionals and small teams. Same account.</p>
+  </div>
+  <div class="grid grid-4">
+    <a class="card" href="/tools/invoice"><div class="icon">🧾</div><h3>Invoices &amp; Quotations</h3><p class="muted small">GST invoices, quotations, proforma and receipts as PDF.</p></a>
+    <a class="card" href="/tools/booking"><div class="icon">📅</div><h3>Booking Page</h3><p class="muted small">Clients book a free slot with you; both get an email.</p></a>
+    <a class="card" href="/tools/business-card"><div class="icon">🪪</div><h3>Digital Business Card</h3><p class="muted small">Call, WhatsApp, UPI and "Save contact" on one link.</p></a>
+    <a class="card" href="/tools/uptime"><div class="icon">📡</div><h3>Uptime &amp; SSL Monitor</h3><p class="muted small">Alerts when a site goes down or its SSL nears expiry.</p></a>
+    <a class="card" href="/tools/forms"><div class="icon">📨</div><h3>Website Forms</h3><p class="muted small">Contact forms for any site, emailed and saved.</p></a>
+    <a class="card" href="/tools/links"><div class="icon">🔗</div><h3>Link Shortener</h3><p class="muted small">Short links with click counts.</p></a>
+    <a class="card" href="/tools/qr"><div class="icon">▦</div><h3>QR Code Generator</h3><p class="muted small">PNG and SVG for links, UPI and Wi-Fi.</p></a>
+    <a class="card" href="/tools"><div class="icon">％</div><h3>GST &amp; EMI Calculators</h3><p class="muted small">Quick free calculators.</p></a>
+  </div>
+  <div class="center" style="margin-top:24px"><a class="btn" href="/pricing#tools">Tool plans from <%= formatPrice(PLANS.pro.price[cur], cur) %>/month</a></div>
+</div></section>
+
+<section class="section soft"><div class="container" style="max-width:780px">
+  <h2 class="center">Questions</h2>
+  <details><summary>Where does RegData's information come from?</summary><p>Only official regulator publications. Every record links to the source document so your team can check the original.</p></details>
+  <details><summary>Can I try it before paying?</summary><p>Yes. The free developer plan gives 100 API calls a month on data delayed by 7 days. <a href="/contact?topic=demo">Ask us</a> for a full-access trial for your team.</p></details>
+  <details><summary>Do you give GST invoices?</summary><p>Yes. Every payment has a downloadable invoice; add your company name and GSTIN in Account → Billing details.</p></details>
+  <details><summary>Can we pay by bank transfer or sign an annual contract?</summary><p>Yes, for Enterprise and annual plans. <a href="/contact?topic=enterprise">Contact us</a>.</p></details>
+  <details><summary>Is my data safe?</summary><p>See our <a href="/security">security page</a> and <a href="/privacy">privacy policy</a>. You can download or delete your data at any time from your account.</p></details>
+</div></section>
+
+<section class="section center"><div class="container">
+  <h2>Start with a free API key</h2>
+  <p class="lead">Set up in two minutes. Talk to us when you're ready for your whole team.</p>
+  <div class="btn-row"><a class="btn primary lg" href="<%= user ? '/dashboard/regdata' : '/signup?next=/dashboard/regdata' %>">Get free API key</a><a class="btn lg" href="/contact?topic=enterprise">Talk to sales</a></div>
+</div></section>
 <%- include('partials/foot') %>

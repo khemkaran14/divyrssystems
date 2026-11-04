@@ -86,36 +86,8 @@
     <p class="lead">Both APIs are included in every plan. Yearly plans get 2 months free.</p>
     <div class="toggle"><a href="?cur=INR#pricing" class="<%= cur === 'INR' ? 'on' : '' %>">₹ INR</a><a href="?cur=USD#pricing" class="<%= cur === 'USD' ? 'on' : '' %>">$ USD</a></div>
   </div>
-  <div class="grid grid-4">
-    <% for (const p of Object.values(REG_PLANS)) { const L = p.limits; %>
-      <div class="card price-card <%= p.id === 'reg_starter' ? 'featured' : '' %>">
-        <h3><%= p.name %></h3><p class="muted small"><%= p.tagline %></p>
-        <div class="price"><%= formatPrice(p.price[cur], cur) %><small> /month</small></div>
-        <ul class="checks">
-          <li><%= L.callsMonth.toLocaleString('en-IN') %> API calls a month</li>
-          <li class="<%= L.delayDays ? 'no' : '' %>"><%= L.delayDays ? 'Data delayed by ' + L.delayDays + ' days' : 'Real-time data' %></li>
-          <li class="<%= L.webhooks ? '' : 'no' %>"><%= L.webhooks ? L.webhooks + ' webhooks & watchlists' : 'No webhooks' %></li>
-          <li>Changes + enforcement APIs</li>
-          <li>Bulk name screening</li>
-        </ul>
-        <% if (p.id === 'reg_free') { %>
-          <a class="btn block" href="<%= user ? '/dashboard/regdata' : '/signup?next=/dashboard/regdata' %>">Get free key</a>
-        <% } else { %>
-          <div class="grid" style="gap:8px">
-            <a class="btn <%= p.id === 'reg_starter' ? 'primary' : '' %> block" href="/billing/checkout?plan=<%= p.id %>&cur=<%= cur %>&months=1">Buy monthly</a>
-            <a class="btn block" href="/billing/checkout?plan=<%= p.id %>&cur=<%= cur %>&months=12">Buy yearly — <%= formatPrice(p.price[cur] * 10, cur) %></a>
-          </div>
-        <% } %>
-      </div>
-    <% } %>
-    <div class="card price-card">
-      <h3>Enterprise</h3><p class="muted small">Banks, large NBFCs and resellers</p>
-      <div class="price" style="font-size:1.8rem">Custom</div>
-      <ul class="checks"><li>Unlimited calls</li><li>Uptime agreement (SLA)</li><li>Resale / embedding rights</li><li>Invoice billing, GST invoice</li><li>Priority support</li></ul>
-      <a class="btn block" href="/contact">Talk to us</a>
-    </div>
-  </div>
-  <p class="center small muted" style="margin-top:20px"><%= cur === 'INR' ? 'Prices exclude 18% GST.' : 'Prices in US dollars.' %></p>
+  <%- include('../partials/regdata-pricing') %>
+  <p class="center small muted" style="margin-top:20px"><%= cur === 'INR' ? (business.gstRate ? 'Prices exclude ' + business.gstRate + '% GST, added at checkout.' : 'Prices in Indian rupees.') : 'Prices in US dollars.' %></p>
 </div></section>
 
 <section class="section"><div class="container" style="max-width:780px">

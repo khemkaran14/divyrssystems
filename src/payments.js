@@ -3,6 +3,7 @@
 const crypto = require('crypto');
 const config = require('./config');
 const db = require('./db');
+const { nextInvoiceNo } = require('./gst');
 
 const enabled = () => !!(config.razorpay.keyId && config.razorpay.keySecret);
 
@@ -51,7 +52,7 @@ const markPaid = db.transaction((orderId, paymentId) => {
   const expires = base + p.months * 30 * 86400000;
   const cols = isReg ? 'reg_plan = ?, reg_plan_expires = ?' : 'plan = ?, plan_expires = ?';
   db.prepare(`UPDATE users SET ${cols} WHERE id = ?`).run(p.plan, expires, user.id);
-  db.prepare("UPDATE payments SET status = 'paid', payment_id = ?, paid_at = ? WHERE id = ?").run(paymentId, now, p.id);
+  db.prepare("UPDATE payments SET status = 'paid', payment_id = ?, paid_at = ?, invoice_no = ? WHERE id = ?").run(paymentId, now, nextInvoiceNo(db, now), p.id);
   return { ...p, status: 'paid' };
 });
 

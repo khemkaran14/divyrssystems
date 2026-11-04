@@ -7,6 +7,11 @@
       <% if (plan.id !== 'business') { %><a href="/pricing">Upgrade</a><% } %></p>
     <% if (flash) { %><div class="alert success"><%= flash %></div><% } %>
     <% if (down.length) { %><div class="alert error">🔴 Down right now: <%= down.map(m => m.name).join(', ') %></div><% } %>
+    <a class="card band" href="/dashboard/regdata" style="margin-top:20px">
+      <div><span class="badge">RegData API</span><h3 style="margin:8px 0 4px">RBI &amp; SEBI changes and enforcement data</h3>
+        <p class="muted small" style="margin:0">Create your API key, track usage, and set up webhooks and watchlists.</p></div>
+      <span class="btn primary">Open →</span>
+    </a>
     <div class="grid grid-3" style="margin-top:20px">
       <a class="card" href="/dashboard/monitors"><div class="muted small">Uptime monitors</div><div class="stat"><%= counts.monitors %> <span class="small muted">/ <%= plan.limits.monitors %></span></div></a>
       <a class="card" href="/dashboard/links"><div class="muted small">Short links</div><div class="stat"><%= counts.links %> <span class="small muted">/ <%= plan.limits.links === Infinity ? '∞' : plan.limits.links %></span></div></a>

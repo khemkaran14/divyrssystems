@@ -126,3 +126,17 @@ It runs inside the same app; no extra server needed.
 5. Status any time: `npm run regdata:status`.
 
 Feeds and settings: `src/regdata/sources.js` and the `REGDATA_*` lines in `.env.example`.
+
+
+## Settings to fill in before going live
+
+In `/root/divyrssystems/.env` (then `pm2 restart divyrs`):
+
+| Setting | Why |
+|---|---|
+| `SMTP_PASS` (and other `SMTP_*`) | Welcome, password-reset, payment, alert and booking emails |
+| `SUPPORT_EMAIL`, `SUPPORT_PHONE`, `BUSINESS_ADDRESS` | Contact, legal and invoice pages |
+| `GSTIN`, `BUSINESS_STATE` | Adds 18% GST to INR checkouts and prints GST tax invoices. Leave `GSTIN` empty if you are not GST-registered |
+| `GRIEVANCE_OFFICER`, `GRIEVANCE_EMAIL` | Required in the privacy policy under the DPDP Act |
+| `ANTHROPIC_API_KEY` | RegData document reading |
+| `RAZORPAY_*` | Online payments |

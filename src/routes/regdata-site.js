@@ -43,6 +43,24 @@ pub.get('/regdata', (req, res) => {
   });
 });
 
+pub.get('/regdata/status', (req, res) => {
+  const seen = Object.fromEntries(db.prepare('SELECT * FROM reg_sources').all().map((r) => [r.id, r]));
+  const staleMs = 3 * 3600000;
+  const rows = SOURCES.map((s) => {
+    const r = seen[s.id];
+    let state = 'pending'; let label = 'Not checked yet';
+    if (r && r.last_status === 'error') { state = 'error'; label = 'Problem fetching'; }
+    else if (r && Date.now() - r.last_fetched > staleMs) { state = 'stale'; label = 'Delayed'; }
+    else if (r) { state = 'ok'; label = 'Operational'; }
+    return { regulator: s.regulator, name: s.name, state, label, checked: r && r.last_fetched };
+  });
+  res.render('regdata/status', { title: 'RegData status', rows, stats: store.stats() });
+});
+
+pub.get('/regdata/openapi.json', (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*').json(require('../regdata/openapi')(require('../config').baseUrl));
+});
+
 pub.get('/regdata/docs', (req, res) => {
   res.render('regdata/docs', { title: 'RegData API documentation', APPLIES_TO, REGULATORS, REG_PLANS, sampleChange: JSON.stringify(SAMPLE_CHANGE, null, 2), sampleAction: JSON.stringify(SAMPLE_ACTION, null, 2) });
 });

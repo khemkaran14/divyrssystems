@@ -1,24 +1,47 @@
 <%- include("../partials/head") %>
 <section class="section"><div class="container legal">
 <h1>Terms of Service</h1>
-<p class="muted">Last updated: <%= new Date().getFullYear() %></p>
-<p>By creating an account or using the tools on this website, you agree to these terms with <%= business.name %>.</p>
-<h2>The service</h2>
-<p>We provide online tools including an invoice generator, website uptime monitoring, a link shortener and a QR code generator, on Free and paid plans as described on the <a href="/pricing">pricing page</a>.</p>
-<h2>Your account</h2>
-<p>Keep your password safe. You are responsible for activity on your account. One person or company per account unless agreed otherwise.</p>
-<h2>Acceptable use</h2>
-<p>You must not use the service to shorten links to malware, phishing, illegal or adult content; to monitor sites you have no right to monitor; to send spam; or to try to break or overload the service. We may remove content or suspend accounts that break these rules.</p>
-<h2>Invoices and tax</h2>
-<p>The invoice generator is a tool. You are responsible for the accuracy of invoices you create and for your own tax compliance.</p>
-<h2>Paid plans</h2>
-<p>Paid plans are prepaid for 1 or 12 months and do not renew automatically. When a plan ends, your account returns to the Free plan limits. Refunds follow our <a href="/refund">refund policy</a>.</p>
-<h2>Availability</h2>
-<p>We aim for high availability but do not guarantee the service will be uninterrupted. Uptime alerts are best-effort and should not be your only safety system.</p>
-<h2>Liability</h2>
-<p>To the extent allowed by law, our total liability is limited to the amount you paid us in the 3 months before the claim.</p>
-<h2>Governing law</h2>
-<p>These terms are governed by the laws of India.</p>
+<p class="muted">Last updated: 4 November 2026</p>
+<p>These terms are between you and <%= business.name %>. By creating an account, using the RegData API or using the tools on this website, you agree to them. If you use the service for a company, you confirm you may accept these terms on its behalf.</p>
+
+<h2>1. The services</h2>
+<p><strong>RegData API:</strong> structured information about Indian regulatory publications and enforcement actions, through an API, webhooks and web pages. <strong>Business tools:</strong> invoices, booking pages, digital business cards, uptime and SSL monitoring, website forms, short links, QR codes and calculators. Plans and limits are on the <a href="/pricing">pricing page</a>.</p>
+
+<h2>2. Your account and API keys</h2>
+<p>Keep your password and API keys secret and use API keys only from your own servers. You are responsible for activity under your account. Tell us at once if you think a key has leaked; you can regenerate it in your dashboard.</p>
+
+<h2>3. RegData: information, not legal advice</h2>
+<ul>
+  <li>RegData is compiled from official sources with automated extraction and human review of high-impact items. It may contain errors, omissions or delays. The official publication always prevails.</li>
+  <li>RegData is not legal, financial or compliance advice. You remain responsible for your compliance decisions.</li>
+  <li>Enforcement records reflect what regulators published at the time. A match from name screening is a lead to check, not a finding about a person or company. Do not take adverse action against anyone based only on an automated match.</li>
+</ul>
+
+<h2>4. How you may use RegData</h2>
+<ul>
+  <li>You may use RegData inside your organisation and show results to your own users as part of your product or service, with attribution to the regulator's source where shown.</li>
+  <li>You may not resell, sublicense or republish RegData as a competing dataset or API, or bulk-download it to recreate it, unless your Enterprise agreement allows it.</li>
+  <li>You may not share API keys across organisations, get around rate limits or quotas, or use the data to harass or unlawfully profile individuals.</li>
+</ul>
+
+<h2>5. Acceptable use of the tools</h2>
+<p>Do not use the service for spam, phishing, malware, illegal or adult content, to monitor systems you have no right to monitor, to collect personal data unlawfully through forms or bookings, or to attack or overload the service. We may remove content and suspend accounts that break these rules. When you collect personal data through forms, booking pages or cards, you are responsible for having a lawful basis and a privacy notice for it.</p>
+
+<h2>6. Plans, payment and taxes</h2>
+<p>Paid plans are prepaid for 1 or 12 months and do not renew automatically. Prices exclude GST, which is added at checkout where applicable. When a plan ends, your account returns to the free limits. Refunds follow our <a href="/refund">refund policy</a>. Enterprise terms, uptime commitments and invoice billing are agreed in writing.</p>
+
+<h2>7. Availability</h2>
+<p>We aim for high availability and fast collection of new publications, but outside a written Enterprise agreement we don't guarantee uninterrupted service, response times or that every publication is captured. Alerts are best-effort and should not be your only control.</p>
+
+<h2>8. Liability</h2>
+<p>To the extent allowed by law, the service is provided "as is", we are not liable for indirect or consequential losses, and our total liability is limited to the amount you paid us in the 3 months before the claim.</p>
+
+<h2>9. Ending the service</h2>
+<p>You can delete your account at any time from Account settings. We may suspend or end accounts that break these terms, with notice where reasonable.</p>
+
+<h2>10. Changes and law</h2>
+<p>We may update these terms and will show the new date here; material changes are emailed to paying customers. These terms are governed by the laws of India, and courts at our registered office have jurisdiction.</p>
+
 <h2>Contact</h2>
 <p><%= business.email %></p>
 </div></section>

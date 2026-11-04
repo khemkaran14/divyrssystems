@@ -7,7 +7,8 @@
     <% if (error) { %><div class="alert error"><%= error %></div><% } %>
 
     <div class="card" style="margin-bottom:20px">
-      <h3>Plan</h3>
+      <h3>Tools plan</h3>
+      <p class="small muted" style="margin:-4px 0 8px">Your RegData API plan is separate: <a href="/dashboard/regdata">RegData dashboard →</a></p>
       <p><strong><%= plan.name %></strong><% if (plan.id !== 'free') { %> — active until <%= new Date(me.plan_expires).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) %><% } %></p>
       <div class="btn-row"><a class="btn primary" href="/pricing"><%= plan.id === 'free' ? 'Upgrade' : 'Renew or change plan' %></a></div>
       <p class="small muted" style="margin-top:10px">Plans are prepaid. Buying the same plan again adds time on top of what you have.</p>
@@ -42,23 +43,51 @@ curl <%= baseUrl %>/api/v1/monitors -H "Authorization: Bearer YOUR_KEY"</pre>
       <% const paid = payments.filter(p => p.status === 'paid'); %>
       <% if (paid.length) { %>
         <div class="table-wrap"><table>
-          <thead><tr><th>Date</th><th>Plan</th><th class="num">Amount</th><th>Payment ID</th></tr></thead>
+          <thead><tr><th>Date</th><th>Plan</th><th class="num">Amount</th><th>Payment ID</th><th></th></tr></thead>
           <tbody><% for (const p of paid) { %>
             <tr><td><%= new Date(p.paid_at).toLocaleDateString('en-IN') %></td><td><%= anyPlan(p.plan).name %> · <%= p.months %> mo</td>
-              <td class="num"><%= formatPrice(p.amount, p.currency) %></td><td class="mono small"><%= p.payment_id %></td></tr>
+              <td class="num"><%= formatPrice(p.amount, p.currency) %></td><td class="mono small"><%= p.payment_id %></td><td><a class="btn sm" href="/dashboard/account/payments/<%= p.id %>/invoice" target="_blank">Invoice</a></td></tr>
           <% } %></tbody>
         </table></div>
       <% } else { %><p class="muted small">No payments yet.</p><% } %>
     </div>
 
-    <div class="card">
+    <div class="card" style="margin-bottom:20px" id="billing">
+      <h3>Billing details</h3>
+      <p class="small muted">Shown on your invoices. Add your GSTIN to claim input tax credit.</p>
+      <form method="post" action="/dashboard/account/billing">
+        <div class="grid grid-2" style="gap:12px">
+          <div class="field"><label for="b-co">Company name</label><input id="b-co" name="company" value="<%= me.company || '' %>" maxlength="200"></div>
+          <div class="field"><label for="b-gst">GSTIN (optional)</label><input id="b-gst" name="gstin" value="<%= me.gstin || '' %>" maxlength="15" placeholder="27ABCDE1234F1Z5" style="text-transform:uppercase"></div>
+          <div class="field"><label for="b-st">State</label><select id="b-st" name="billing_state"><option value="">— Outside India / not set —</option><% for (const [code, nm] of Object.entries(STATES)) { %><option value="<%= code %>" <%= me.billing_state === code ? 'selected' : '' %>><%= nm %></option><% } %></select></div>
+          <div class="field"><label for="b-ph">Phone</label><input id="b-ph" name="phone" value="<%= me.phone || '' %>" maxlength="30"></div>
+        </div>
+        <div class="field"><label for="b-ad">Billing address</label><textarea id="b-ad" name="billing_address" rows="2" maxlength="500"><%= me.billing_address || '' %></textarea></div>
+        <button class="btn" type="submit">Save billing details</button>
+      </form>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
       <h3>Change password</h3>
       <form method="post" action="/dashboard/account/password" class="inline-form">
         <div class="field"><label for="pw-cur">Current</label><input id="pw-cur" type="password" name="current" required autocomplete="current-password"></div>
         <div class="field"><label for="pw-new">New (8+)</label><input id="pw-new" type="password" name="next" minlength="8" required autocomplete="new-password"></div>
         <button class="btn" type="submit">Update</button>
       </form>
-      <p class="small muted" style="margin-top:12px">Signed in as <%= me.email %>. To delete your account, <a href="/contact">contact us</a>.</p>
+      <p class="small muted" style="margin-top:12px">Signed in as <%= me.email %>.</p>
+    </div>
+
+    <div class="card">
+      <h3>Your data</h3>
+      <p class="small muted">Download everything we hold about you, or delete your account. Paid invoices are kept without your personal details, as tax law requires.</p>
+      <a class="btn" href="/dashboard/account/export">Download my data (JSON)</a>
+      <details style="border:none;padding:14px 0 0"><summary class="small" style="color:var(--bad)">Delete my account</summary>
+        <form method="post" action="/dashboard/account/delete" class="inline-form" style="margin-top:12px" onsubmit="return confirm('This permanently deletes your account, monitors, links, forms, cards, bookings and API keys. Continue?')">
+          <div class="field"><label for="d-pw">Password</label><input id="d-pw" type="password" name="password" required autocomplete="current-password"></div>
+          <div class="field"><label for="d-cf">Type DELETE</label><input id="d-cf" name="confirm" required></div>
+          <button class="btn danger" type="submit">Delete permanently</button>
+        </form>
+      </details>
     </div>
   </div>
 </div>

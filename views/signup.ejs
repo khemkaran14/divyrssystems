@@ -2,7 +2,7 @@
 <section class="section"><div class="container" style="max-width:440px">
   <div class="card">
     <h1 style="font-size:1.8rem">Create your free account</h1>
-    <p class="muted small">All four tools. No credit card.</p>
+    <p class="muted small">One account for the RegData API and all tools. No credit card.</p>
     <% if (error) { %><div class="alert error"><%= error %></div><% } %>
     <form method="post" action="/signup">
       <input type="hidden" name="next" value="<%= next %>">

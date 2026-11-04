@@ -1,25 +1,43 @@
 <%- include("../partials/head") %>
 <section class="section"><div class="container legal">
 <h1>Privacy Policy</h1>
-<p class="muted">Last updated: <%= new Date().getFullYear() %></p>
-<p><%= business.name %> ("we", "us") runs this website and its online tools. This policy explains what we collect and why.</p>
+<p class="muted">Last updated: 4 November 2026</p>
+<p><%= business.name %> ("we", "us") runs divyrs.com, the RegData API and the business tools on this website. This policy explains what personal data we collect, why, and your rights under India's Digital Personal Data Protection Act, 2023 and its Rules.</p>
+
 <h2>What we collect</h2>
 <ul>
-  <li><strong>Account details:</strong> your name, email address and a hashed (unreadable) password.</li>
-  <li><strong>Content you create:</strong> saved invoices, short links, and the website addresses you ask us to monitor.</li>
-  <li><strong>Usage data:</strong> click counts on short links (we count clicks; we do not store visitors' identities).</li>
-  <li><strong>Payments:</strong> handled by Razorpay. We receive the payment ID and amount, never your card or bank details.</li>
-  <li><strong>Invoice drafts</strong> made without an account stay in your own browser and are not sent to us.</li>
+  <li><strong>Account:</strong> name, email, a bcrypt hash of your password, and, if you add them, company name, GSTIN, billing address, state and phone.</li>
+  <li><strong>Payments:</strong> plan, amount, invoice number and Razorpay payment ID. Card, UPI and bank details go to Razorpay, not to us.</li>
+  <li><strong>RegData API:</strong> your API key, the number of calls you make each month, and webhook URLs and watchlist names you save. Names you send to enforcement search or screening are used to answer the request; we don't keep a log of them.</li>
+  <li><strong>Tools:</strong> what you create: monitors, short links (with click counts, not visitors' identities), saved invoices, forms and their submissions, business cards, booking pages and bookings.</li>
+  <li><strong>Contact form:</strong> what you send us.</li>
+  <li><strong>Technical:</strong> IP address and request details in server logs, kept for security and abuse prevention. Invoice drafts made without an account stay in your browser.</li>
 </ul>
-<h2>How we use it</h2>
-<p>Only to provide the service: log you in, run your tools, send alerts and receipts, and answer support requests. We do not sell your data or show ads.</p>
+
+<h2>Regulatory data</h2>
+<p>RegData contains information that regulators publish publicly, which can include names of companies and individuals in enforcement orders. We process it to provide accurate, cited regulatory information. If you believe a record about you is wrong or out of date, write to our grievance officer below and we will review it against the official source.</p>
+
+<h2>Why we use your data</h2>
+<p>Only to provide and secure the service: running your account and tools, answering API calls, sending alerts, receipts and password-reset emails, issuing GST invoices, preventing abuse, and replying to you. We don't sell personal data or show ads.</p>
+
+<h2>Who we share it with</h2>
+<ul>
+  <li>Hosting and email providers that run the service.</li>
+  <li>Razorpay, to process payments.</li>
+  <li>Anthropic (Claude), which reads public regulator documents for RegData. We send only those public documents, not your account data.</li>
+  <li>Authorities, when required by law.</li>
+</ul>
+
 <h2>Cookies</h2>
-<p>We use one login cookie and one cookie that remembers your currency. No tracking or advertising cookies.</p>
-<h2>Sharing</h2>
-<p>We share data only with providers needed to run the service (hosting, email delivery, Razorpay for payments), or when required by law.</p>
+<p>One login cookie and one cookie that remembers your currency. No advertising or tracking cookies.</p>
+
+<h2>How long we keep it</h2>
+<p>As long as your account is open. When you delete your account, your content is deleted immediately. Paid invoices are kept without your contact details for as long as tax and company law require. Backups are overwritten within 14 days.</p>
+
 <h2>Your rights</h2>
-<p>You can ask us to export or delete your data at any time by writing to <a href="mailto:<%= business.email %>"><%= business.email %></a>.</p>
-<h2>Contact</h2>
-<p><%= business.name %>, <%= business.address %>. Email: <%= business.email %></p>
+<p>You can access, correct and erase your data, withdraw consent and nominate someone to act for you. From <a href="/dashboard/account">Account</a> you can edit your details, download all your data, or delete your account. For anything else, contact the grievance officer.</p>
+
+<h2>Grievance officer</h2>
+<p><%= business.grievanceOfficer %>, <%= business.name %>, <%= business.address %>. Email: <a href="mailto:<%= business.grievanceEmail %>"><%= business.grievanceEmail %></a>. We reply within 7 days. If you're not satisfied, you may complain to the Data Protection Board of India.</p>
 </div></section>
 <%- include("../partials/foot") %>

@@ -4,6 +4,19 @@
     <h1 style="font-size:1.8rem">Upgrade to <%= plan.name %></h1>
     <p class="price"><%= formatPrice(amount, currency) %></p>
     <p class="muted"><%= months === 12 ? '12 months (2 months free)' : '1 month' %> · prepaid, no auto-renewal</p>
+    <% if (tax.tax) { %>
+      <div style="text-align:left;max-width:300px;margin:0 auto 16px" class="small">
+        <div style="display:flex;justify-content:space-between"><span>Plan price</span><span><%= formatPrice(tax.base, currency) %></span></div>
+        <% if (tax.mode === 'intra') { %>
+          <div style="display:flex;justify-content:space-between"><span>CGST <%= tax.rate / 2 %>%</span><span><%= formatPrice(Math.floor(tax.tax / 2), currency) %></span></div>
+          <div style="display:flex;justify-content:space-between"><span>SGST <%= tax.rate / 2 %>%</span><span><%= formatPrice(tax.tax - Math.floor(tax.tax / 2), currency) %></span></div>
+        <% } else { %>
+          <div style="display:flex;justify-content:space-between"><span>IGST <%= tax.rate %>%</span><span><%= formatPrice(tax.tax, currency) %></span></div>
+        <% } %>
+        <div style="display:flex;justify-content:space-between;font-weight:700;border-top:1px solid var(--line);margin-top:4px;padding-top:4px"><span>Total</span><span><%= formatPrice(amount, currency) %></span></div>
+      </div>
+      <% if (!user.gstin) { %><p class="small muted">Need a GST invoice in your company's name? <a href="/dashboard/account#billing">Add your GSTIN</a> before paying.</p><% } %>
+    <% } %>
     <button id="pay" class="btn primary lg block">Pay securely</button>
     <p class="small muted" style="margin-top:12px">Payments are processed by Razorpay. UPI, cards, net banking and wallets accepted.</p>
     <form id="done" method="post" action="/billing/verify">

@@ -1,0 +1,23 @@
+<%- include('../partials/head') %>
+<section class="section" style="padding-top:36px"><div class="container" style="max-width:820px">
+  <p class="small"><a href="/regdata">← RegData API</a></p>
+  <h1 style="font-size:2rem">RegData status</h1>
+  <% const allOk = rows.every(r => r.state === 'ok'); %>
+  <div class="alert <%= allOk ? 'success' : 'error' %>" style="font-weight:600"><%= allOk ? '✅ All feeds are being collected normally' : '⚠️ Some feeds need attention — data from them may be delayed' %></div>
+  <div class="card table-wrap" style="padding:8px"><table>
+    <thead><tr><th>Feed</th><th>Status</th><th>Last checked</th></tr></thead>
+    <tbody><% for (const r of rows) { %>
+      <tr><td><strong><%= r.regulator %></strong> · <%= r.name %></td>
+        <td><span class="badge <%= r.state === 'ok' ? 'ok' : r.state === 'error' ? 'bad' : 'warn' %>"><%= r.label %></span></td>
+        <td class="small muted"><%= r.checked ? new Date(r.checked).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) + ' IST' : '—' %></td></tr>
+    <% } %></tbody>
+  </table></div>
+  <div class="grid grid-3" style="margin-top:20px">
+    <div class="card"><div class="muted small">Documents processed</div><div class="stat"><%= stats.documents.toLocaleString('en-IN') %></div></div>
+    <div class="card"><div class="muted small">Waiting to be read</div><div class="stat"><%= stats.pending %></div></div>
+    <div class="card"><div class="muted small">Newest document</div><div class="stat" style="font-size:1.2rem"><%= stats.latest ? new Date(stats.latest).toLocaleDateString('en-IN') : '—' %></div></div>
+  </div>
+  <p class="small muted" style="margin-top:16px">This page refreshes every minute. The API itself is checked by our own uptime monitor.</p>
+  <script>setTimeout(() => location.reload(), 60000)</script>
+</div></section>
+<%- include('../partials/foot') %>

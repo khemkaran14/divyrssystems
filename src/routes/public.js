@@ -9,7 +9,14 @@ const { PLANS, effectivePlan } = require('../plans');
 
 const router = express.Router();
 
-router.get('/', (req, res) => res.render('home', { title: 'Online tools for professionals & companies' }));
+router.get('/', (req, res) => {
+  const store = require('../regdata/store');
+  res.render('home', {
+    title: 'Regulatory data API & business tools for India',
+    description: 'Divyrs Systems: the RegData API for RBI and SEBI regulatory changes and enforcement actions, plus simple business tools: GST invoices, booking pages, digital business cards, uptime & SSL monitoring.',
+    stats: store.stats(), latest: store.listChanges({ limit: 5 }).rows, deleted: req.query.deleted === '1',
+  });
+});
 router.get('/tools', (req, res) => res.render('tools/index', { title: 'Tools' }));
 router.get('/pricing', (req, res) => res.render('pricing', { title: 'Pricing' }));
 router.get('/about', (req, res) => res.render('about', { title: 'About' }));
@@ -20,21 +27,23 @@ for (const page of ['privacy', 'terms', 'refund', 'shipping']) {
   }[page] }));
 }
 
-router.get('/contact', (req, res) => res.render('contact', { title: 'Contact', sent: false, error: null }));
+const TOPICS = { regdata: 'RegData API', demo: 'Book a RegData demo', enterprise: 'Enterprise / reseller licence', tools: 'Business tools', billing: 'Billing & invoices', support: 'Technical support', other: 'Something else' };
+router.get('/contact', (req, res) => res.render('contact', { title: 'Contact', sent: false, error: null, TOPICS, topic: TOPICS[req.query.topic] ? req.query.topic : 'regdata' }));
 router.post('/contact', rateLimit(5, 3600000), async (req, res) => {
-  const { name = '', email = '', company = '', message = '' } = req.body;
+  const { name = '', email = '', company = '', message = '', phone = '' } = req.body;
+  const topic = TOPICS[req.body.topic] ? req.body.topic : 'other';
   if (!name.trim() || !/^\S+@\S+\.\S+$/.test(email) || message.trim().length < 5) {
-    return res.render('contact', { title: 'Contact', sent: false, error: 'Please fill in your name, a valid email and a message.' });
+    return res.render('contact', { title: 'Contact', sent: false, error: 'Please fill in your name, a valid email and a message.', TOPICS, topic });
   }
-  db.prepare('INSERT INTO messages (name, email, company, body, created_at) VALUES (?,?,?,?,?)')
-    .run(name.slice(0, 200), email.slice(0, 200), company.slice(0, 200), message.slice(0, 5000), Date.now());
+  db.prepare('INSERT INTO messages (name, email, company, phone, topic, body, created_at) VALUES (?,?,?,?,?,?,?)')
+    .run(name.slice(0, 200), email.slice(0, 200), company.slice(0, 200), phone.slice(0, 30), topic, message.slice(0, 5000), Date.now());
   await sendMail({
     to: config.business.email,
     replyTo: email,
-    subject: `New enquiry from ${name}${company ? ' (' + company + ')' : ''}`,
-    text: `${message}\n\n— ${name} <${email}>`,
+    subject: `[${TOPICS[topic]}] ${name}${company ? ' (' + company + ')' : ''}`,
+    text: `${message}\n\n— ${name} <${email}>${phone ? ' · ' + phone : ''}`,
   });
-  res.render('contact', { title: 'Contact', sent: true, error: null });
+  res.render('contact', { title: 'Contact', sent: true, error: null, TOPICS, topic });
 });
 
 // ---- Free tools (no login needed: they bring visitors in from Google) ----
@@ -131,14 +140,26 @@ router.get('/status/:slug', (req, res, next) => {
   res.render('status', { title: owner.name + ' status', owner, monitors, history, whiteLabel: plan.limits.whiteLabel, layout: false });
 });
 
+router.get('/security', (req, res) => res.render('security', { title: 'Security' }));
+router.get('/.well-known/security.txt', (req, res) => {
+  const expires = new Date(Date.now() + 365 * 86400000).toISOString();
+  res.type('text/plain').send(`Contact: mailto:${config.business.email}\nExpires: ${expires}\nPreferred-Languages: en, hi\nCanonical: ${config.baseUrl}/.well-known/security.txt\nPolicy: ${config.baseUrl}/security\n`);
+});
+
 router.get('/robots.txt', (req, res) => {
   res.type('text/plain').send(`User-agent: *\nDisallow: /dashboard\nDisallow: /admin\nDisallow: /billing\nSitemap: ${config.baseUrl}/sitemap.xml\n`);
 });
 router.get('/sitemap.xml', (req, res) => {
-  const pages = ['', '/regdata', '/regdata/changes', '/regdata/enforcement', '/regdata/docs', '/tools', '/tools/invoice', '/tools/qr', '/tools/uptime', '/tools/links', '/tools/booking', '/tools/forms',
-    '/tools/business-card', '/tools/gst-calculator', '/tools/emi-calculator', '/pricing', '/about', '/contact', '/privacy', '/terms', '/refund'];
+  const pages = ['', '/regdata', '/regdata/changes', '/regdata/enforcement', '/regdata/docs', '/regdata/status', '/tools', '/tools/invoice', '/tools/qr',
+    '/tools/uptime', '/tools/links', '/tools/booking', '/tools/forms', '/tools/business-card', '/tools/gst-calculator', '/tools/emi-calculator',
+    '/pricing', '/about', '/contact', '/security', '/privacy', '/terms', '/refund', '/shipping'];
+  // Every public regulatory change page, newest first (search engines cap sitemaps at 50,000 URLs).
+  const changes = db.prepare("SELECT id, updated_at FROM reg_documents WHERE status = 'ready' AND review_status != 'rejected' ORDER BY published_at DESC LIMIT 45000").all();
+  const esc = (u) => u.replace(/&/g, '&amp;');
   res.type('application/xml').send(`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-    pages.map((p) => `  <url><loc>${config.baseUrl}${p}</loc></url>`).join('\n') + '\n</urlset>\n');
+    pages.map((p) => `  <url><loc>${esc(config.baseUrl + p)}</loc></url>`).join('\n') + '\n' +
+    changes.map((c) => `  <url><loc>${esc(config.baseUrl)}/regdata/changes/${c.id}</loc><lastmod>${new Date(c.updated_at).toISOString().slice(0, 10)}</lastmod></url>`).join('\n') +
+    '\n</urlset>\n');
 });
 
 module.exports = router;

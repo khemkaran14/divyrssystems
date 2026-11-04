@@ -1,0 +1,17 @@
+<%- include('partials/head') %>
+<section class="section"><div class="container" style="max-width:440px">
+  <div class="card">
+    <h1 style="font-size:1.8rem">Choose a new password</h1>
+    <% if (!ok) { %>
+      <div class="alert error">This link has expired or was already used.</div>
+      <a class="btn" href="/forgot">Send a new link</a>
+    <% } else { %>
+      <% if (error) { %><div class="alert error"><%= error %></div><% } %>
+      <form method="post" action="/reset/<%= token %>">
+        <div class="field"><label for="password">New password (8+ characters)</label><input id="password" name="password" type="password" minlength="8" required autocomplete="new-password"></div>
+        <button class="btn primary block" type="submit">Save password</button>
+      </form>
+    <% } %>
+  </div>
+</div></section>
+<%- include('partials/foot') %>
