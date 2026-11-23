@@ -1,0 +1,43 @@
+# SPEC 9 phase 6: sign up -> style and save a look -> sign out -> sign in on a second
+# simulator -> the look reopens identically. Run against a test backend:
+#   maestro test -e EMAIL=test+$(date +%s)@example.com -e PASSWORD=password123 .maestro/sync-flow.yaml
+appId: com.livelifetricks.styleguide
+---
+- launchApp:
+    clearState: true
+- tapOn: "Profile"
+- tapOn: "Create an account"
+- tapOn: "Name"
+- inputText: "Maestro Tester"
+- tapOn: "Email"
+- inputText: ${EMAIL}
+- tapOn: "Password (8+ characters)"
+- inputText: ${PASSWORD}
+- tapOn:
+    text: "Create account"
+    index: 1
+- assertVisible: "Hi, Maestro"
+- tapOn: "Dressing Room"
+- tapOn: "Swap pieces"
+- tapOn: "Blue straight jeans"
+- tapOn: "Colour"
+- tapOn: "Blue straight jeans"
+- tapOn: "navy"
+- tapOn: "Save look"
+- assertVisible: "Look saved"
+- tapOn: "Profile"
+- scrollUntilVisible:
+    element: "Sign out"
+- tapOn: "Sign out"
+- tapOn: "Sign in"
+- tapOn: "Email"
+- inputText: ${EMAIL}
+- tapOn: "Password"
+- inputText: ${PASSWORD}
+- tapOn:
+    text: "Sign in"
+    index: 1
+- tapOn: "Saved"
+- tapOn: "My styled photos (1)"
+- tapOn: "Saved look 1"
+- assertVisible: "Blue straight jeans · navy"

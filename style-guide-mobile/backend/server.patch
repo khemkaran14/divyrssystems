@@ -1,0 +1,82 @@
+--- a/server.js	2026-11-23 12:00:53.895183179 +0000
++++ b/server.js	2026-11-23 12:18:47.220190847 +0000
+@@ -85,6 +85,14 @@
+   const expires = Date.now() + SESSION_DAYS * 864e5;
+   q('INSERT INTO sessions (token, user_id, expires) VALUES (?, ?, ?)').run(token, userId, expires);
+   res.cookie('sg_session', token, { httpOnly: true, secure: COOKIE_SECURE, sameSite: 'lax', maxAge: SESSION_DAYS * 864e5, path: '/' });
++  return token;
++}
++// The phone app sends "X-Client: mobile" and keeps the session token itself (Authorization: Bearer).
++const isMobile = req => req.get('X-Client') === 'mobile';
++const withToken = (req, payload, token) => (isMobile(req) ? Object.assign(payload, { token }) : payload);
++function readBearer(req) {
++  const m = /^Bearer\s+([a-f0-9]{64})$/i.exec(req.headers.authorization || '');
++  return m ? m[1].toLowerCase() : null;
+ }
+ // Reset tokens: the link carries the token, the database only keeps its SHA-256.
+ const sha256 = t => crypto.createHash('sha256').update(String(t)).digest('hex');
+@@ -125,9 +133,9 @@
+   if (req.secure) res.setHeader('Strict-Transport-Security', 'max-age=31536000');
+   next();
+ });
+-// attach the signed-in user
++// attach the signed-in user: a Bearer token (phone app) first, then the sg_session cookie (website)
+ app.use((req, res, next) => {
+-  const token = readCookie(req, 'sg_session');
++  const token = readBearer(req) || readCookie(req, 'sg_session');
+   if (token) {
+     const row = q('SELECT u.id, u.email, u.name, u.role, u.created, u.last_active, s.expires FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token = ?').get(token);
+     if (row && row.expires > Date.now()) {
+@@ -181,16 +189,16 @@
+   const role = first || ADMIN_EMAILS.includes(email) ? 'admin' : 'member';
+   const id = 'u_' + crypto.randomBytes(12).toString('hex');
+   q('INSERT INTO users (id, email, name, pass, role, created, last_active) VALUES (?, ?, ?, ?, ?, ?, ?)').run(id, email, name, hashPassword(pw), role, today(), today());
+-  newSession(res, id);
+-  res.json(mePayload(q('SELECT * FROM users WHERE id = ?').get(id)));
++  const token = newSession(res, id);
++  res.json(withToken(req, mePayload(q('SELECT * FROM users WHERE id = ?').get(id)), token));
+ });
+ app.post('/api/auth/login', authLimiter, (req, res) => {
+   const email = cleanEmail(req.body.email), pw = String(req.body.password || '');
+   const u = q('SELECT * FROM users WHERE email = ?').get(email);
+   if (!u || !checkPassword(pw, u.pass)) return res.status(401).json({ error: 'That email and password don’t match.' });
+   if (ADMIN_EMAILS.includes(email) && u.role !== 'admin') q('UPDATE users SET role = ? WHERE id = ?').run('admin', u.id), u.role = 'admin';
+-  newSession(res, u.id);
+-  res.json(mePayload(u));
++  const token = newSession(res, u.id);
++  res.json(withToken(req, mePayload(u), token));
+ });
+ app.post('/api/auth/logout', (req, res) => {
+   if (req.token) q('DELETE FROM sessions WHERE token = ?').run(req.token);
+@@ -228,10 +236,13 @@
+   q('UPDATE users SET pass = ? WHERE id = ?').run(hashPassword(pw), row.user_id);
+   q('DELETE FROM resets WHERE user_id = ?').run(row.user_id);
+   q('DELETE FROM sessions WHERE user_id = ?').run(row.user_id);
+-  newSession(res, row.user_id);
+-  res.json(mePayload(q('SELECT * FROM users WHERE id = ?').get(row.user_id)));
++  const token = newSession(res, row.user_id);
++  res.json(withToken(req, mePayload(q('SELECT * FROM users WHERE id = ?').get(row.user_id)), token));
+ });
+ app.get('/api/me', (req, res) => res.json(mePayload(req.user)));
++// Lets the phone app show a friendly offline state.
++const VERSION = (() => { try { return require('./package.json').version; } catch (e) { return '1.0.0'; } })();
++app.get('/api/health', (req, res) => res.json({ ok: true, version: VERSION }));
+ 
+ // ---------- profile, hearts, saved looks ----------
+ app.put('/api/profile', need, (req, res) => {
+@@ -267,6 +278,7 @@
+   res.json({ ok: true });
+ });
+ app.delete('/api/account', need, (req, res) => {
++  q('DELETE FROM sessions WHERE user_id = ?').run(req.user.id);
+   q('DELETE FROM users WHERE id = ?').run(req.user.id);
+   res.clearCookie('sg_session', { path: '/' });
+   res.json({ ok: true });
+@@ -387,6 +399,7 @@
+   q('DELETE FROM messages WHERE created < ?').run(Date.now() - 365 * 864e5);
+ }, 36e5).unref();
+ 
++if (require.main !== module) { module.exports = app; return; }
+ app.listen(PORT, process.env.HOST || '127.0.0.1', () => {
+   console.log(`Style guide running on http://127.0.0.1:${PORT}`);
+   console.log(EMAIL_ON ? `Password-reset emails on (from ${SMTP.from})` : 'Password-reset emails off (admins can create reset links)');

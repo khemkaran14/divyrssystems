@@ -1,0 +1,12 @@
+appId: com.livelifetricks.styleguide
+---
+- launchApp
+- assertVisible: "47"
+- tapOn: "Lookbook"
+- tapOn: "Search looks"
+- inputText: "silk wedding"
+- assertVisible: "5 looks"
+- tapOn: "Open Banarasi Silk Saree"
+- assertVisible: "What to wear"
+- tapOn: "Style it in the Dressing Room"
+- assertVisible: "Tap a garment to select it"

@@ -1,0 +1,54 @@
+[
+ {
+  "id": "top",
+  "label": "Tops"
+ },
+ {
+  "id": "bottom",
+  "label": "Bottoms"
+ },
+ {
+  "id": "shoes",
+  "label": "Shoes & sandals"
+ },
+ {
+  "id": "bag",
+  "label": "Bags"
+ },
+ {
+  "id": "jewellery",
+  "label": "Jewellery sets"
+ },
+ {
+  "id": "earrings",
+  "label": "Earrings"
+ },
+ {
+  "id": "necklace",
+  "label": "Necklaces"
+ },
+ {
+  "id": "wrist",
+  "label": "Bangles & watches"
+ },
+ {
+  "id": "rings",
+  "label": "Rings"
+ },
+ {
+  "id": "head",
+  "label": "Caps & hats"
+ },
+ {
+  "id": "eyewear",
+  "label": "Sunglasses"
+ },
+ {
+  "id": "belt",
+  "label": "Belts"
+ },
+ {
+  "id": "scarf",
+  "label": "Scarves & layers"
+ }
+]

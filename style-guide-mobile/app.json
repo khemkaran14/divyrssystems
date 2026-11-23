@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "The Ultimate Style Guide",
+    "slug": "ultimate-style-guide",
+    "scheme": "styleguide",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "backgroundColor": "#FFF4F8",
+    "ios": {
+      "bundleIdentifier": "com.livelifetricks.styleguide",
+      "supportsTablet": false,
+      "config": { "usesNonExemptEncryption": false },
+      "infoPlist": {
+        "NSPhotoLibraryAddUsageDescription": "Save your styled looks to your photo library."
+      }
+    },
+    "android": {
+      "package": "com.livelifetricks.styleguide",
+      "adaptiveIcon": {
+        "backgroundColor": "#D6246E",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      "expo-router",
+      "expo-image",
+      "expo-secure-store",
+      "expo-sharing",
+      "expo-font",
+      "expo-asset",
+      [
+        "expo-splash-screen",
+        { "backgroundColor": "#D6246E", "image": "./assets/splash-icon.png", "imageWidth": 220 }
+      ],
+      [
+        "expo-media-library",
+        { "savePhotosPermission": "Save your styled looks to your photo library.", "isAccessMediaLocationEnabled": false }
+      ]
+    ],
+    "experiments": { "typedRoutes": false },
+    "extra": { "router": {} }
+  }
+}

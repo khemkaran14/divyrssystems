@@ -1,0 +1,1342 @@
+{
+ "partysaree": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "grey",
+    "share": 1
+   }
+  ],
+  "map": "partysaree"
+ },
+ "kanjeevaram": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "camel",
+    "share": 0.38
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "emerald",
+    "share": 0.33
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "wine",
+    "share": 0.15
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "black",
+    "share": 0.13
+   }
+  ],
+  "map": "kanjeevaram"
+ },
+ "bridal": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "brown",
+    "share": 0.13
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "wine",
+    "share": 0.23
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "camel",
+    "share": 0.12
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "brown",
+    "share": 0.13
+   }
+  ],
+  "map": "bridal"
+ },
+ "banarasi": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "brown",
+    "share": 0.32
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "brown",
+    "share": 0.27
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "camel",
+    "share": 0.14
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "black",
+    "share": 0.13
+   }
+  ],
+  "map": "banarasi"
+ },
+ "chikan": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Bottom",
+    "name": "grey",
+    "share": 0.77
+   },
+   {
+    "id": 2,
+    "seg": "Bottom",
+    "name": "ivory",
+    "share": 0.22
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "silver",
+    "share": 0.72
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "ivory",
+    "share": 0.25
+   }
+  ],
+  "map": "chikan"
+ },
+ "mirror": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "champagne",
+    "share": 0.37
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "silver",
+    "share": 0.3
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "grey",
+    "share": 0.13
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "camel",
+    "share": 0.15
+   }
+  ],
+  "map": "mirror"
+ },
+ "handloom": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "navy",
+    "share": 0.38
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "black",
+    "share": 0.23
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "peacock teal",
+    "share": 0.18
+   }
+  ],
+  "map": "handloom"
+ },
+ "halfsaree": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "camel",
+    "share": 0.35
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "green",
+    "share": 0.25
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "emerald",
+    "share": 0.21
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "pink",
+    "share": 0.19
+   }
+  ],
+  "map": "halfsaree"
+ },
+ "gharara": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "ruby red",
+    "share": 0.34
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "camel",
+    "share": 0.22
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "wine",
+    "share": 0.2
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "pink",
+    "share": 0.19
+   }
+  ],
+  "map": "gharara"
+ },
+ "haldi": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Bottom",
+    "name": "antique gold",
+    "share": 0.55
+   },
+   {
+    "id": 2,
+    "seg": "Bottom",
+    "name": "champagne",
+    "share": 0.26
+   },
+   {
+    "id": 3,
+    "seg": "Bottom",
+    "name": "camel",
+    "share": 0.14
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "marigold",
+    "share": 0.32
+   },
+   {
+    "id": 5,
+    "seg": "Outfit",
+    "name": "champagne",
+    "share": 0.25
+   },
+   {
+    "id": 6,
+    "seg": "Outfit",
+    "name": "antique gold",
+    "share": 0.2
+   },
+   {
+    "id": 7,
+    "seg": "Outfit",
+    "name": "antique gold",
+    "share": 0.2
+   }
+  ],
+  "map": "haldi"
+ },
+ "anarkali": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "royal blue",
+    "share": 0.5
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "peacock teal",
+    "share": 0.22
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "navy",
+    "share": 0.17
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "denim blue",
+    "share": 0.07
+   }
+  ],
+  "map": "anarkali"
+ },
+ "sharara": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "camel",
+    "share": 0.33
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "brown",
+    "share": 0.28
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "brown",
+    "share": 0.2
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "black",
+    "share": 0.14
+   }
+  ],
+  "map": "sharara"
+ },
+ "chaniya": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Top",
+    "name": "wine",
+    "share": 0.42
+   },
+   {
+    "id": 2,
+    "seg": "Top",
+    "name": "camel",
+    "share": 0.22
+   },
+   {
+    "id": 3,
+    "seg": "Top",
+    "name": "emerald",
+    "share": 0.13
+   },
+   {
+    "id": 4,
+    "seg": "Top",
+    "name": "marigold",
+    "share": 0.1
+   },
+   {
+    "id": 5,
+    "seg": "Outfit",
+    "name": "wine",
+    "share": 0.37
+   },
+   {
+    "id": 6,
+    "seg": "Outfit",
+    "name": "antique gold",
+    "share": 0.24
+   },
+   {
+    "id": 7,
+    "seg": "Outfit",
+    "name": "brown",
+    "share": 0.18
+   },
+   {
+    "id": 8,
+    "seg": "Outfit",
+    "name": "emerald",
+    "share": 0.15
+   }
+  ],
+  "map": "chaniya"
+ },
+ "ruffle": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "blush pink",
+    "share": 0.65
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "grey",
+    "share": 0.25
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "denim blue",
+    "share": 0.08
+   }
+  ],
+  "map": "ruffle"
+ },
+ "patiala": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Bottom",
+    "name": "antique gold",
+    "share": 0.36
+   },
+   {
+    "id": 2,
+    "seg": "Bottom",
+    "name": "antique gold",
+    "share": 0.29
+   },
+   {
+    "id": 3,
+    "seg": "Bottom",
+    "name": "green",
+    "share": 0.16
+   },
+   {
+    "id": 4,
+    "seg": "Bottom",
+    "name": "brown",
+    "share": 0.14
+   },
+   {
+    "id": 5,
+    "seg": "Outfit",
+    "name": "antique gold",
+    "share": 0.51
+   },
+   {
+    "id": 6,
+    "seg": "Outfit",
+    "name": "ruby red",
+    "share": 0.39
+   },
+   {
+    "id": 7,
+    "seg": "Outfit",
+    "name": "brown",
+    "share": 0.08
+   }
+  ],
+  "map": "patiala"
+ },
+ "athleisure": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Top",
+    "name": "blush pink",
+    "share": 0.44
+   },
+   {
+    "id": 2,
+    "seg": "Top",
+    "name": "coral",
+    "share": 0.31
+   },
+   {
+    "id": 3,
+    "seg": "Top",
+    "name": "navy",
+    "share": 0.17
+   },
+   {
+    "id": 4,
+    "seg": "Top",
+    "name": "ruby red",
+    "share": 0.07
+   },
+   {
+    "id": 5,
+    "seg": "Bottom",
+    "name": "brown",
+    "share": 1
+   }
+  ],
+  "map": "athleisure"
+ },
+ "beltedsaree": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Top",
+    "name": "ivory",
+    "share": 1
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "burnt orange",
+    "share": 0.61
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "ruby red",
+    "share": 0.28
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "brown",
+    "share": 0.09
+   }
+  ],
+  "map": "beltedsaree"
+ },
+ "blockprint": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "marigold",
+    "share": 0.46
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "ivory",
+    "share": 0.23
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "camel",
+    "share": 0.07
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "emerald",
+    "share": 0.11
+   }
+  ],
+  "map": "blockprint"
+ },
+ "bodycon": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "pink",
+    "share": 1
+   }
+  ],
+  "map": "bodycon"
+ },
+ "boho": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "ruby red",
+    "share": 0.88
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "wine",
+    "share": 0.12
+   }
+  ],
+  "map": "boho"
+ },
+ "cape": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Top",
+    "name": "champagne",
+    "share": 0.7
+   },
+   {
+    "id": 2,
+    "seg": "Top",
+    "name": "camel",
+    "share": 0.25
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "silver",
+    "share": 0.33
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "champagne",
+    "share": 0.3
+   },
+   {
+    "id": 5,
+    "seg": "Outfit",
+    "name": "camel",
+    "share": 0.2
+   }
+  ],
+  "map": "cape"
+ },
+ "cropskirt": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Top",
+    "name": "coral",
+    "share": 0.55
+   },
+   {
+    "id": 2,
+    "seg": "Top",
+    "name": "champagne",
+    "share": 0.17
+   },
+   {
+    "id": 3,
+    "seg": "Top",
+    "name": "ruby red",
+    "share": 0.08
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "coral",
+    "share": 0.52
+   },
+   {
+    "id": 5,
+    "seg": "Outfit",
+    "name": "champagne",
+    "share": 0.21
+   },
+   {
+    "id": 6,
+    "seg": "Outfit",
+    "name": "wine",
+    "share": 0.13
+   },
+   {
+    "id": 7,
+    "seg": "Outfit",
+    "name": "ruby red",
+    "share": 0.08
+   }
+  ],
+  "map": "cropskirt"
+ },
+ "dhotijacket": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Top",
+    "name": "camel",
+    "share": 0.31
+   },
+   {
+    "id": 2,
+    "seg": "Top",
+    "name": "champagne",
+    "share": 0.2
+   },
+   {
+    "id": 3,
+    "seg": "Top",
+    "name": "black",
+    "share": 0.25
+   },
+   {
+    "id": 4,
+    "seg": "Top",
+    "name": "brown",
+    "share": 0.07
+   },
+   {
+    "id": 5,
+    "seg": "Outfit",
+    "name": "black",
+    "share": 0.58
+   },
+   {
+    "id": 6,
+    "seg": "Outfit",
+    "name": "champagne",
+    "share": 0.18
+   },
+   {
+    "id": 7,
+    "seg": "Outfit",
+    "name": "camel",
+    "share": 0.2
+   }
+  ],
+  "map": "dhotijacket"
+ },
+ "dhotikurta": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Bottom",
+    "name": "ivory",
+    "share": 0.86
+   },
+   {
+    "id": 2,
+    "seg": "Bottom",
+    "name": "silver",
+    "share": 0.14
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "peacock teal",
+    "share": 0.74
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "grey",
+    "share": 0.16
+   },
+   {
+    "id": 5,
+    "seg": "Outfit",
+    "name": "brown",
+    "share": 0.07
+   }
+  ],
+  "map": "dhotikurta"
+ },
+ "evening": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "navy",
+    "share": 0.4
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "black",
+    "share": 0.27
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "denim blue",
+    "share": 0.1
+   }
+  ],
+  "map": "evening"
+ },
+ "ikatcoord": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Top",
+    "name": "denim blue",
+    "share": 0.58
+   },
+   {
+    "id": 2,
+    "seg": "Top",
+    "name": "silver",
+    "share": 0.26
+   },
+   {
+    "id": 3,
+    "seg": "Top",
+    "name": "grey",
+    "share": 0.03
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "denim blue",
+    "share": 0.61
+   },
+   {
+    "id": 5,
+    "seg": "Outfit",
+    "name": "silver",
+    "share": 0.25
+   },
+   {
+    "id": 6,
+    "seg": "Outfit",
+    "name": "grey",
+    "share": 0.02
+   }
+  ],
+  "map": "ikatcoord"
+ },
+ "jumpsuit": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "royal blue",
+    "share": 0.91
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "royal blue",
+    "share": 0.08
+   }
+  ],
+  "map": "jumpsuit"
+ },
+ "kaftan": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "coral",
+    "share": 0.61
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "ruby red",
+    "share": 0.15
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "camel",
+    "share": 0.24
+   }
+  ],
+  "map": "kaftan"
+ },
+ "kurtajeans": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Bottom",
+    "name": "denim blue",
+    "share": 0.8
+   },
+   {
+    "id": 2,
+    "seg": "Bottom",
+    "name": "grey",
+    "share": 0.14
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "wine",
+    "share": 0.62
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "pink",
+    "share": 0.04
+   },
+   {
+    "id": 5,
+    "seg": "Outfit",
+    "name": "blush pink",
+    "share": 0.06
+   }
+  ],
+  "map": "kurtajeans"
+ },
+ "lbd": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "black",
+    "share": 1
+   }
+  ],
+  "map": "lbd"
+ },
+ "mekhela": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "champagne",
+    "share": 0.41
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "camel",
+    "share": 0.21
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "ruby red",
+    "share": 0.15
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "brown",
+    "share": 0.07
+   }
+  ],
+  "map": "mekhela"
+ },
+ "monocoord": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Top",
+    "name": "silver",
+    "share": 1
+   },
+   {
+    "id": 2,
+    "seg": "Bottom",
+    "name": "blush pink",
+    "share": 0.77
+   },
+   {
+    "id": 3,
+    "seg": "Bottom",
+    "name": "lavender",
+    "share": 0.22
+   }
+  ],
+  "map": "monocoord"
+ },
+ "offshoulder": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Top",
+    "name": "ivory",
+    "share": 1
+   },
+   {
+    "id": 2,
+    "seg": "Bottom",
+    "name": "ruby red",
+    "share": 1
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "ruby red",
+    "share": 0.86
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "ruby red",
+    "share": 0.12
+   }
+  ],
+  "map": "offshoulder"
+ },
+ "pantsuit": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Top",
+    "name": "navy",
+    "share": 0.61
+   },
+   {
+    "id": 2,
+    "seg": "Top",
+    "name": "silver",
+    "share": 0.22
+   },
+   {
+    "id": 3,
+    "seg": "Top",
+    "name": "black",
+    "share": 0.14
+   },
+   {
+    "id": 4,
+    "seg": "Bottom",
+    "name": "navy",
+    "share": 0.9
+   },
+   {
+    "id": 5,
+    "seg": "Bottom",
+    "name": "black",
+    "share": 0.08
+   }
+  ],
+  "map": "pantsuit"
+ },
+ "pencil": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Top",
+    "name": "ivory",
+    "share": 1
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "brown",
+    "share": 1
+   }
+  ],
+  "map": "pencil"
+ },
+ "pleated": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Top",
+    "name": "ivory",
+    "share": 1
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "grey",
+    "share": 0.96
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "brown",
+    "share": 0.07
+   }
+  ],
+  "map": "pleated"
+ },
+ "sareegown": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "denim blue",
+    "share": 0.46
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "denim blue",
+    "share": 0.18
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "grey",
+    "share": 0.18
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "black",
+    "share": 0.16
+   }
+  ],
+  "map": "sareegown"
+ },
+ "shirtdress": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "silver",
+    "share": 0.95
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "ivory",
+    "share": 0.07
+   }
+  ],
+  "map": "shirtdress"
+ },
+ "shrugset": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Top",
+    "name": "silver",
+    "share": 0.83
+   },
+   {
+    "id": 2,
+    "seg": "Top",
+    "name": "grey",
+    "share": 0.14
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "brown",
+    "share": 0.56
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "grey",
+    "share": 0.26
+   },
+   {
+    "id": 5,
+    "seg": "Outfit",
+    "name": "black",
+    "share": 0.18
+   }
+  ],
+  "map": "shrugset"
+ },
+ "silvermini": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "grey",
+    "share": 0.18
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "silver",
+    "share": 0.1
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "brown",
+    "share": 0.07
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "ivory",
+    "share": 0.09
+   }
+  ],
+  "map": "silvermini"
+ },
+ "slip": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "silver",
+    "share": 0.72
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "ivory",
+    "share": 0.28
+   }
+  ],
+  "map": "slip"
+ },
+ "smartdenim": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Top",
+    "name": "camel",
+    "share": 0.56
+   },
+   {
+    "id": 2,
+    "seg": "Top",
+    "name": "ivory",
+    "share": 0.24
+   },
+   {
+    "id": 3,
+    "seg": "Top",
+    "name": "camel",
+    "share": 0.19
+   },
+   {
+    "id": 4,
+    "seg": "Bottom",
+    "name": "denim blue",
+    "share": 0.77
+   },
+   {
+    "id": 5,
+    "seg": "Bottom",
+    "name": "grey",
+    "share": 0.19
+   }
+  ],
+  "map": "smartdenim"
+ },
+ "sundress": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "turmeric yellow",
+    "share": 0.46
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "champagne",
+    "share": 0.12
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "ivory",
+    "share": 0.17
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "camel",
+    "share": 0.12
+   }
+  ],
+  "map": "sundress"
+ },
+ "teejeans": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Top",
+    "name": "ruby red",
+    "share": 0.66
+   },
+   {
+    "id": 2,
+    "seg": "Top",
+    "name": "silver",
+    "share": 0.11
+   },
+   {
+    "id": 3,
+    "seg": "Top",
+    "name": "wine",
+    "share": 0.11
+   },
+   {
+    "id": 4,
+    "seg": "Bottom",
+    "name": "navy",
+    "share": 1
+   }
+  ],
+  "map": "teejeans"
+ },
+ "trench": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Bottom",
+    "name": "navy",
+    "share": 1
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "camel",
+    "share": 0.4
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "champagne",
+    "share": 0.33
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "brown",
+    "share": 0.12
+   },
+   {
+    "id": 5,
+    "seg": "Outfit",
+    "name": "black",
+    "share": 0.1
+   }
+  ],
+  "map": "trench"
+ },
+ "wrap": {
+  "parts": [
+   {
+    "id": 1,
+    "seg": "Outfit",
+    "name": "emerald",
+    "share": 0.39
+   },
+   {
+    "id": 2,
+    "seg": "Outfit",
+    "name": "silver",
+    "share": 0.17
+   },
+   {
+    "id": 3,
+    "seg": "Outfit",
+    "name": "grey",
+    "share": 0.09
+   },
+   {
+    "id": 4,
+    "seg": "Outfit",
+    "name": "brown",
+    "share": 0.12
+   }
+  ],
+  "map": "wrap"
+ }
+}

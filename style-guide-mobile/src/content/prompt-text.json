@@ -1,0 +1,25 @@
+{
+ "keep": "Keep EVERYTHING else exactly the same as the attached photo: the same woman, face, expression, hair, skin tone, body, pose, hand positions, camera angle, framing, crop, lighting and plain background, and the same image size. Do not move, resize or re-pose her. Photorealistic, no text, no watermark.",
+ "catRule": {
+  "bag": "Do not change the outfit.",
+  "shoes": "",
+  "earrings": "Remove the small stud earrings she is wearing. Do not change her hair.",
+  "necklace": "Wear it around her neck over the t-shirt. Do not change the t-shirt.",
+  "wrist": "Put it on her wrist on the LEFT side of the image only. Keep both hands exactly where they are.",
+  "rings": "Put them on the fingers of the hand on the LEFT side of the image only. Keep both hands exactly where they are.",
+  "head": "Keep her face, hair length and hairstyle otherwise unchanged.",
+  "eyewear": "Keep her face and expression unchanged.",
+  "belt": "Keep the t-shirt tucked in. Do not change the trousers.",
+  "scarf": "Do not change the outfit underneath."
+ },
+ "heroDefault": [
+  "banarasi",
+  "bridal",
+  "chaniya",
+  "ivorytee",
+  "anarkali",
+  "kanjeevaram",
+  "sharara",
+  "ruffle"
+ ]
+}

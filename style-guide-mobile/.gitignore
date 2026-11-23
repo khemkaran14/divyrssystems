@@ -1,0 +1,18 @@
+node_modules/
+.expo/
+dist/
+web-build/
+ios/
+android/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+.env*.local
+.DS_Store
+# The web app reference is re-created with `npm run resources` (read-only, never edited).
+resources/ultimate-style-guide-app/
+resources/*.zip
+coverage/

@@ -1,0 +1,86 @@
+[
+ {
+  "name": "Rani Pink + Marigold",
+  "a": "#E0115F",
+  "b": "#F4A300",
+  "usedFor": "Mehendi, haldi, Navratri",
+  "lookId": "patiala"
+ },
+ {
+  "name": "Wine + Antique Gold",
+  "a": "#7B1E3A",
+  "b": "#C9A04B",
+  "usedFor": "Weddings, Diwali, receptions",
+  "lookId": "banarasi"
+ },
+ {
+  "name": "Emerald + Magenta",
+  "a": "#0B6E4F",
+  "b": "#C2185B",
+  "usedFor": "Kanjeevaram sarees, festivals",
+  "lookId": "kanjeevaram"
+ },
+ {
+  "name": "Ivory + Gold",
+  "a": "#F5EBDC",
+  "b": "#C9A04B",
+  "usedFor": "Pooja, day weddings, Onam",
+  "lookId": "chikan"
+ },
+ {
+  "name": "Navy + Blush",
+  "a": "#1F2A55",
+  "b": "#F2B8C6",
+  "usedFor": "Office, interviews, dinner",
+  "lookId": "pantsuit"
+ },
+ {
+  "name": "Black + White",
+  "a": "#151515",
+  "b": "#FAFAFA",
+  "usedFor": "Anything, any time",
+  "lookId": "lbd"
+ },
+ {
+  "name": "Mustard + Teal",
+  "a": "#E1A21B",
+  "b": "#00796B",
+  "usedFor": "Kurta sets, college, brunch",
+  "lookId": "blockprint"
+ },
+ {
+  "name": "Lavender + Mint",
+  "a": "#B9A6E0",
+  "b": "#A8E6CF",
+  "usedFor": "Day sangeet, brunch, spring",
+  "lookId": "mirror"
+ },
+ {
+  "name": "Camel + Cream",
+  "a": "#C19A6B",
+  "b": "#F3E9DC",
+  "usedFor": "Office, travel, winter layers",
+  "lookId": "ivorytee"
+ },
+ {
+  "name": "Coral + Turquoise",
+  "a": "#FF6F59",
+  "b": "#1FB5AC",
+  "usedFor": "Beach, vacation, summer",
+  "lookId": "kaftan"
+ },
+ {
+  "name": "Red + Pink",
+  "a": "#D32F2F",
+  "b": "#F06292",
+  "usedFor": "Festive, Valentine’s, dates",
+  "lookId": "bridal"
+ },
+ {
+  "name": "Cobalt + Orange",
+  "a": "#1F4FD1",
+  "b": "#FF8A00",
+  "usedFor": "Parties, statement looks",
+  "lookId": "anarkali"
+ }
+]

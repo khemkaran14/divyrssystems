@@ -1,0 +1,99 @@
+[
+ {
+  "question": "Where are you going?",
+  "answers": [
+   {
+    "label": "Wedding or festival",
+    "value": [
+     "wedding",
+     "festive",
+     "pooja"
+    ]
+   },
+   {
+    "label": "Sangeet or party",
+    "value": [
+     "sangeet",
+     "party",
+     "cocktail"
+    ]
+   },
+   {
+    "label": "Office or interview",
+    "value": [
+     "office",
+     "interview"
+    ]
+   },
+   {
+    "label": "Date night",
+    "value": [
+     "date",
+     "cocktail"
+    ]
+   },
+   {
+    "label": "Brunch or day out",
+    "value": [
+     "brunch",
+     "college"
+    ]
+   },
+   {
+    "label": "Travel or beach",
+    "value": [
+     "travel",
+     "beach"
+    ]
+   },
+   {
+    "label": "Mehendi or haldi",
+    "value": [
+     "mehendi",
+     "haldi"
+    ]
+   },
+   {
+    "label": "Black-tie event",
+    "value": [
+     "formal",
+     "cocktail"
+    ]
+   }
+  ]
+ },
+ {
+  "question": "What’s your vibe?",
+  "answers": [
+   {
+    "label": "Traditional Indian",
+    "value": "ethnic"
+   },
+   {
+    "label": "Modern western",
+    "value": "western"
+   },
+   {
+    "label": "A bit of both",
+    "value": "fusion"
+   }
+  ]
+ },
+ {
+  "question": "How do you want to feel?",
+  "answers": [
+   {
+    "label": "Comfortable & easy",
+    "value": "easy"
+   },
+   {
+    "label": "Elegant & classic",
+    "value": "classic"
+   },
+   {
+    "label": "Bold & head-turning",
+    "value": "bold"
+   }
+  ]
+ }
+]

@@ -1,0 +1,162 @@
+[
+ {
+  "id": "wedding",
+  "name": "Wedding",
+  "subtitle": "Guest, bride & reception",
+  "colour": "#B0123B",
+  "dressing": "Go rich: silk, brocade, velvet and full-length silhouettes. Day weddings suit lighter silks and pastels; evening weddings can take jewel tones and heavier embroidery.",
+  "whatToWear": "Banarasi or Kanjeevaram sarees, lehengas, floor-length anarkalis, saree gowns for the reception.",
+  "avoid": "Bridal red if you are a guest, all-white or all-black at many Hindu weddings (check with the hosts), and short hemlines.",
+  "colours": "Emerald, wine, royal blue, rani pink, gold."
+ },
+ {
+  "id": "sangeet",
+  "name": "Sangeet",
+  "subtitle": "Music & dance night",
+  "colour": "#7B2CBF",
+  "dressing": "You will dance, so pick something light that moves and catches the light. Shimmer and sequins are welcome.",
+  "whatToWear": "Pre-draped or ruffle sarees, sharara sets, light lehengas, dhoti-pant sets, cape sets.",
+  "avoid": "Heavy trailing dupattas, stiff silk that restricts movement and very high heels.",
+  "colours": "Fuchsia, purple, silver, metallics."
+ },
+ {
+  "id": "mehendi",
+  "name": "Mehendi",
+  "subtitle": "Henna day",
+  "colour": "#2E7D32",
+  "dressing": "Comfort first: you will sit for a while with henna drying on your hands and feet.",
+  "whatToWear": "Mirror-work lehengas, sharara or gharara sets, short kurtas with palazzos.",
+  "avoid": "Long or tight sleeves (they smudge henna) and fabrics that show stains.",
+  "colours": "Greens, pastels, marigold, pink."
+ },
+ {
+  "id": "haldi",
+  "name": "Haldi",
+  "subtitle": "Turmeric ceremony",
+  "colour": "#E0A100",
+  "dressing": "Expect to get turmeric on you. Wear washable cotton or georgette you do not mind staining.",
+  "whatToWear": "Yellow kurta sets with gota work, simple cotton lehengas, floral jewellery.",
+  "avoid": "Expensive silk, white and anything dry-clean only.",
+  "colours": "Turmeric yellow, marigold, mustard, white with yellow."
+ },
+ {
+  "id": "festive",
+  "name": "Festivals",
+  "subtitle": "Diwali, Eid, Navratri, Onam, Puja",
+  "colour": "#E65100",
+  "dressing": "Traditional with a sense of celebration. Navratri means twirl-ready chaniya cholis, Onam means ivory and gold kasavu, Durga Puja means red and white.",
+  "whatToWear": "Silk sarees, anarkalis, sharara sets, chaniya cholis, kurta sets.",
+  "avoid": "Synthetic fabrics near diyas and candles, and dark dull colours.",
+  "colours": "Red, gold, orange, green, ivory."
+ },
+ {
+  "id": "pooja",
+  "name": "Pooja & Temple",
+  "subtitle": "Prayers & ceremonies",
+  "colour": "#BF360C",
+  "dressing": "Modest and traditional. Shoulders and knees covered, breathable fabric for sitting on the floor.",
+  "whatToWear": "Cotton or silk sarees, chikankari kurta sets, half sarees, mekhela chador.",
+  "avoid": "Leather belts and bags at many temples, sleeveless tops, short dresses.",
+  "colours": "Ivory, saffron, red, yellow, temple green."
+ },
+ {
+  "id": "office",
+  "name": "Office",
+  "subtitle": "Everyday work",
+  "colour": "#1F2A55",
+  "dressing": "Polished, comfortable and repeatable. Neat fits and solid colours with one print at most.",
+  "whatToWear": "Cotton kurta sets, handloom sarees, pantsuits, pencil skirts, shirt dresses, wrap dresses.",
+  "avoid": "Heavy embroidery, sheer fabric, sequins and very loud prints.",
+  "colours": "Navy, ivory, camel, grey, muted pastels."
+ },
+ {
+  "id": "interview",
+  "name": "Interview",
+  "subtitle": "First impressions",
+  "colour": "#37474F",
+  "dressing": "Look capable and calm. Structured pieces, neutral colours and minimal jewellery.",
+  "whatToWear": "Power pantsuit, pencil skirt with a silk blouse, a crisp kurta with straight pants.",
+  "avoid": "Bright prints, strong perfume and new shoes you have not broken in.",
+  "colours": "Navy, charcoal, white, blush."
+ },
+ {
+  "id": "date",
+  "name": "Date Night",
+  "subtitle": "Dinner for two",
+  "colour": "#C2185B",
+  "dressing": "Something you feel good in that is easy to sit and walk in. One standout detail is enough.",
+  "whatToWear": "Slip dress, wrap dress, jumpsuit, off-shoulder top with flares, the little black dress.",
+  "avoid": "Outfits you need to keep adjusting and shoes you cannot walk in.",
+  "colours": "Red, black, champagne, emerald."
+ },
+ {
+  "id": "brunch",
+  "name": "Brunch & Day Out",
+  "subtitle": "Daytime casual",
+  "colour": "#F4511E",
+  "dressing": "Fresh, relaxed and photo-friendly. Prints and light fabrics shine in daylight.",
+  "whatToWear": "Sundresses, co-ord sets, kurta with jeans, kaftans, pleated skirts.",
+  "avoid": "Heavy sequins and evening fabrics.",
+  "colours": "Pastels, florals, white, coral."
+ },
+ {
+  "id": "party",
+  "name": "Party & Night Out",
+  "subtitle": "Clubs & celebrations",
+  "colour": "#D81B60",
+  "dressing": "Go bold. Shine, cut-outs and strong colour all work after dark.",
+  "whatToWear": "Sequin minis, bodycon dresses, jumpsuits, party sarees, dhoti-pant sets.",
+  "avoid": "Daywear cottons that wrinkle and flat, dull colours.",
+  "colours": "Hot pink, cobalt, silver, black, gold."
+ },
+ {
+  "id": "cocktail",
+  "name": "Cocktail & Reception",
+  "subtitle": "Dressy evenings",
+  "colour": "#6A1B9A",
+  "dressing": "Between formal and party: elegant with some sparkle. Indo-western fusion is perfect here.",
+  "whatToWear": "Saree gowns, cape sets, satin slip dresses, sequin sarees, evening gowns.",
+  "avoid": "Very casual denim and overly bridal pieces.",
+  "colours": "Champagne, teal, wine, midnight blue."
+ },
+ {
+  "id": "formal",
+  "name": "Formal & Gala",
+  "subtitle": "Black-tie events",
+  "colour": "#0D3B8C",
+  "dressing": "Floor-length and refined. Fit matters more than embellishment.",
+  "whatToWear": "Evening gowns, mermaid gowns, Kanjeevaram sarees, saree gowns.",
+  "avoid": "Short hemlines, casual fabrics and chunky everyday sneakers.",
+  "colours": "Midnight blue, emerald, black, silver."
+ },
+ {
+  "id": "travel",
+  "name": "Travel",
+  "subtitle": "Airports & sightseeing",
+  "colour": "#00796B",
+  "dressing": "Layers, pockets and fabrics that do not crease. Comfortable shoes are not optional.",
+  "whatToWear": "Co-ords, kurta with jeans, trench coat over jeans, athleisure, maxi dresses.",
+  "avoid": "Delicate fabrics, lots of jewellery and stiff new shoes.",
+  "colours": "Neutrals, denim, olive, one bright accent."
+ },
+ {
+  "id": "college",
+  "name": "College & Everyday",
+  "subtitle": "Classes & hangouts",
+  "colour": "#3949AB",
+  "dressing": "Easy, expressive and budget-friendly. Mix basics so a few pieces make many outfits.",
+  "whatToWear": "Jeans with tees, kurta with jeans, block-print kurta sets, athleisure, pleated skirts.",
+  "avoid": "Anything precious you cannot sit on the grass in.",
+  "colours": "Anything you love: denim, white, bright accents."
+ },
+ {
+  "id": "beach",
+  "name": "Beach & Vacation",
+  "subtitle": "Sun, sand & resorts",
+  "colour": "#0097A7",
+  "dressing": "Breathable, flowy and quick-drying. Prints and bright colour look great against water and sand.",
+  "whatToWear": "Kaftans, boho maxi dresses, sundresses, linen co-ords.",
+  "avoid": "Heavy fabrics, dark colours that absorb heat and heels in sand.",
+  "colours": "Coral, turquoise, white, sunshine yellow."
+ }
+]

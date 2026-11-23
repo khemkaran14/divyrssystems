@@ -1,0 +1,1358 @@
+[
+ {
+  "id": "ivorytee",
+  "name": "Ivory Tee & Beige Trousers",
+  "category": "western",
+  "region": "Global",
+  "type": "jeans_top",
+  "palette": [
+   "#F4EEE4",
+   "#D8CBB8",
+   "#FFFFFF"
+  ],
+  "occasions": [
+   "office",
+   "travel",
+   "college",
+   "brunch"
+  ],
+  "mood": "easy",
+  "colourName": "ivory cotton tee with beige high-waist tailored trousers",
+  "description": "A fitted ivory tee tucked into high-waist pressed trousers with white sneakers. Clean, modern and right for almost any day.",
+  "pieces": [
+   "Fitted ivory crew-neck tee",
+   "Beige high-waist tailored trousers"
+  ],
+  "footwear": "White leather sneakers",
+  "accessories": "Small gold studs, a structured tote",
+  "tip": "Keep the tee fitted and fully tucked so the high waist of the trousers shows.",
+  "photo": "ivorytee",
+  "photoFit": "contain"
+ },
+ {
+  "id": "banarasi",
+  "name": "Banarasi Silk Saree",
+  "category": "ethnic",
+  "region": "Indian",
+  "type": "saree",
+  "palette": [
+   "#8E1538",
+   "#C9963A",
+   "#F2C14E"
+  ],
+  "occasions": [
+   "wedding",
+   "festive",
+   "pooja"
+  ],
+  "mood": "classic",
+  "colourName": "deep wine red silk with heavy gold zari",
+  "description": "A handwoven heirloom silk from Varanasi with dense gold brocade. The classic choice for weddings and big festivals.",
+  "pieces": [
+   "Banarasi silk saree with gold zari border",
+   "Gold brocade blouse with elbow sleeves",
+   "Satin petticoat"
+  ],
+  "footwear": "Gold embellished juttis or block heels",
+  "accessories": "Temple jewellery, jhumkas, gajra around the bun",
+  "tip": "Let the zari border be the star. Keep the blouse in a matching tone and stick to gold jewellery.",
+  "pattern": "brocade",
+  "photo": "banarasi"
+ },
+ {
+  "id": "kanjeevaram",
+  "name": "Kanjeevaram Silk Saree",
+  "category": "ethnic",
+  "region": "Indian",
+  "type": "saree",
+  "palette": [
+   "#0B6E4F",
+   "#C2185B",
+   "#E2B13C"
+  ],
+  "occasions": [
+   "wedding",
+   "pooja",
+   "festive",
+   "formal"
+  ],
+  "mood": "classic",
+  "colourName": "emerald green silk with a contrasting magenta and gold border",
+  "description": "Heavy mulberry silk woven in Kanchipuram, Tamil Nadu, famous for bold contrasting borders.",
+  "pieces": [
+   "Kanjeevaram silk saree with contrast border",
+   "Magenta silk blouse",
+   "Cotton petticoat"
+  ],
+  "footwear": "Gold kolhapuris or embellished sandals",
+  "accessories": "Kasu mala or temple necklace, jhumkas, jasmine in the braid",
+  "tip": "Contrast is the point: pick the blouse in the border colour, not the body colour.",
+  "pattern": "brocade",
+  "photo": "kanjeevaram"
+ },
+ {
+  "id": "partysaree",
+  "name": "Sequin Chiffon Party Saree",
+  "category": "ethnic",
+  "region": "Indian",
+  "type": "saree",
+  "palette": [
+   "#F3A6C0",
+   "#E87FA3",
+   "#FFFFFF"
+  ],
+  "occasions": [
+   "party",
+   "cocktail",
+   "sangeet"
+  ],
+  "mood": "bold",
+  "colourName": "blush pink chiffon covered in silver sequins",
+  "description": "Lightweight chiffon or georgette with all-over sequins. Drapes close to the body and sparkles under lights.",
+  "pieces": [
+   "Sequinned chiffon saree",
+   "Sleeveless sequinned blouse",
+   "Shapewear petticoat"
+  ],
+  "footwear": "Strappy metallic heels",
+  "accessories": "Statement diamond-look earrings, no necklace, a clutch",
+  "tip": "Pin the pleats tightly and keep the pallu narrow so the shimmer reads as a line.",
+  "pattern": "sequin",
+  "photo": "partysaree"
+ },
+ {
+  "id": "ruffle",
+  "name": "Pre-draped Ruffle Saree",
+  "category": "fusion",
+  "region": "Indian",
+  "type": "saree",
+  "palette": [
+   "#B79AE6",
+   "#8E6FD0",
+   "#E9DDFB"
+  ],
+  "occasions": [
+   "sangeet",
+   "cocktail",
+   "party"
+  ],
+  "mood": "bold",
+  "colourName": "lavender georgette with layered ruffles",
+  "description": "A ready-stitched saree with ruffle tiers. Zip in and go: no pleating skills needed and easy to dance in.",
+  "pieces": [
+   "Pre-draped ruffle saree",
+   "Cap-sleeve blouse",
+   "Built-in petticoat"
+  ],
+  "footwear": "Block heels or embellished flats",
+  "accessories": "Ear cuffs, a cocktail ring, a potli bag",
+  "tip": "Ruffles add volume, so keep hair sleek and jewellery minimal.",
+  "photo": "ruffle"
+ },
+ {
+  "id": "handloom",
+  "name": "Handloom Cotton Saree",
+  "category": "ethnic",
+  "region": "Indian",
+  "type": "saree",
+  "palette": [
+   "#2B3F8C",
+   "#F3EFE6",
+   "#E8E2D0"
+  ],
+  "occasions": [
+   "office",
+   "pooja",
+   "festive"
+  ],
+  "mood": "easy",
+  "colourName": "indigo block-printed cotton with an ivory blouse",
+  "description": "Breathable handloom cotton (think ikat, jamdani or dabu prints). Elegant enough for work, comfortable all day.",
+  "pieces": [
+   "Indigo handloom cotton saree",
+   "Ivory cotton blouse",
+   "Cotton petticoat"
+  ],
+  "footwear": "Kolhapuri chappals or loafers",
+  "accessories": "Oxidised silver jhumkas, a watch, a jute tote",
+  "tip": "Starch the saree lightly before draping so the pleats stay crisp till evening.",
+  "pattern": "block",
+  "photo": "handloom"
+ },
+ {
+  "id": "bridal",
+  "name": "Bridal Lehenga",
+  "category": "ethnic",
+  "region": "Indian",
+  "type": "lehenga",
+  "palette": [
+   "#B3122E",
+   "#9E0F28",
+   "#E3B04B"
+  ],
+  "occasions": [
+   "wedding"
+  ],
+  "mood": "bold",
+  "colourName": "bridal red velvet and silk with gold zardozi embroidery",
+  "description": "The full bridal look: heavy flared skirt, fitted blouse and a sheer embroidered dupatta, usually in red or deep pink.",
+  "pieces": [
+   "Embroidered red lehenga skirt with can-can",
+   "Matching zardozi blouse",
+   "Net dupatta with scalloped gold border"
+  ],
+  "footwear": "Embellished juttis or platform heels",
+  "accessories": "Choker and rani haar, maang tikka, nath, chooda and kaleere",
+  "tip": "Do a trial: the skirt alone can weigh 5 to 10 kg, so choose a can-can and footwear you can stand in for hours.",
+  "pattern": "brocade",
+  "photo": "bridal"
+ },
+ {
+  "id": "mirror",
+  "name": "Pastel Mirror-work Lehenga",
+  "category": "ethnic",
+  "region": "Indian",
+  "type": "lehenga",
+  "palette": [
+   "#A8E6CF",
+   "#FFD3B6",
+   "#F6A5C0"
+  ],
+  "occasions": [
+   "mehendi",
+   "sangeet",
+   "festive"
+  ],
+  "mood": "classic",
+  "colourName": "mint green with peach and pink mirror work",
+  "description": "Light pastel lehenga with tiny mirror and thread work. Fresh for daytime functions and easy to move in.",
+  "pieces": [
+   "Mint mirror-work lehenga skirt",
+   "Peach cap-sleeve blouse",
+   "Sheer peach dupatta"
+  ],
+  "footwear": "Embroidered juttis",
+  "accessories": "Floral or kundan jewellery, haath phool",
+  "tip": "Pastels photograph best in daylight. Add one deeper accent, like pink, so you do not look washed out.",
+  "pattern": "mirror",
+  "photo": "mirror"
+ },
+ {
+  "id": "chaniya",
+  "name": "Navratri Chaniya Choli",
+  "category": "ethnic",
+  "region": "Indian",
+  "type": "lehenga",
+  "palette": [
+   "#E53935",
+   "#F4A300",
+   "#00897B"
+  ],
+  "occasions": [
+   "festive",
+   "sangeet"
+  ],
+  "mood": "bold",
+  "colourName": "red, marigold and teal with mirror work",
+  "description": "The Gujarati garba outfit: a wide twirling skirt with mirrors, a backless choli and a bright odhni.",
+  "pieces": [
+   "Multi-colour mirror chaniya",
+   "Backless choli",
+   "Contrast odhni"
+  ],
+  "footwear": "Barefoot for garba or flat mojaris",
+  "accessories": "Oxidised silver jewellery, kamarbandh, ghungroo anklets",
+  "tip": "Pick a skirt with at least 6 to 8 metres of flare. That is what makes the twirl.",
+  "pattern": "mirror",
+  "photo": "chaniya"
+ },
+ {
+  "id": "anarkali",
+  "name": "Floor-length Anarkali",
+  "category": "ethnic",
+  "region": "Indian",
+  "type": "anarkali",
+  "palette": [
+   "#1E3A8A",
+   "#16296A",
+   "#E8C266"
+  ],
+  "occasions": [
+   "wedding",
+   "festive",
+   "cocktail"
+  ],
+  "mood": "classic",
+  "colourName": "royal blue with gold embroidery",
+  "description": "A fitted bodice that flares into a floor-length frock. Mughal in origin, regal and flattering on almost everyone.",
+  "pieces": [
+   "Royal blue anarkali kurta",
+   "Matching churidar",
+   "Organza dupatta"
+  ],
+  "footwear": "Embellished juttis or heels",
+  "accessories": "Polki chandbalis, a statement ring",
+  "tip": "Let the flare start at your natural waist to make the most of the shape.",
+  "pattern": "brocade",
+  "photo": "anarkali"
+ },
+ {
+  "id": "chikan",
+  "name": "Chikankari Kurta Set",
+  "category": "ethnic",
+  "region": "Indian",
+  "type": "kurta_pants",
+  "palette": [
+   "#FAF7F0",
+   "#E9DEC9",
+   "#D9CBB0"
+  ],
+  "occasions": [
+   "brunch",
+   "pooja",
+   "office",
+   "festive"
+  ],
+  "mood": "easy",
+  "colourName": "ivory white with tonal chikankari embroidery",
+  "description": "Hand-embroidered white-on-white work from Lucknow. Cool, graceful and works from office to family lunch.",
+  "pieces": [
+   "Chikankari straight kurta",
+   "Cigarette pants",
+   "Mulmul dupatta"
+  ],
+  "footwear": "Tan kolhapuris or nude flats",
+  "accessories": "Pearl or silver studs, a slim bangle",
+  "tip": "Wear a nude slip underneath: fine mulmul is sheer.",
+  "pattern": "chikan",
+  "photo": "chikan"
+ },
+ {
+  "id": "blockprint",
+  "name": "Block-print Kurta & Palazzo",
+  "category": "ethnic",
+  "region": "Indian",
+  "type": "kurta_palazzo",
+  "palette": [
+   "#E1A21B",
+   "#0E5E6F",
+   "#0E5E6F"
+  ],
+  "occasions": [
+   "office",
+   "college",
+   "brunch",
+   "travel"
+  ],
+  "mood": "easy",
+  "colourName": "mustard yellow with teal block print and off-white palazzos",
+  "description": "Hand block-printed cotton from Rajasthan paired with breezy palazzos. The everyday hero of Indian summers.",
+  "pieces": [
+   "Mustard block-print kurta",
+   "Off-white cotton palazzos"
+  ],
+  "footwear": "Juttis or white sneakers",
+  "accessories": "Oxidised jhumkas, a canvas tote",
+  "tip": "Wear a solid palazzo with a printed kurta (or the reverse) so the outfit has one focus.",
+  "pattern": "block",
+  "photo": "blockprint"
+ },
+ {
+  "id": "sharara",
+  "name": "Sharara Set",
+  "category": "ethnic",
+  "region": "Indian",
+  "type": "sharara",
+  "palette": [
+   "#0F5132",
+   "#0A3D25",
+   "#D4AF37"
+  ],
+  "occasions": [
+   "festive",
+   "mehendi",
+   "sangeet",
+   "wedding"
+  ],
+  "mood": "classic",
+  "colourName": "bottle green with antique gold embroidery",
+  "description": "A short kurta over wide pants that flare from the knee. A favourite for Eid and wedding functions.",
+  "pieces": [
+   "Embroidered short kurta",
+   "Flared sharara pants",
+   "Tissue dupatta"
+  ],
+  "footwear": "Embellished block heels (the flare needs a little height)",
+  "accessories": "Jhoomar or passa, chandbalis",
+  "tip": "Hem the sharara to just touch the floor with your heels on.",
+  "pattern": "brocade",
+  "photo": "sharara"
+ },
+ {
+  "id": "gharara",
+  "name": "Gharara Set",
+  "category": "ethnic",
+  "region": "Indian",
+  "type": "gharara",
+  "palette": [
+   "#E58FA8",
+   "#F7C9D4",
+   "#C9A04B"
+  ],
+  "occasions": [
+   "festive",
+   "wedding",
+   "mehendi"
+  ],
+  "mood": "classic",
+  "colourName": "rose pink with gold gota bands",
+  "description": "Like a sharara but gathered at the knee with a decorative band. A Lucknowi classic with old-world charm.",
+  "pieces": [
+   "Short rose-pink kurta",
+   "Gharara pants with gota knee band",
+   "Net dupatta"
+  ],
+  "footwear": "Gold juttis",
+  "accessories": "Kundan earrings, matha patti",
+  "tip": "The knee band is the signature, so keep the kurta short enough to show it.",
+  "pattern": "chikan",
+  "photo": "gharara"
+ },
+ {
+  "id": "patiala",
+  "name": "Patiala Salwar Suit",
+  "category": "ethnic",
+  "region": "Indian",
+  "type": "patiala",
+  "palette": [
+   "#D81B60",
+   "#C0CA33",
+   "#FFB300"
+  ],
+  "occasions": [
+   "festive",
+   "haldi",
+   "college"
+  ],
+  "mood": "bold",
+  "colourName": "fuchsia kurta with lime patiala and a marigold dupatta",
+  "description": "Punjab’s pleated, voluminous salwar with a short kurta and a bright phulkari-style dupatta.",
+  "pieces": [
+   "Short fuchsia kurta",
+   "Lime patiala salwar",
+   "Marigold phulkari dupatta"
+  ],
+  "footwear": "Punjabi juttis",
+  "accessories": "Paranda in the braid, chunky silver earrings",
+  "tip": "Three bold colours work here because the patiala is so traditional. Keep them all equally bright.",
+  "pattern": "dots",
+  "photo": "patiala"
+ },
+ {
+  "id": "haldi",
+  "name": "Haldi Gota Kurta Set",
+  "category": "ethnic",
+  "region": "Indian",
+  "type": "kurta_palazzo",
+  "palette": [
+   "#FFD60A",
+   "#F4A300",
+   "#F4A300"
+  ],
+  "occasions": [
+   "haldi",
+   "mehendi"
+  ],
+  "mood": "easy",
+  "colourName": "turmeric yellow with gold gota lace",
+  "description": "Sunny yellow cotton with shiny gota lace. Made for the haldi ceremony and fine to stain.",
+  "pieces": [
+   "Sleeveless yellow kurta with gota trim",
+   "Pale yellow palazzos",
+   "Optional mul dupatta"
+  ],
+  "footwear": "Flat sandals you can wash",
+  "accessories": "Fresh flower jewellery",
+  "tip": "Rent or buy budget for this one. Turmeric rarely washes out completely.",
+  "pattern": "floral",
+  "photo": "haldi"
+ },
+ {
+  "id": "halfsaree",
+  "name": "Half Saree (Langa Voni)",
+  "category": "ethnic",
+  "region": "Indian",
+  "type": "halfsaree",
+  "palette": [
+   "#2E7D32",
+   "#E91E63",
+   "#E2B13C"
+  ],
+  "occasions": [
+   "festive",
+   "pooja",
+   "wedding"
+  ],
+  "mood": "classic",
+  "colourName": "parrot green silk skirt with a pink voni and gold border",
+  "description": "South India’s pattu pavadai with a draped half-saree (voni). Youthful and traditional.",
+  "pieces": [
+   "Silk langa (skirt) with zari border",
+   "Contrast blouse",
+   "Draped voni"
+  ],
+  "footwear": "Gold sandals",
+  "accessories": "Temple jewellery, oddiyanam waist belt, jasmine",
+  "tip": "Match the voni to the blouse and let the skirt be the contrast.",
+  "pattern": "brocade",
+  "photo": "halfsaree"
+ },
+ {
+  "id": "mekhela",
+  "name": "Mekhela Chador",
+  "category": "ethnic",
+  "region": "Indian",
+  "type": "saree",
+  "palette": [
+   "#F3E7C9",
+   "#B71C1C",
+   "#B71C1C"
+  ],
+  "occasions": [
+   "festive",
+   "pooja",
+   "wedding"
+  ],
+  "mood": "classic",
+  "colourName": "golden muga silk with red woven motifs",
+  "description": "Assam’s two-piece drape in muga or pat silk: a wrapped skirt (mekhela) and a chador across the shoulder.",
+  "pieces": [
+   "Muga silk mekhela",
+   "Chador with red motifs",
+   "Red blouse"
+  ],
+  "footwear": "Simple gold sandals",
+  "accessories": "Jonbiri and dugdugi necklaces, gamkharu bangles",
+  "tip": "Wear it for Bihu with red-and-gold jewellery for the most authentic look.",
+  "pattern": "dots",
+  "photo": "mekhela"
+ },
+ {
+  "id": "dhotikurta",
+  "name": "Dhoti Pants & Short Kurta",
+  "category": "fusion",
+  "region": "Indian",
+  "type": "dhoti",
+  "palette": [
+   "#00796B",
+   "#F3E9DC",
+   "#E1A21B"
+  ],
+  "occasions": [
+   "college",
+   "festive",
+   "travel"
+  ],
+  "mood": "easy",
+  "colourName": "teal ikat kurta with ivory dhoti pants",
+  "description": "Draped dhoti pants with a short kurta. Relaxed, playful and easy to move in.",
+  "pieces": [
+   "Teal ikat short kurta",
+   "Ivory dhoti pants"
+  ],
+  "footwear": "Kolhapuris or white sneakers",
+  "accessories": "Silver hoops, a cross-body bag",
+  "tip": "Keep the kurta above mid-thigh so the drape of the dhoti shows.",
+  "pattern": "ikat",
+  "photo": "dhotikurta"
+ },
+ {
+  "id": "cape",
+  "name": "Cape Lehenga Set",
+  "category": "fusion",
+  "region": "Indian",
+  "type": "cape",
+  "palette": [
+   "#F5EBDC",
+   "#E8D3A8",
+   "#C9A04B"
+  ],
+  "occasions": [
+   "cocktail",
+   "sangeet",
+   "wedding"
+  ],
+  "mood": "classic",
+  "colourName": "ivory and champagne with gold sequins and a sheer cape",
+  "description": "A lehenga skirt and bustier finished with a sheer embellished cape instead of a dupatta. Modern and hands-free.",
+  "pieces": [
+   "Sequinned champagne skirt",
+   "Bustier blouse",
+   "Sheer ivory cape with gold border"
+  ],
+  "footwear": "Gold heels",
+  "accessories": "Statement earrings only",
+  "tip": "The cape replaces the dupatta. Never wear both.",
+  "pattern": "sequin",
+  "photo": "cape"
+ },
+ {
+  "id": "sareegown",
+  "name": "Saree Gown",
+  "category": "fusion",
+  "region": "Global",
+  "type": "sareegown",
+  "palette": [
+   "#00796B",
+   "#1FB5AC",
+   "#E2C275"
+  ],
+  "occasions": [
+   "cocktail",
+   "wedding",
+   "formal"
+  ],
+  "mood": "classic",
+  "colourName": "deep teal gown with a sheer aqua pallu and gold edging",
+  "description": "A gown with an attached pallu: the grace of a saree with the ease of a dress. Loved at receptions abroad and in India.",
+  "pieces": [
+   "Teal saree gown with attached drape"
+  ],
+  "footwear": "Strappy heels",
+  "accessories": "Drop earrings, a sleek clutch",
+  "tip": "Ideal if you love sarees but not draping. Pin the pallu at the shoulder for security.",
+  "photo": "sareegown"
+ },
+ {
+  "id": "dhotijacket",
+  "name": "Dhoti Pants, Crop & Long Jacket",
+  "category": "fusion",
+  "region": "Indian",
+  "type": "dhotijacket",
+  "palette": [
+   "#C9A04B",
+   "#151515",
+   "#5A3E12"
+  ],
+  "occasions": [
+   "sangeet",
+   "party",
+   "cocktail"
+  ],
+  "mood": "bold",
+  "colourName": "black crop and dhoti pants under a gold brocade jacket",
+  "description": "Black dhoti pants and crop top under a long brocade waistcoat. Sharp and dance-floor ready.",
+  "pieces": [
+   "Gold brocade long jacket",
+   "Black crop top",
+   "Black dhoti pants"
+  ],
+  "footwear": "Metallic block heels",
+  "accessories": "Ear cuffs, stacked rings",
+  "tip": "Belt the jacket at the waist to show your shape.",
+  "pattern": "brocade",
+  "photo": "dhotijacket"
+ },
+ {
+  "id": "kurtajeans",
+  "name": "Short Kurta with Jeans",
+  "category": "fusion",
+  "region": "Indian",
+  "type": "kurta_jeans",
+  "palette": [
+   "#C2185B",
+   "#3D5A80",
+   "#F4A300"
+  ],
+  "occasions": [
+   "college",
+   "travel",
+   "brunch"
+  ],
+  "mood": "easy",
+  "colourName": "magenta block-print kurti with blue jeans",
+  "description": "The college staple: a short printed kurti over straight or skinny jeans.",
+  "pieces": [
+   "Magenta printed short kurti",
+   "Mid-wash straight jeans"
+  ],
+  "footwear": "White sneakers or kolhapuris",
+  "accessories": "Silver jhumkas, a tote",
+  "tip": "Roll the jeans once at the ankle to show off your footwear.",
+  "pattern": "block",
+  "photo": "kurtajeans"
+ },
+ {
+  "id": "cropskirt",
+  "name": "Printed Crop Top & Flared Skirt",
+  "category": "fusion",
+  "region": "Indian",
+  "type": "coord_skirt",
+  "palette": [
+   "#FF7043",
+   "#FFE0B2",
+   "#5D4037"
+  ],
+  "occasions": [
+   "college",
+   "festive",
+   "brunch"
+  ],
+  "mood": "classic",
+  "colourName": "orange ikat crop top and matching flared midi skirt",
+  "description": "A matching crop top and flared skirt in an Indian print. Works for college fests and Diwali parties alike.",
+  "pieces": [
+   "Ikat crop top",
+   "Matching flared midi skirt"
+  ],
+  "footwear": "Juttis or block heels",
+  "accessories": "Oxidised choker, bangles",
+  "tip": "Show only a sliver of midriff for a festive-friendly look.",
+  "pattern": "ikat",
+  "photo": "cropskirt"
+ },
+ {
+  "id": "ikatcoord",
+  "name": "Ikat Co-ord Set",
+  "category": "fusion",
+  "region": "Indian",
+  "type": "coord",
+  "palette": [
+   "#283593",
+   "#E8EAF6",
+   "#E53935"
+  ],
+  "occasions": [
+   "brunch",
+   "travel",
+   "office"
+  ],
+  "mood": "easy",
+  "colourName": "indigo and white ikat crop top with matching wide pants",
+  "description": "A handwoven ikat top and wide pants in one print. One decision, a complete outfit.",
+  "pieces": [
+   "Ikat crop or boxy top",
+   "Matching wide-leg pants"
+  ],
+  "footwear": "Slides or loafers",
+  "accessories": "Wooden or silver hoops",
+  "tip": "Swap the top for a white tee on lazy days to get two outfits from one set.",
+  "pattern": "ikat",
+  "photo": "ikatcoord"
+ },
+ {
+  "id": "kaftan",
+  "name": "Embroidered Kaftan",
+  "category": "fusion",
+  "region": "Global",
+  "type": "kaftan",
+  "palette": [
+   "#FF6F59",
+   "#FFD8C9",
+   "#E2B13C"
+  ],
+  "occasions": [
+   "festive",
+   "brunch",
+   "beach"
+  ],
+  "mood": "easy",
+  "colourName": "coral kaftan with gold embroidered hem",
+  "description": "A loose, flowing kaftan that suits Eid lunches, resort holidays and lazy brunches.",
+  "pieces": [
+   "Floor-length coral kaftan"
+  ],
+  "footwear": "Flat sandals",
+  "accessories": "Statement earrings, sunglasses",
+  "tip": "Belt it loosely if you want more shape.",
+  "pattern": "floral",
+  "photo": "kaftan"
+ },
+ {
+  "id": "shrugset",
+  "name": "Draped Skirt & Sheer Shrug",
+  "category": "fusion",
+  "region": "Global",
+  "type": "shrugset",
+  "palette": [
+   "#4A148C",
+   "#CE93D8",
+   "#E2B13C"
+  ],
+  "occasions": [
+   "cocktail",
+   "sangeet",
+   "party"
+  ],
+  "mood": "bold",
+  "colourName": "plum draped skirt with a lilac embellished blouse and long shrug",
+  "description": "An embellished fitted blouse and draped skirt finished with a floor-length shrug. Glamorous but not heavy.",
+  "pieces": [
+   "Embellished lilac blouse",
+   "Draped plum skirt",
+   "Long lilac shrug"
+  ],
+  "footwear": "Strappy heels",
+  "accessories": "Long drop earrings",
+  "tip": "Keep the blouse fitted so the long shrug falls in a clean line.",
+  "pattern": "sequin",
+  "photo": "shrugset"
+ },
+ {
+  "id": "beltedsaree",
+  "name": "Belted Saree with Shirt Blouse",
+  "category": "fusion",
+  "region": "Indian",
+  "type": "saree",
+  "palette": [
+   "#E65100",
+   "#FFF1E0",
+   "#3E2723"
+  ],
+  "occasions": [
+   "festive",
+   "party",
+   "office"
+  ],
+  "mood": "bold",
+  "colourName": "burnt orange saree with a white shirt blouse and a brown leather belt",
+  "description": "A plain saree worn with a crisp full-sleeve shirt and a waist belt. Modern and office-party ready.",
+  "pieces": [
+   "Plain burnt-orange saree",
+   "White cotton shirt blouse",
+   "Leather waist belt"
+  ],
+  "footwear": "Loafers or block heels",
+  "accessories": "A watch, gold hoops",
+  "tip": "Belt over the pallu at the waist to hold everything neatly in place.",
+  "photo": "beltedsaree"
+ },
+ {
+  "id": "lbd",
+  "name": "The Little Black Dress",
+  "category": "western",
+  "region": "Global",
+  "type": "dress",
+  "palette": [
+   "#151515",
+   "#151515",
+   "#D4AF37"
+  ],
+  "occasions": [
+   "party",
+   "date",
+   "cocktail"
+  ],
+  "mood": "classic",
+  "colourName": "black sheath dress",
+  "description": "Coco Chanel’s timeless idea: a simple black dress you can dress up or down.",
+  "pieces": [
+   "Black knee-length sheath dress"
+  ],
+  "footwear": "Black pumps or strappy heels",
+  "accessories": "Gold hoops, a structured mini bag",
+  "tip": "Change the accessories and it goes from office dinner to party.",
+  "photo": "lbd"
+ },
+ {
+  "id": "pantsuit",
+  "name": "Power Pantsuit",
+  "category": "western",
+  "region": "Global",
+  "type": "suit",
+  "palette": [
+   "#1F2A55",
+   "#F2B8C6",
+   "#C9A04B"
+  ],
+  "occasions": [
+   "interview",
+   "office",
+   "formal"
+  ],
+  "mood": "classic",
+  "colourName": "navy tailored suit with a blush silk top",
+  "description": "A tailored blazer and matching trousers. The most confident outfit for interviews and presentations.",
+  "pieces": [
+   "Navy single-breasted blazer",
+   "Matching straight trousers",
+   "Blush silk camisole"
+  ],
+  "footwear": "Pointed pumps or loafers",
+  "accessories": "Small studs, a slim watch, a structured tote",
+  "tip": "Get the blazer shoulders tailored. Shoulder fit is the one thing a tailor cannot easily fix later.",
+  "photo": "pantsuit"
+ },
+ {
+  "id": "pencil",
+  "name": "Pencil Skirt & Silk Blouse",
+  "category": "western",
+  "region": "Global",
+  "type": "pencil",
+  "palette": [
+   "#F2E8DA",
+   "#2D2D2D",
+   "#C9A04B"
+  ],
+  "occasions": [
+   "office",
+   "interview"
+  ],
+  "mood": "classic",
+  "colourName": "ivory silk blouse with a charcoal pencil skirt",
+  "description": "A tucked silk blouse with a knee-length pencil skirt. Polished and feminine.",
+  "pieces": [
+   "Ivory silk blouse",
+   "Charcoal pencil skirt"
+  ],
+  "footwear": "Tan pumps",
+  "accessories": "Pearl studs, a thin belt",
+  "tip": "Choose a skirt with a back slit so you can walk comfortably.",
+  "photo": "pencil"
+ },
+ {
+  "id": "wrap",
+  "name": "Wrap Dress",
+  "category": "western",
+  "region": "Global",
+  "type": "dress",
+  "palette": [
+   "#0B6E4F",
+   "#7BC8A4",
+   "#E2B13C"
+  ],
+  "occasions": [
+   "office",
+   "brunch",
+   "date"
+  ],
+  "mood": "classic",
+  "colourName": "emerald floral wrap dress",
+  "description": "Diane von Furstenberg’s 1974 classic: ties at the waist and flatters nearly every body type.",
+  "pieces": [
+   "Emerald printed wrap midi dress"
+  ],
+  "footwear": "Nude block heels",
+  "accessories": "Gold pendant, a top-handle bag",
+  "tip": "Wear a camisole underneath if the neckline sits too low for work.",
+  "pattern": "floral",
+  "photo": "wrap"
+ },
+ {
+  "id": "sundress",
+  "name": "Floral Sundress",
+  "category": "western",
+  "region": "Global",
+  "type": "dress",
+  "palette": [
+   "#FFD54F",
+   "#FFFFFF",
+   "#E57373"
+  ],
+  "occasions": [
+   "brunch",
+   "beach",
+   "travel"
+  ],
+  "mood": "easy",
+  "colourName": "sunshine yellow sundress with white and coral flowers",
+  "description": "Light cotton with thin straps and a cheerful print. Pure summer.",
+  "pieces": [
+   "Yellow floral strappy sundress"
+  ],
+  "footwear": "Flat sandals or espadrilles",
+  "accessories": "Straw bag, sunglasses",
+  "tip": "Add a denim jacket for evenings or air-conditioned cafés.",
+  "pattern": "floral",
+  "photo": "sundress"
+ },
+ {
+  "id": "boho",
+  "name": "Boho Tiered Maxi",
+  "category": "western",
+  "region": "Global",
+  "type": "maxi",
+  "palette": [
+   "#B5502A",
+   "#E9A66B",
+   "#F4E1C1"
+  ],
+  "occasions": [
+   "beach",
+   "travel",
+   "brunch"
+  ],
+  "mood": "easy",
+  "colourName": "rust tiered maxi dress",
+  "description": "A flowing tiered maxi in earthy rust. Effortless for holidays, hill stations and festivals.",
+  "pieces": [
+   "Rust tiered maxi dress"
+  ],
+  "footwear": "Gladiator sandals",
+  "accessories": "Layered necklaces, a fringe bag",
+  "tip": "Cinch it with a skinny tan belt to keep the volume from overwhelming you.",
+  "photo": "boho"
+ },
+ {
+  "id": "smartdenim",
+  "name": "Smart-casual Denim & Blazer",
+  "category": "western",
+  "region": "Global",
+  "type": "jeans_top",
+  "palette": [
+   "#FFFFFF",
+   "#3D5A80",
+   "#C19A6B"
+  ],
+  "occasions": [
+   "office",
+   "college",
+   "travel",
+   "brunch"
+  ],
+  "mood": "classic",
+  "colourName": "white tee, mid-blue jeans and a camel blazer",
+  "description": "A white tee and straight jeans with a blazer thrown on top. The smartest casual outfit there is.",
+  "pieces": [
+   "Camel blazer",
+   "White crew-neck tee",
+   "Straight mid-wash jeans"
+  ],
+  "footwear": "White leather sneakers or loafers",
+  "accessories": "Gold chain, a tote",
+  "tip": "Push the blazer sleeves up slightly to keep it relaxed.",
+  "photo": "smartdenim"
+ },
+ {
+  "id": "teejeans",
+  "name": "Graphic Tee & Straight Jeans",
+  "category": "western",
+  "region": "Global",
+  "type": "jeans_top",
+  "palette": [
+   "#E53935",
+   "#2F4B7C",
+   "#FAFAFA"
+  ],
+  "occasions": [
+   "college",
+   "travel",
+   "brunch"
+  ],
+  "mood": "easy",
+  "colourName": "red graphic tee with dark straight jeans",
+  "description": "The default weekend outfit. Simple, comfortable and easy to personalise.",
+  "pieces": [
+   "Red graphic t-shirt",
+   "Dark straight-leg jeans"
+  ],
+  "footwear": "Canvas sneakers",
+  "accessories": "Cap, backpack",
+  "tip": "Half-tuck the tee at the front to define your waist.",
+  "photo": "teejeans"
+ },
+ {
+  "id": "jumpsuit",
+  "name": "Wide-leg Jumpsuit",
+  "category": "western",
+  "region": "Global",
+  "type": "jumpsuit",
+  "palette": [
+   "#1F4FD1",
+   "#1F4FD1",
+   "#E2B13C"
+  ],
+  "occasions": [
+   "party",
+   "date",
+   "office",
+   "cocktail"
+  ],
+  "mood": "bold",
+  "colourName": "cobalt blue halter jumpsuit with a gold belt",
+  "description": "One piece, wide legs, instant glamour. Works from boardroom to dinner with a change of shoes.",
+  "pieces": [
+   "Cobalt halter wide-leg jumpsuit",
+   "Gold belt"
+  ],
+  "footwear": "Platform heels (wide legs need height)",
+  "accessories": "Gold cuff, bold lip",
+  "tip": "Make sure the crotch length is right. A jumpsuit that pulls is never comfortable.",
+  "photo": "jumpsuit"
+ },
+ {
+  "id": "slip",
+  "name": "Satin Slip Dress",
+  "category": "western",
+  "region": "Global",
+  "type": "dress",
+  "palette": [
+   "#E8C9A0",
+   "#F5E3C8",
+   "#C9A04B"
+  ],
+  "occasions": [
+   "date",
+   "cocktail",
+   "party"
+  ],
+  "mood": "classic",
+  "colourName": "champagne satin bias-cut slip dress",
+  "description": "A 90s minimalist favourite. Bias-cut satin that skims the body.",
+  "pieces": [
+   "Champagne satin slip midi"
+  ],
+  "footwear": "Strappy heeled sandals",
+  "accessories": "Fine gold chain, a small shoulder bag",
+  "tip": "Steam, never iron, satin. Layer a blazer over it for cooler nights.",
+  "photo": "slip"
+ },
+ {
+  "id": "evening",
+  "name": "Sequin Mermaid Gown",
+  "category": "western",
+  "region": "Global",
+  "type": "mermaid",
+  "palette": [
+   "#0D3B8C",
+   "#2856C8",
+   "#C0C0C0"
+  ],
+  "occasions": [
+   "formal",
+   "cocktail",
+   "wedding"
+  ],
+  "mood": "bold",
+  "colourName": "midnight blue sequin mermaid gown",
+  "description": "Fitted through the hips and flaring at the knee. The red-carpet silhouette.",
+  "pieces": [
+   "Midnight-blue sequin mermaid gown"
+  ],
+  "footwear": "Silver heels",
+  "accessories": "Diamond-look drops, a minaudière clutch",
+  "tip": "Practise walking and sitting in it before the event.",
+  "pattern": "sequin",
+  "photo": "evening"
+ },
+ {
+  "id": "bodycon",
+  "name": "Bodycon Mini Dress",
+  "category": "western",
+  "region": "Global",
+  "type": "dress",
+  "palette": [
+   "#E91E63",
+   "#E91E63",
+   "#FFD54F"
+  ],
+  "occasions": [
+   "party"
+  ],
+  "mood": "bold",
+  "colourName": "hot pink bodycon mini",
+  "description": "Stretchy, close-fitting and short. Made for a night out.",
+  "pieces": [
+   "Hot pink bodycon mini dress"
+  ],
+  "footwear": "Yellow strappy heels or chunky boots",
+  "accessories": "Hoops, a mini bag",
+  "tip": "Choose a thick, structured knit so it holds shape and is not see-through.",
+  "photo": "bodycon"
+ },
+ {
+  "id": "monocoord",
+  "name": "Monochrome Co-ord",
+  "category": "western",
+  "region": "Global",
+  "type": "coord",
+  "palette": [
+   "#B9A6E0",
+   "#B9A6E0",
+   "#FFFFFF"
+  ],
+  "occasions": [
+   "brunch",
+   "travel",
+   "office"
+  ],
+  "mood": "easy",
+  "colourName": "lilac matching top and wide trousers",
+  "description": "Top and trousers in the same colour. Looks put together with zero effort.",
+  "pieces": [
+   "Lilac boxy top",
+   "Matching wide trousers"
+  ],
+  "footwear": "White sneakers or mules",
+  "accessories": "Silver hoops, sunglasses",
+  "tip": "Same colour, different textures (knit with linen, say) makes it look expensive.",
+  "photo": "monocoord"
+ },
+ {
+  "id": "trench",
+  "name": "Trench Coat Layering",
+  "category": "western",
+  "region": "Global",
+  "type": "coat",
+  "palette": [
+   "#C19A6B",
+   "#2F4B7C",
+   "#F3E9DC"
+  ],
+  "occasions": [
+   "travel",
+   "office"
+  ],
+  "mood": "classic",
+  "colourName": "camel trench coat over a cream knit and dark jeans",
+  "description": "A belted camel trench over jeans and a knit. The classic for London, Paris or a Delhi winter.",
+  "pieces": [
+   "Camel belted trench coat",
+   "Cream knit top",
+   "Dark skinny jeans"
+  ],
+  "footwear": "Ankle boots",
+  "accessories": "Scarf, leather crossbody",
+  "tip": "Tie the belt at the back when you wear it open.",
+  "photo": "trench"
+ },
+ {
+  "id": "athleisure",
+  "name": "Athleisure Set",
+  "category": "western",
+  "region": "Global",
+  "type": "athleisure",
+  "palette": [
+   "#FF8A65",
+   "#37474F",
+   "#FFFFFF"
+  ],
+  "occasions": [
+   "travel",
+   "college"
+  ],
+  "mood": "easy",
+  "colourName": "coral crop hoodie with charcoal joggers",
+  "description": "A cropped hoodie and joggers. Comfortable enough for a long flight, smart enough for a coffee run.",
+  "pieces": [
+   "Coral crop hoodie",
+   "Charcoal joggers"
+  ],
+  "footwear": "Chunky sneakers",
+  "accessories": "Cap, belt bag",
+  "tip": "Matching sets look more intentional than random gym clothes.",
+  "photo": "athleisure"
+ },
+ {
+  "id": "pleated",
+  "name": "Pleated Midi & Knit",
+  "category": "western",
+  "region": "Global",
+  "type": "skirt_top",
+  "palette": [
+   "#F3E9DC",
+   "#A1887F",
+   "#5D4037"
+  ],
+  "occasions": [
+   "college",
+   "brunch",
+   "office"
+  ],
+  "mood": "easy",
+  "colourName": "cream knit with a mocha pleated midi skirt",
+  "description": "A soft knit tucked into a pleated midi. The polished Korean-minimal look.",
+  "pieces": [
+   "Cream fitted knit",
+   "Mocha pleated midi skirt"
+  ],
+  "footwear": "Loafers or Mary Janes",
+  "accessories": "Pearl earrings, a shoulder bag",
+  "tip": "Tuck only the front of the knit to keep the waist visible without bulk.",
+  "photo": "pleated"
+ },
+ {
+  "id": "silvermini",
+  "name": "Silver Sequin Mini",
+  "category": "western",
+  "region": "Global",
+  "type": "dress",
+  "palette": [
+   "#C8C8C8",
+   "#9E9E9E",
+   "#FFFFFF"
+  ],
+  "occasions": [
+   "party",
+   "cocktail"
+  ],
+  "mood": "bold",
+  "colourName": "silver sequin long-sleeve mini dress",
+  "description": "Long sleeves balance the short hem. The New Year’s Eve dress.",
+  "pieces": [
+   "Silver sequin long-sleeve mini"
+  ],
+  "footwear": "Black or silver heels",
+  "accessories": "Very minimal: the dress is the jewellery",
+  "tip": "Long sleeves plus a short hem looks more polished than a short and strappy combo.",
+  "pattern": "sequin",
+  "photo": "silvermini"
+ },
+ {
+  "id": "offshoulder",
+  "name": "Off-shoulder Top & Flares",
+  "category": "western",
+  "region": "Global",
+  "type": "offshoulder",
+  "palette": [
+   "#FFFFFF",
+   "#C62828",
+   "#F4A300"
+  ],
+  "occasions": [
+   "date",
+   "party",
+   "brunch"
+  ],
+  "mood": "bold",
+  "colourName": "white ruffled off-shoulder top with red flared trousers",
+  "description": "A ruffled off-shoulder top with high-waisted flared trousers. Retro and flattering.",
+  "pieces": [
+   "White off-shoulder ruffle top",
+   "Red high-waist flared trousers"
+  ],
+  "footwear": "Platform heels",
+  "accessories": "Statement earrings (no necklace)",
+  "tip": "Show off the collarbones: skip the necklace and go for bold earrings.",
+  "photo": "offshoulder"
+ },
+ {
+  "id": "shirtdress",
+  "name": "Belted Shirt Dress",
+  "category": "western",
+  "region": "Global",
+  "type": "dress",
+  "palette": [
+   "#7FB3D5",
+   "#FFFFFF",
+   "#5D4037"
+  ],
+  "occasions": [
+   "office",
+   "brunch",
+   "travel"
+  ],
+  "mood": "easy",
+  "colourName": "blue and white striped shirt dress with a brown belt",
+  "description": "A button-down shirt stretched into a dress. Crisp and grown-up.",
+  "pieces": [
+   "Striped cotton shirt dress",
+   "Brown leather belt"
+  ],
+  "footwear": "Loafers or white sneakers",
+  "accessories": "Watch, tote",
+  "tip": "Unbutton the bottom two buttons for easier walking.",
+  "pattern": "vstripes",
+  "photo": "shirtdress"
+ }
+]

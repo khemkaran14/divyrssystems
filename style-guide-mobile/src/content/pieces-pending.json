@@ -1,0 +1,16 @@
+[
+ {
+  "id": "s-sandals-flat",
+  "name": "Flat tan sandals",
+  "category": "shoes",
+  "desc": "flat tan leather strappy sandals",
+  "prompt": "Edit the attached photo. Replace ONLY the white sneakers with flat tan leather strappy sandals. Keep the outfit unchanged. Keep EVERYTHING else exactly the same as the attached photo: the same woman, face, expression, hair, skin tone, body, pose, hand positions, camera angle, framing, crop, lighting and plain background, and the same image size. Do not move, resize or re-pose her. Photorealistic, no text, no watermark."
+ },
+ {
+  "id": "w-charm",
+  "name": "Charm bracelet",
+  "category": "wrist",
+  "desc": "a delicate gold charm bracelet",
+  "prompt": "Edit the attached photo. ADD ONLY a delicate gold charm bracelet. Put it on her wrist on the LEFT side of the image only. Keep both hands exactly where they are. Keep EVERYTHING else exactly the same as the attached photo: the same woman, face, expression, hair, skin tone, body, pose, hand positions, camera angle, framing, crop, lighting and plain background, and the same image size. Do not move, resize or re-pose her. Photorealistic, no text, no watermark."
+ }
+]
