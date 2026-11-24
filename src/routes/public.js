@@ -141,6 +141,11 @@ router.get('/status/:slug', (req, res, next) => {
 });
 
 router.get('/security', (req, res) => res.render('security', { title: 'Security' }));
+// Privacy policy for the Android app "Chance: Probability & Stats" (linked from Google Play).
+router.get('/chance/privacy', (req, res) => res.render('chance/privacy', {
+  title: 'Chance: Probability & Stats — Privacy Policy',
+  description: 'Privacy policy for the Chance: Probability & Stats Android app by Divyrs. No personal data collected; progress stays on your device.',
+}));
 router.get('/.well-known/security.txt', (req, res) => {
   const expires = new Date(Date.now() + 365 * 86400000).toISOString();
   res.type('text/plain').send(`Contact: mailto:${config.business.email}\nExpires: ${expires}\nPreferred-Languages: en, hi\nCanonical: ${config.baseUrl}/.well-known/security.txt\nPolicy: ${config.baseUrl}/security\n`);
@@ -152,7 +157,7 @@ router.get('/robots.txt', (req, res) => {
 router.get('/sitemap.xml', (req, res) => {
   const pages = ['', '/regdata', '/regdata/topics', ...require('../regdata/topics').TOPICS.map((t) => '/regdata/topics/' + t.slug), '/regdata/changes', '/regdata/enforcement', '/regdata/docs', '/regdata/status', '/tools', '/tools/invoice', '/tools/qr',
     '/tools/uptime', '/tools/links', '/tools/booking', '/tools/forms', '/tools/business-card', '/tools/gst-calculator', '/tools/emi-calculator',
-    '/pricing', '/about', '/contact', '/security', '/privacy', '/terms', '/refund', '/shipping'];
+    '/pricing', '/about', '/contact', '/security', '/chance/privacy', '/privacy', '/terms', '/refund', '/shipping'];
   // Every public regulatory change page, newest first (search engines cap sitemaps at 50,000 URLs).
   const changes = db.prepare("SELECT id, updated_at FROM reg_documents WHERE status = 'ready' AND review_status != 'rejected' ORDER BY published_at DESC LIMIT 45000").all();
   const esc = (u) => u.replace(/&/g, '&amp;');

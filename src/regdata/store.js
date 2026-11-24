@@ -119,7 +119,11 @@ function listChanges(f = {}) {
   if (f.since) { where.push('d.published_at >= ?'); args.push(f.since); }
   if (f.until) { where.push('d.published_at < ?'); args.push(f.until); }
   if (f.maxPublished) { where.push('d.published_at <= ?'); args.push(f.maxPublished); }
-  if (f.before) { where.push('d.id < ?'); args.push(f.before); }
+  if (f.before) {
+    // Keyset pagination on (published_at, id), matching the sort order, so pages never repeat or skip.
+    const c = db.prepare('SELECT published_at FROM reg_documents WHERE id = ?').get(f.before);
+    if (c) { where.push('(d.published_at < ? OR (d.published_at = ? AND d.id < ?))'); args.push(c.published_at, c.published_at, f.before); }
+  }
   const limit = Math.min(Math.max(parseInt(f.limit, 10) || 20, 1), 100);
   const rows = db.prepare(`SELECT d.* FROM ${from} WHERE ${where.join(' AND ')} ORDER BY d.published_at DESC, d.id DESC LIMIT ?`).all(...args, limit + 1);
   const more = rows.length > limit;
@@ -165,9 +169,12 @@ function listActions({ regulator, actionType, since, maxDate, limit = 20, before
   if (actionType) { where.push(`action_type IN (${actionType.map(() => '?').join(',')})`); args.push(...actionType); }
   if (since) { where.push('action_date >= ?'); args.push(since); }
   if (maxDate) { where.push('action_date <= ?'); args.push(maxDate); }
-  if (before) { where.push('id < ?'); args.push(before); }
+  if (before) {
+    const c = db.prepare('SELECT action_date FROM reg_actions WHERE id = ?').get(before);
+    if (c) { where.push("(COALESCE(action_date, '') < ? OR (COALESCE(action_date, '') = ? AND id < ?))"); args.push(c.action_date || '', c.action_date || '', before); }
+  }
   const lim = Math.min(Math.max(parseInt(limit, 10) || 20, 1), 100);
-  const rows = db.prepare(`SELECT * FROM reg_actions WHERE ${where.join(' AND ')} ORDER BY action_date DESC, id DESC LIMIT ?`).all(...args, lim + 1);
+  const rows = db.prepare(`SELECT * FROM reg_actions WHERE ${where.join(' AND ')} ORDER BY COALESCE(action_date, '') DESC, id DESC LIMIT ?`).all(...args, lim + 1);
   return { rows: rows.slice(0, lim), more: rows.length > lim };
 }
 

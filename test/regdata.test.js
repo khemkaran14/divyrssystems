@@ -158,10 +158,16 @@ test('API: rejects bad keys', async () => {
 });
 
 test('API: free plan sees data with a 7-day delay', async () => {
-  const r = await (await call('/changes')).json();
-  // Only the KYC master direction (15 Oct) is older than 7 days.
-  assert.deepStrictEqual(r.data.map((d) => d.doc_type), ['master_direction']);
+  // Make the delay independent of today's date: one document published today, the rest 30 days ago.
+  const docs = db.prepare("SELECT id FROM reg_documents WHERE status = 'ready' ORDER BY id").all();
+  const fresh = db.prepare("SELECT id FROM reg_documents WHERE title LIKE 'Digital Lending%'").get().id;
+  for (const d of docs) db.prepare('UPDATE reg_documents SET published_at = ? WHERE id = ?').run(d.id === fresh ? Date.now() : Date.now() - 30 * 86400000, d.id);
+  db.prepare("UPDATE reg_actions SET action_date = ?").run(new Date().toISOString().slice(0, 10)); // all actions are recent
+
+  const r = await (await call('/changes?limit=100')).json();
   assert.strictEqual(r.delayed_days, 7);
+  assert.strictEqual(r.data.length, docs.length - 1);
+  assert.ok(!r.data.some((d) => d.id === `chg_${fresh}`), 'recent change hidden from the free plan');
   const e = await (await call('/enforcement?name=HDFC%20Bank')).json();
   assert.strictEqual(e.data.length, 0);
 });
@@ -255,3 +261,16 @@ test('RegData plan purchase extends the right columns', () => {
 });
 
 test('stop server', () => { server.close(); assert.ok(SOURCES.length >= 3); });
+
+test('pagination never repeats or skips when IDs and dates disagree (back-filled documents)', () => {
+  const all = store.listChanges({ limit: 100 }).rows.map((d) => d.id);
+  const seen = [];
+  let before;
+  for (;;) {
+    const r = store.listChanges({ limit: 2, before });
+    seen.push(...r.rows.map((d) => d.id));
+    if (!r.more) break;
+    before = r.rows[r.rows.length - 1].id;
+  }
+  assert.deepStrictEqual(seen, all);
+});
